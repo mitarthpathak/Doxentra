@@ -37,13 +37,13 @@ export function TwinPanel({ doc, onDocumentChange }: { doc: DocumentResult; onDo
     } catch (err: any) { setError(err?.message || 'Could not save the decision.'); }
     finally { setBusy(false); }
   };
-  return <section className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-4" data-testid="twin-panel">
+  return <section className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm space-y-4" data-testid="twin-panel">
     <div>
       <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Document Twin + Change Radar</p>
       <h3 className="text-xl font-headline font-bold mt-1">{twin.changes.length} changed field{twin.changes.length === 1 ? '' : 's'}</h3>
       <p className="text-xs text-on-surface-variant mt-1">Compared with {twin.previousFilename} · {twin.matchReason}. Changes need human review; they do not prove fraud.</p>
     </div>
-    {twin.changes.length ? <div className="space-y-2">{twin.changes.map(change => <div key={change.key} className="bg-white border border-slate-200 rounded-2xl p-3">
+    {twin.changes.length ? <div className="space-y-2">{twin.changes.map(change => <div key={change.key} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-3">
       <button type="button" className="w-full text-left" onClick={() => setOpen(open === change.key ? null : change.key)} aria-expanded={open === change.key}>
         <span className="block text-[10px] uppercase font-bold text-on-surface-variant">{change.label}</span>
         <span className="block text-sm break-all"><span className="text-slate-500">{change.before.value ?? 'Not found'}</span> → <strong>{change.after.value ?? 'Not found'}</strong></span>

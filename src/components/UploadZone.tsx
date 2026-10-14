@@ -253,7 +253,7 @@ export function UploadZone({ onDocumentsReady, setUploads }: UploadZoneProps) {
           isDragActive ? 'opacity-40' : 'opacity-10 group-hover:opacity-25'
         )}
       />
-      <div className="relative glass-panel border border-slate-200 rounded-xl p-6 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center min-h-[320px]">
+      <div className="relative glass-panel border border-slate-200 dark:border-slate-700 rounded-xl p-6 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center min-h-[320px]">
         <input {...getInputProps()} data-testid="file-input" />
         {loading ? (
           <div className="flex flex-col items-center">

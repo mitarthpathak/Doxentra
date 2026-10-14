@@ -107,7 +107,7 @@ export function PagePreview({ docId, page, quote, value, fieldKey, box, redactio
 
   return (
     <div className={cn('space-y-2', className)} data-testid="page-preview">
-      <div ref={scrollRef} className="relative max-h-[340px] overflow-auto rounded-2xl border border-slate-200 bg-surface-container-low">
+      <div ref={scrollRef} className="relative max-h-[340px] overflow-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-surface-container-low">
         <div ref={frameRef} className="relative w-full">
           <canvas ref={canvasRef} className={kind === 'pdf' ? 'block w-full' : 'hidden'} aria-label={`Page ${page || 1} of the document`} />
           {kind === 'image' && imageUrl && <img src={imageUrl} alt="Uploaded page" className="block w-full h-auto" onLoad={() => setImageLoaded(n => n + 1)} />}

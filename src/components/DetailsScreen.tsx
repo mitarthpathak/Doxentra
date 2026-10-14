@@ -131,10 +131,10 @@ export function DetailsScreen({ data, viewedNodeIds, onNavigate, masked = false,
         <div className="relative min-h-64 md:absolute md:inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between gap-5 md:gap-0">
           <div className="flex flex-wrap justify-between items-start gap-3">
             {/* PDF file badge */}
-            <div className="flex items-center gap-3 max-lg:min-w-0 max-lg:max-w-full px-5 py-2.5 bg-white/70 backdrop-blur-md rounded-2xl border border-slate-200 shadow-sm">
+            <div className="flex items-center gap-3 max-lg:min-w-0 max-lg:max-w-full px-5 py-2.5 bg-white/70 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
               <span className="material-symbols-outlined text-primary text-lg">picture_as_pdf</span>
               <div className="max-lg:min-w-0">
-                <p className="text-xs font-bold text-slate-900 truncate max-w-[200px]">{filename}</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate max-w-[200px]">{filename}</p>
                 <p className="text-[9px] text-on-surface-variant">{nodeCount} concepts extracted</p>
               </div>
             </div>
@@ -151,7 +151,7 @@ export function DetailsScreen({ data, viewedNodeIds, onNavigate, masked = false,
                 <span className="material-symbols-outlined text-primary text-3xl">auto_stories</span>
               </div>
               <div className="max-lg:min-w-0">
-                <h3 className="text-xl sm:text-2xl font-headline font-bold text-slate-900 max-lg:break-words">{metadata.category} Intelligence</h3>
+                <h3 className="text-xl sm:text-2xl font-headline font-bold text-slate-900 dark:text-slate-100 max-lg:break-words">{metadata.category} Intelligence</h3>
                 <p className="text-[10px] font-bold text-primary uppercase tracking-[0.12em] sm:tracking-[0.2em] max-lg:break-words">{filename}</p>
               </div>
             </div>
@@ -199,7 +199,7 @@ export function DetailsScreen({ data, viewedNodeIds, onNavigate, masked = false,
                 {complexity >= 8 ? 'High Complexity' : complexity >= 5 ? 'Medium Complexity' : 'Low Complexity'}
               </span>
             </div>
-            <h2 className="text-3xl min-[360px]:text-4xl sm:text-5xl md:text-7xl font-headline font-bold leading-[0.9] text-slate-900 break-words">
+            <h2 className="text-3xl min-[360px]:text-4xl sm:text-5xl md:text-7xl font-headline font-bold leading-[0.9] text-slate-900 dark:text-slate-100 break-words">
               {metadata.title.split(' ').length > 1 ? (
                 <>
                   {metadata.title.split(' ').slice(0, -1).join(' ')} <br />
@@ -215,14 +215,14 @@ export function DetailsScreen({ data, viewedNodeIds, onNavigate, masked = false,
           </div>
 
           <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3 sm:gap-4">
-            <div className="bg-surface-container-low p-5 sm:p-8 rounded-[32px] border border-slate-200 shadow-sm">
+            <div className="bg-surface-container-low p-5 sm:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm">
               <p className="text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.2em] text-on-surface-variant mb-3 sm:mb-4 opacity-50">Syllabus Complexity</p>
               <div className="flex flex-wrap items-baseline gap-x-2">
                 <p className="text-2xl sm:text-4xl font-headline font-bold text-primary">Level {String(complexity).padStart(2, '0')}</p>
                 <p className="text-xs font-bold text-slate-400">/ 10</p>
               </div>
             </div>
-            <div className="bg-surface-container-low p-5 sm:p-8 rounded-[32px] border border-slate-200 shadow-sm">
+            <div className="bg-surface-container-low p-5 sm:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm">
               <p className="text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.2em] text-on-surface-variant mb-3 sm:mb-4 opacity-50">Semantic Context</p>
               <div className="flex flex-wrap items-baseline gap-x-2">
                 <p className="text-2xl sm:text-4xl font-headline font-bold text-tertiary">{nodeCount}</p>
@@ -232,7 +232,7 @@ export function DetailsScreen({ data, viewedNodeIds, onNavigate, masked = false,
           </div>
 
           {/* Exploration Progress */}
-          <div className="bg-surface-container-low p-6 sm:p-10 rounded-[40px] border border-slate-200 shadow-sm space-y-6">
+          <div className="bg-surface-container-low p-6 sm:p-10 rounded-[40px] border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
             <div className="flex justify-between items-center gap-4">
               <div className="max-lg:min-w-0">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50">Exploration Progress</p>
@@ -262,7 +262,7 @@ export function DetailsScreen({ data, viewedNodeIds, onNavigate, masked = false,
           {!isRelatedMaximized && (
             <motion.div
               layoutId="related-container"
-              className="bg-surface-container-low p-5 sm:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-4 sm:space-y-6"
+              className="bg-surface-container-low p-5 sm:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm space-y-4 sm:space-y-6"
             >
               <div className="flex justify-between items-center gap-3 lg:gap-0">
                 <div className="flex items-center gap-3 max-lg:min-w-0">
@@ -309,7 +309,7 @@ export function DetailsScreen({ data, viewedNodeIds, onNavigate, masked = false,
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="relative w-full max-w-4xl max-h-[85dvh] md:max-h-[90vh] overflow-y-auto max-md:overscroll-contain bg-white rounded-[32px] md:rounded-[48px] p-5 sm:p-8 md:p-16 shadow-2xl space-y-6 sm:space-y-8 md:space-y-12 z-10"
+              className="relative w-full max-w-4xl max-h-[85dvh] md:max-h-[90vh] overflow-y-auto max-md:overscroll-contain bg-white dark:bg-slate-800 rounded-[32px] md:rounded-[48px] p-5 sm:p-8 md:p-16 shadow-2xl space-y-6 sm:space-y-8 md:space-y-12 z-10"
             >
               <div className="flex justify-between items-center gap-4 lg:gap-0">
                 <h4 className="text-2xl sm:text-3xl md:text-5xl font-headline font-bold">Extended Knowledge Domains</h4>
@@ -342,7 +342,7 @@ function RoadmapItem({ number, title, status, desc, active = false, onStudy, onE
       </div>
       <div className={cn(
         'p-5 md:p-6 rounded-3xl border transition-all',
-        active ? 'bg-surface-container-high border-primary/20' : 'bg-surface-container-low border-slate-200 opacity-60'
+        active ? 'bg-surface-container-high border-primary/20' : 'bg-surface-container-low border-slate-200 dark:border-slate-700 opacity-60'
       )}>
         <div className="flex justify-between items-start gap-2 lg:gap-0 mb-2">
           <h4 className="font-bold max-lg:min-w-0 max-lg:break-words">{title}</h4>
@@ -372,7 +372,7 @@ function RelatedModule({ icon, title, desc, large = false }: { icon: string; tit
   return (
     <div className={cn(
       'flex gap-4 items-center rounded-2xl transition-all cursor-pointer group',
-      large ? 'p-4 sm:p-6 bg-slate-50 border border-slate-100 hover:border-primary/30' : 'p-3 sm:p-4 hover:bg-surface-container-high'
+      large ? 'p-4 sm:p-6 bg-slate-50 dark:bg-slate-700 border border-slate-100 hover:border-primary/30' : 'p-3 sm:p-4 hover:bg-surface-container-high'
     )}>
       <div className={cn(
         'bg-surface-container-highest rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shrink-0',

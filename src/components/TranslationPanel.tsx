@@ -35,7 +35,7 @@ export function TranslationPanel({ translation, onClose }: { translation: Docume
     }
   }, []);
   return (
-    <div ref={ref} className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-5 scroll-mt-24" data-testid="translation-panel" lang={translation.language}>
+    <div ref={ref} className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm space-y-5 scroll-mt-24" data-testid="translation-panel" lang={translation.language}>
       <div className="flex justify-between items-start gap-4">
         <div className="min-w-0">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50">{language} translation</p>
@@ -62,7 +62,7 @@ export function TranslationPanel({ translation, onClose }: { translation: Docume
       {translation.fields.length > 0 && (
         <ul className="space-y-2" aria-label="Translated fields">
           {translation.fields.map(f => (
-            <li key={f.key} className="px-4 py-3 bg-white rounded-2xl border border-slate-200">
+            <li key={f.key} className="px-4 py-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
               <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">{f.label}</p>
               <p className="text-sm font-medium break-words">{f.value}</p>
               <p className="text-[10px] text-on-surface-variant break-words mt-0.5">{f.original}</p>
@@ -89,7 +89,7 @@ export function TranslationPanel({ translation, onClose }: { translation: Docume
             ))}
           </div>
           {translation.pages.filter(p => p.page === openPage).map(p => (
-            <p key={p.page} className="text-sm text-on-surface leading-relaxed whitespace-pre-line bg-white rounded-2xl border border-slate-200 px-4 py-3 max-h-80 overflow-y-auto" data-testid="translation-page">
+            <p key={p.page} className="text-sm text-on-surface leading-relaxed whitespace-pre-line bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 px-4 py-3 max-h-80 overflow-y-auto" data-testid="translation-page">
               {p.text}
             </p>
           ))}

@@ -61,7 +61,7 @@ interface GraphScreenProps {
 }
 
 const SEVERITY_RING: Record<string, string> = { error: 'ring-2 ring-red-400 ring-offset-2', warning: 'ring-2 ring-amber-400 ring-offset-2', info: '' };
-const SEVERITY_BOX: Record<string, string> = { error: 'bg-red-50 border-red-100 text-red-700', warning: 'bg-amber-50 border-amber-100 text-amber-700', info: 'bg-slate-50 border-slate-200 text-slate-600' };
+const SEVERITY_BOX: Record<string, string> = { error: 'bg-red-50 border-red-100 text-red-700', warning: 'bg-amber-50 border-amber-100 text-amber-700', info: 'bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300' };
 
 /** Concept map ↔ people & documents (same tabs as Search ↔ Ask). */
 function ModeTabs({ mode, onModeChange }: { mode: GraphMode; onModeChange?: (mode: GraphMode) => void }) {
@@ -185,7 +185,7 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
           <h2 className="text-4xl md:text-5xl font-headline font-bold">{entities ? 'People & Documents' : 'Concept Galaxy'}</h2>
           <ModeTabs mode={mode} onModeChange={onModeChange} />
         </div>
-        <div className="text-center py-24 px-6 md:px-0 bg-surface-container-low rounded-[40px] border border-slate-200" data-testid="graph-empty">
+        <div className="text-center py-24 px-6 md:px-0 bg-surface-container-low rounded-[40px] border border-slate-200 dark:border-slate-700" data-testid="graph-empty">
           <span className="material-symbols-outlined text-6xl text-slate-300 mb-4 block">{entities ? 'groups' : 'account_tree'}</span>
           <p className={cn('font-medium mb-5', error ? 'text-red-500' : 'text-slate-500')}>
             {error || (loading ? 'Linking your documents…' : entities ? 'No documents yet. Upload documents to see the people and organisations in them.' : 'No knowledge graph yet. Upload a PDF to generate one.')}
@@ -220,14 +220,14 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
             <ModeTabs mode={mode} onModeChange={onModeChange} />
           </div>
           {entities ? (
-            <div className="bg-surface-container-high px-5 py-2 md:px-8 md:py-4 rounded-[32px] border border-slate-200 shadow-sm text-center self-start md:self-auto flex items-center gap-3 md:block">
+            <div className="bg-surface-container-high px-5 py-2 md:px-8 md:py-4 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm text-center self-start md:self-auto flex items-center gap-3 md:block">
               <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Conflicts</p>
               <p className={cn('text-2xl md:text-3xl font-headline font-bold', data.stats?.mismatches ? 'text-red-500' : 'text-tertiary')} data-testid="graph-conflicts">
                 {data.stats?.mismatches ?? 0} <span className="text-sm text-slate-400">/ {data.stats?.documents ?? 0} docs</span>
               </p>
             </div>
           ) : (
-          <div className="bg-surface-container-high px-5 py-2 md:px-8 md:py-4 rounded-[32px] border border-slate-200 shadow-sm text-center self-start md:self-auto flex items-center gap-3 md:block">
+          <div className="bg-surface-container-high px-5 py-2 md:px-8 md:py-4 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm text-center self-start md:self-auto flex items-center gap-3 md:block">
             <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Explored</p>
             <p className="text-2xl md:text-3xl font-headline font-bold text-primary" data-testid="mastery">
               {viewedCount} <span className="text-sm text-slate-400">/ {nodes.length}</span>
@@ -245,7 +245,7 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
 
       <div
         className={cn(
-          'relative w-full bg-surface-container-low border border-slate-200 overflow-hidden cursor-grab active:cursor-grabbing shadow-inner',
+          'relative w-full bg-surface-container-low border border-slate-200 dark:border-slate-700 overflow-hidden cursor-grab active:cursor-grabbing shadow-inner',
           isMaximized ? 'flex-1 md:rounded-[32px]' : 'h-[70vh] min-h-[480px] max-h-[850px] rounded-[40px]'
         )}
         ref={containerRef}
@@ -316,7 +316,7 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
         </div>
 
         {/* Legend */}
-        <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8 bg-white/80 backdrop-blur-md p-3 md:p-6 rounded-3xl border border-slate-200/50 shadow-lg space-y-1.5 md:space-y-3 z-40 pointer-events-none">
+        <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-3 md:p-6 rounded-3xl border border-slate-200/50 dark:border-slate-700/50 shadow-lg space-y-1.5 md:space-y-3 z-40 pointer-events-none">
           {entities ? (
             <>
               <LegendItem color="bg-secondary" label="People & organisations" />
@@ -364,26 +364,26 @@ interface GraphNodeViewProps {
 
 const NODE_STYLES: Record<string, { box: string; label: string; caption?: string; captionClass?: string }> = {
   major: {
-    box: 'w-56 min-h-28 bg-white border-[3px] border-primary rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-30 p-4',
+    box: 'w-56 min-h-28 bg-white dark:bg-slate-800 border-[3px] border-primary rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] z-30 p-4',
     label: 'text-lg font-black leading-tight uppercase tracking-tight',
     caption: 'Core Concept',
     captionClass: 'text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em] mt-2',
   },
   header: {
-    box: 'w-48 min-h-20 bg-slate-50 border-2 border-secondary rounded-2xl shadow-md z-20 px-4 py-3',
+    box: 'w-48 min-h-20 bg-slate-50 dark:bg-slate-700 border-2 border-secondary rounded-2xl shadow-md z-20 px-4 py-3',
     label: 'text-xs font-black text-secondary uppercase tracking-wider leading-tight',
     caption: 'Main Topic',
     captionClass: 'text-[8px] font-bold text-slate-400 mt-1 uppercase tracking-widest',
   },
   'sub-topic': {
-    box: 'w-40 min-h-14 bg-white border border-tertiary rounded-xl shadow-sm z-[15] px-3 py-2',
-    label: 'text-[11px] font-bold text-slate-700 leading-tight',
+    box: 'w-40 min-h-14 bg-white dark:bg-slate-800 border border-tertiary rounded-xl shadow-sm z-[15] px-3 py-2',
+    label: 'text-[11px] font-bold text-slate-700 dark:text-slate-200 leading-tight',
     caption: 'Sub-Topic',
     captionClass: 'text-[7px] font-bold text-tertiary/60 mt-0.5 uppercase tracking-widest',
   },
   concept: {
-    box: 'max-w-40 bg-white border border-slate-200 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] z-10 px-3 py-1.5',
-    label: 'text-[10px] font-bold text-slate-600 tracking-tight leading-tight',
+    box: 'max-w-40 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] z-10 px-3 py-1.5',
+    label: 'text-[10px] font-bold text-slate-600 dark:text-slate-300 tracking-tight leading-tight',
   },
 };
 
@@ -488,15 +488,15 @@ function ConceptModal({ node, nodeById, edges, onSelect, onClose, onOpenDocument
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.95, opacity: 0, y: 30 }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        className="relative w-full max-w-5xl bg-white rounded-[32px] md:rounded-[40px] shadow-[0_32px_128px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col lg:flex-row max-h-[90dvh] lg:h-[650px]"
+        className="relative w-full max-w-5xl bg-white dark:bg-slate-800 rounded-[32px] md:rounded-[40px] shadow-[0_32px_128px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col lg:flex-row max-h-[90dvh] lg:h-[650px]"
       >
         {/* Left Side: Info (below lg its content scrolls while Close stays in view) */}
-        <div className="w-full lg:w-[380px] p-6 md:p-10 flex flex-col justify-between border-r border-slate-100 bg-white z-10 min-h-0 lg:overflow-y-auto">
+        <div className="w-full lg:w-[380px] p-6 md:p-10 flex flex-col justify-between border-r border-slate-100 bg-white dark:bg-slate-800 z-10 min-h-0 lg:overflow-y-auto">
           <div ref={infoRef} className="space-y-8 min-h-0 overflow-y-auto -mx-6 -mt-6 px-6 pt-6 md:-mx-10 md:-mt-10 md:px-10 md:pt-10 lg:m-0 lg:p-0 lg:min-h-auto lg:overflow-visible">
             <div className="space-y-3">
               <div className="w-12 h-1 bg-primary rounded-full mb-4"></div>
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/60">{node.caption || TYPE_LABEL[node.type] || 'Concept'}</p>
-              <h3 className="text-3xl md:text-4xl font-headline font-bold text-slate-900 leading-[1.1] break-words">{node.label}</h3>
+              <h3 className="text-3xl md:text-4xl font-headline font-bold text-slate-900 dark:text-slate-100 leading-[1.1] break-words">{node.label}</h3>
             </div>
 
             <p className="text-sm text-slate-700 font-medium leading-relaxed border-l-4 border-primary/20 pl-4 py-1 break-words" data-testid="concept-desc">
@@ -566,7 +566,7 @@ function ConceptModal({ node, nodeById, edges, onSelect, onClose, onOpenDocument
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.35, delay: 0.1 + i * 0.06, type: 'spring' }}
-                className="absolute rounded-2xl px-4 py-2 bg-white/95 border border-slate-200 shadow-sm hover:shadow-md hover:border-primary/40 max-w-40 max-lg:w-max"
+                className="absolute rounded-2xl px-4 py-2 bg-white/95 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/40 max-w-40 max-lg:w-max"
                 style={{ left: n.x, top: n.y, x: '-50%', y: '-50%' }}
               >
                 <span className="block text-[9px] uppercase tracking-wider text-slate-400 font-bold">{n.label}</span>
@@ -577,10 +577,10 @@ function ConceptModal({ node, nodeById, edges, onSelect, onClose, onOpenDocument
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="absolute rounded-2xl px-5 py-3 bg-white border-primary border-[3px] w-44 min-h-20 flex items-center justify-center shadow-xl shadow-primary/10 z-20"
+              className="absolute rounded-2xl px-5 py-3 bg-white dark:bg-slate-800 border-primary border-[3px] w-44 min-h-20 flex items-center justify-center shadow-xl shadow-primary/10 z-20"
               style={{ left: 0, top: 0, x: '-50%', y: '-50%' }}
             >
-              <p className="font-bold text-center leading-tight text-sm text-slate-900">{node.label}</p>
+              <p className="font-bold text-center leading-tight text-sm text-slate-900 dark:text-slate-100">{node.label}</p>
             </motion.div>
           </div>
         </div>
@@ -596,14 +596,14 @@ function RelatedNodeItem({ node, relation, onOpen }: { node: GraphNode; relation
     <div
       className={cn(
         'group bg-slate-50/50 rounded-2xl border border-slate-100/50 transition-all overflow-hidden',
-        isOpen ? 'bg-white border-primary/20 shadow-lg shadow-primary/5' : 'hover:bg-slate-50 hover:border-slate-200'
+        isOpen ? 'bg-white dark:bg-slate-800 border-primary/20 shadow-lg shadow-primary/5' : 'hover:bg-slate-50 hover:border-slate-200'
       )}
     >
       <button type="button" className="w-full flex items-center justify-between p-3 text-left" onClick={() => setIsOpen(!isOpen)}>
         <div className="flex items-center gap-3 min-w-0">
           <div className={cn('w-2 h-2 rounded-full shrink-0', isOpen ? 'bg-primary' : 'bg-slate-300')}></div>
           <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold shrink-0">{relation}</span>
-          <span className={cn('text-[11px] font-bold max-sm:line-clamp-2 max-sm:wrap-anywhere sm:truncate', isOpen ? 'text-slate-900' : 'text-slate-600')}>{node.label}</span>
+          <span className={cn('text-[11px] font-bold max-sm:line-clamp-2 max-sm:wrap-anywhere sm:truncate', isOpen ? 'text-slate-900 dark:text-slate-100' : 'text-slate-600')}>{node.label}</span>
         </div>
         <span className={cn('material-symbols-outlined text-sm transition-transform duration-300', isOpen ? 'rotate-180 text-primary' : 'text-slate-300')}>
           expand_more
@@ -638,7 +638,7 @@ function ControlButton({ icon, label, onClick }: { icon: string; label: string; 
       onClick={onClick}
       aria-label={label}
       title={label}
-      className="w-11 h-11 md:w-12 md:h-12 bg-white shadow-xl border border-slate-100/50 rounded-2xl flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 hover:text-primary active:scale-95"
+      className="w-11 h-11 md:w-12 md:h-12 bg-white dark:bg-slate-800 shadow-xl border border-slate-100/50 rounded-2xl flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 hover:text-primary active:scale-95"
     >
       <span className="material-symbols-outlined text-[20px]">{icon}</span>
     </button>

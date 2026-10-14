@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-headline: "Space Grotesk", sans-serif;
@@ -30,13 +32,46 @@
 @layer base {
   body {
     @apply bg-background text-on-surface font-sans antialiased selection:bg-primary/20 selection:text-primary;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+}
+
+/* ── Dark-mode overrides ────────────────────────────────────────────── */
+/* All tokens are re-declared on :root when .dark is on <html> so that
+   Tailwind's generated utilities (bg-background, text-on-surface, …)
+   automatically pick up the dark values. */
+:root.dark {
+  --color-primary: #22d3ee;
+  --color-primary-container: #0e7490;
+  --color-on-primary: #0f172a;
+  --color-secondary: #a78bfa;
+  --color-secondary-container: #7c3aed;
+  --color-tertiary: #34d399;
+  --color-tertiary-container: #059669;
+  --color-on-tertiary: #0f172a;
+
+  --color-background: #0f172a;
+  --color-surface: #0f172a;
+  --color-surface-container-low: #1e293b;
+  --color-surface-container: #243043;
+  --color-surface-container-high: #2d3a4e;
+  --color-surface-container-highest: #374456;
+  --color-surface-container-lowest: #0a1120;
+  --color-surface-bright: #3f4f65;
+
+  --color-on-surface: #e2e8f0;
+  --color-on-surface-variant: #94a3b8;
+  --color-outline-variant: #334155;
 }
 
 .glass-panel {
   background: rgba(241, 245, 249, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+:root.dark .glass-panel {
+  background: rgba(30, 41, 59, 0.7);
 }
 
 .material-symbols-outlined {
