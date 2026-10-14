@@ -10,14 +10,14 @@
     "benchmark": "node scripts/benchmark.mjs",
     "benchmark:gemini": "node scripts/benchmark-gemini.mjs",
     "benchmark:hybrid": "node scripts/benchmark-gemini.mjs",
+    "benchmark:ocr": "node scripts/evaluate-ocr.mjs",
     "dev": "npm start",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "test": "npm test --prefix server",
-    
-    "test:ui": "node scripts/test-privacy-ui.mjs"
+    "test:ui": "node scripts/test-privacy-ui.mjs && node scripts/test-ocr-ui.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.27.0",

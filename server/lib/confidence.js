@@ -139,7 +139,10 @@ export function validationScore(field, issues = []) {
 export function scoreField(field, ctx) {
   const { textByPage = [], issues = [] } = ctx;
   if (field.value == null) {
-    return { confidence: 0, confidenceBand: 'low', confidenceDetail: { model: 0, verification: 0, validation: 0, source: null } };
+    const confidence = field.ocr?.confidence ?? 0;
+    return { confidence, confidenceBand: confidenceBand(confidence),
+      ...(field.ocr ? { extractionConfidence: 0 } : {}),
+      confidenceDetail: { model: 0, verification: 0, validation: 0, source: field.ocr ? 'ocr' : null } };
   }
   const model = Math.min(1, Math.max(0, Number(field.modelConfidence ?? field.confidence ?? 0.5)));
   const source = pageSource(field.page, ctx);
@@ -167,9 +170,16 @@ export function scoreField(field, ctx) {
     caps.push('unverified');
   }
   confidence = round2(confidence);
+  if (field.ocr) {
+    // Agreement is a small supporting signal, never independent proof of accuracy.
+    const bonus = field.agreement ? 0.03 : 0;
+    confidence = round2(Math.min(confidence + bonus, field.ocr.confidence, source === 'ocr' ? OCR_CAP : 1,
+      caps.includes('image_quality') ? QUALITY_CAP : 1, caps.includes('unverified') ? HALLUCINATION_CAP : 1));
+  }
   return {
-    confidence,
-    confidenceBand: confidenceBand(confidence),
+    confidence: field.ocr ? field.ocr.confidence : confidence,
+    confidenceBand: confidenceBand(field.ocr ? field.ocr.confidence : confidence),
+    ...(field.ocr ? { extractionConfidence: confidence } : {}),
     confidenceDetail: {
       model: round2(model),
       verification: round2(verification),
@@ -188,8 +198,8 @@ export function scoreField(field, ctx) {
  */
 export function overallConfidence(fields, issues = []) {
   const required = fields.filter(f => f.required);
-  const basis = required.length ? required : fields.filter(f => f.value != null);
-  const mean = basis.length ? basis.reduce((s, f) => s + (f.confidence || 0), 0) / basis.length : 0;
+  const basis = required.length ? required : fields.filter(f => f.value != null || f.status === 'needs_review');
+  const mean = basis.length ? basis.reduce((s, f) => s + (f.status === 'needs_review' || (f.ocr && f.value == null) ? 0 : f.confidence || 0), 0) / basis.length : 0;
   const penalty = issues.reduce((s, i) => s + (ISSUE_PENALTY[i.severity] || 0), 0);
   return round2(mean - penalty);
 }

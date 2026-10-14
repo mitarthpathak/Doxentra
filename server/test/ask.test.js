@@ -106,11 +106,16 @@ test('extractive answer quotes the best passages with citations', () => {
 });
 
 // ─── API ─────────────────────────────────────────────────────────────
-const { default: app } = await import('../index.js');
-const { setGeminiClient } = await import('../lib/ai.js');
-const server = app.listen(0);
-const base = `http://127.0.0.1:${server.address().port}/api`;
-test.after(() => server.close());
+let server, base, setGeminiClient;
+// Register lifecycle hooks synchronously at file scope. A top-level await after
+// unit tests have been registered can attach cleanup to an already-running test.
+test.before(async () => {
+  const { default: app } = await import('../index.js');
+  ({ setGeminiClient } = await import('../lib/ai.js'));
+  server = app.listen(0);
+  base = `http://127.0.0.1:${server.address().port}/api`;
+});
+test.after(() => server?.close());
 const invoice = JSON.parse(readFileSync(new URL('./fixtures/gemini/invoice.json', import.meta.url)));
 const guest = () => ({ 'x-guest-id': `ask${Date.now()}${Math.random().toString(36).slice(2)}xxxxxxxxxxxx`.slice(0, 40) });
 

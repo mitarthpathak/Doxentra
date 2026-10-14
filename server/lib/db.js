@@ -101,22 +101,23 @@ export async function findUserGraphByHash(contentHash, userId) {
 }
 
 // ─── Document extractions (cached by file hash + extraction version) ─
-export async function findExtractionByHash(fileHash, version) {
-  const match = g => g.fileHash === fileHash && g.extractionVersion === version && g.source === 'ai' && g.extraction;
+export async function findExtractionByHash(fileHash, version, ocrConfigHash) {
+  const match = g => g.fileHash === fileHash && g.extractionVersion === version && g.source === 'ai' && g.extraction &&
+    (ocrConfigHash == null || g.ocrConfigHash === ocrConfigHash);
   if (useMongo()) {
-    return GraphModel.findOne({ fileHash, extractionVersion: version, source: 'ai', extraction: { $ne: null } }).sort({ createdAt: -1 }).lean();
+    return GraphModel.findOne({ fileHash, extractionVersion: version, source: 'ai', extraction: { $ne: null }, ...(ocrConfigHash ? { ocrConfigHash } : {}) }).sort({ createdAt: -1 }).lean();
   }
   return [...memGraphsStore()].reverse().find(match) || null;
 }
 
 /** The owner's own copy of a cached extraction (owner: a user record or { guestId }). */
-export async function findUserExtractionByHash(fileHash, version, owner) {
+export async function findUserExtractionByHash(fileHash, version, owner, ocrConfigHash) {
   if (!owner) return null;
   if (useMongo()) {
-    return GraphModel.findOne({ $and: [{ fileHash, extractionVersion: version, source: 'ai', extraction: { $ne: null } }, ownerFilter(owner)] }).lean();
+    return GraphModel.findOne({ $and: [{ fileHash, extractionVersion: version, source: 'ai', extraction: { $ne: null }, ...(ocrConfigHash ? { ocrConfigHash } : {}) }, ownerFilter(owner)] }).lean();
   }
   return memGraphsStore().find(g => g.fileHash === fileHash && g.extractionVersion === version && g.source === 'ai' &&
-    g.extraction && memOwned(g, owner)) || null;
+    g.extraction && memOwned(g, owner) && (ocrConfigHash == null || g.ocrConfigHash === ocrConfigHash)) || null;
 }
 
 export async function saveGraph(doc) {

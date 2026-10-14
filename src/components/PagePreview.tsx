@@ -10,6 +10,8 @@ interface PagePreviewProps {
   fieldKey?: string;
   /** AI bounding box [ymin, xmin, ymax, xmax] on 0-1000, for scans and photos. */
   box?: number[] | null;
+  /** Show the unprocessed source region alongside OCR review controls. */
+  showCrop?: boolean;
   /** Areas to black out (PII masking). */
   redactions?: Rect[];
   className?: string;
@@ -21,8 +23,12 @@ type Located = 'text' | 'ai' | 'none';
  * The page a value came from, with the value highlighted: exact for PDF text
  * layers, approximate (AI-located) for scans and photos.
  */
-export function PagePreview({ docId, page, quote, value, fieldKey, box, redactions = [], className }: PagePreviewProps) {
+export function PagePreview({ docId, page, quote, value, fieldKey, box, showCrop = false, redactions = [], className }: PagePreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const cropRef = useRef<HTMLCanvasElement>(null);
+  const [cropReady, setCropReady] = useState(false);
+  const [showFullPage, setShowFullPage] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const [kind, setKind] = useState<'pdf' | 'image' | null>(null);
@@ -40,6 +46,8 @@ export function PagePreview({ docId, page, quote, value, fieldKey, box, redactio
   useEffect(() => {
     let cancelled = false;
     setStatus('loading');
+    setCropReady(false);
+    setShowFullPage(false);
     setRects([]);
     setLocated('none');
     setLocating(false);
@@ -105,12 +113,47 @@ export function PagePreview({ docId, page, quote, value, fieldKey, box, redactio
     return () => clearTimeout(t);
   }, [status, rects, imageLoaded]);
 
+  useEffect(() => {
+    if (!showCrop || status !== 'ready' || !rects.length || !cropRef.current) return;
+    const source = kind === 'pdf' ? canvasRef.current : imageRef.current;
+    if (!source) return;
+    const sourceWidth = source instanceof HTMLImageElement ? source.naturalWidth : source.width;
+    const sourceHeight = source instanceof HTMLImageElement ? source.naturalHeight : source.height;
+    if (!sourceWidth || !sourceHeight) return;
+    const r = rects[0];
+    const x = Math.max(0, Math.floor(r.left / 100 * sourceWidth) - 8);
+    const y = Math.max(0, Math.floor(r.top / 100 * sourceHeight) - 8);
+    const width = Math.min(sourceWidth - x, Math.max(1, Math.ceil(r.width / 100 * sourceWidth) + 16));
+    const height = Math.min(sourceHeight - y, Math.max(1, Math.ceil(r.height / 100 * sourceHeight) + 16));
+    if (width <= 0 || height <= 0) return;
+    const scale = Math.min(2, 1200 / width, 600 / height);
+    const crop = cropRef.current;
+    crop.width = Math.max(1, Math.round(width * scale));
+    crop.height = Math.max(1, Math.round(height * scale));
+    const ctx = crop.getContext('2d');
+    if (!ctx) return;
+    ctx.drawImage(source, x, y, width, height, 0, 0, crop.width, crop.height);
+    ctx.fillStyle = '#0f172a';
+    for (const area of redactions) ctx.fillRect((area.left / 100 * sourceWidth - x) * scale,
+      (area.top / 100 * sourceHeight - y) * scale, area.width / 100 * sourceWidth * scale, area.height / 100 * sourceHeight * scale);
+    setCropReady(true);
+  }, [showCrop, status, kind, rects, imageLoaded, redactions]);
+
   return (
     <div className={cn('space-y-2', className)} data-testid="page-preview">
-      <div ref={scrollRef} className="relative max-h-[340px] overflow-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-surface-container-low">
+      {showCrop && status === 'ready' && rects.length > 0 && (
+        <div className="space-y-2 rounded-2xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 p-3" data-testid="source-crop" data-ready={cropReady}>
+          <p className="text-xs font-bold">Original source crop · page {page || 1}</p>
+          <canvas ref={cropRef} className="block max-w-full h-auto rounded-lg bg-white" aria-label="Original document region for the selected field" />
+        </div>
+      )}
+      {showCrop && cropReady && <button type="button" className="text-xs font-bold text-primary" aria-expanded={showFullPage}
+        onClick={() => setShowFullPage(v => !v)}>{showFullPage ? 'Hide full page' : 'View full page'}</button>}
+      <div ref={scrollRef} className={cn('relative max-h-[340px] overflow-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-surface-container-low',
+        showCrop && cropReady && !showFullPage && 'hidden')}>
         <div ref={frameRef} className="relative w-full">
           <canvas ref={canvasRef} className={kind === 'pdf' ? 'block w-full' : 'hidden'} aria-label={`Page ${page || 1} of the document`} />
-          {kind === 'image' && imageUrl && <img src={imageUrl} alt="Uploaded page" className="block w-full h-auto" onLoad={() => setImageLoaded(n => n + 1)} />}
+          {kind === 'image' && imageUrl && <img ref={imageRef} src={imageUrl} alt="Uploaded page" className="block w-full h-auto" onLoad={() => setImageLoaded(n => n + 1)} />}
           {status === 'ready' && rects.map((r, i) => (
             <div
               key={i}
@@ -139,7 +182,7 @@ export function PagePreview({ docId, page, quote, value, fieldKey, box, redactio
         <p className="text-[10px] text-on-surface-variant" data-testid="preview-caption">
           Page {page || 1}{pageCount ? ` of ${pageCount}` : ''} ·{' '}
           {locating ? 'Locating selected text on the original page…' : locationError ? locationError : located === 'text' ? 'located exactly in the PDF text layer'
-            : located === 'ai' ? 'location found by the AI on the scan (approximate)'
+            : located === 'ai' ? 'approximate region on the original scan'
             : quote ? 'exact position not available; see the quote below' : 'no position for this value'}
           {locationError && <button type="button" className="ml-2 text-primary underline" onClick={() => setRetry(n => n + 1)}>Retry highlight</button>}
         </p>

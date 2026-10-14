@@ -7,7 +7,7 @@ import { asciiDigits, cleanValue, normalizeValue, parseAmount, parseDate } from 
  * Bump when the prompt, schema or normalisation changes so cached
  * extractions of the same file are recomputed.
  */
-export const EXTRACTION_VERSION = 14;
+export const EXTRACTION_VERSION = 16;
 
 const MAX_QUOTE = 120;
 const MAX_FIELDS = 60;
@@ -375,7 +375,7 @@ function guessDocType(text) {
 }
 
 /** Label/value lookup, including label-above-value forms and OCR without punctuation. */
-function findLabelled(def, lines) {
+export function findLabelled(def, lines) {
   const labels = [...new Set([def.label, def.key.replace(/_/g, ' '), ...(def.aliases || [])])]
     .sort((a, b) => b.length - a.length);
   for (const label of labels) {

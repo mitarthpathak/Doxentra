@@ -14,6 +14,8 @@ const GraphSchema = new mongoose.Schema({
   // Document intelligence (see server/lib/extract.js)
   fileHash: { type: String, index: true },
   extractionVersion: { type: Number },
+  ocrConfigHash: { type: String },
+  processingMode: { type: String, enum: ['deep', 'privacy'] },
   mimeType: { type: String },
   fileSize: { type: Number },
   extraction: { type: Object, default: null },

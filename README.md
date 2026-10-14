@@ -183,6 +183,63 @@ For a quick demo, upload `samples/workflow-invoice-v1.pdf` and then `samples/wor
   • Documents are partitioned by user identity or ephemeral guest workspaces.
   • Human review modifications are logged to an append-only audit trail.
   ──────
+## Independent OCR agreement and confidence review
+
+Images and scanned/unreliable PDF pages now run through **Tesseract and PaddleOCR** locally. The engine interface is `extract({data, mimeType}, {timeoutMs, signal}) -> {text, words, lines, confidenceGranularity}` in `server/lib/ocr/engines.js`; boxes use `[ymin,xmin,ymax,xmax]` on a 0–1000 page scale. More engines can be registered there. Text PDFs keep their existing extraction path. Gemini remains the default document reasoning engine; the local cross-check does not require another API key or cloud OCR call. [Tesseract documentation](https://github.com/naptha/tesseract.js) and [PaddleOCR Node wrapper](https://github.com/gutenye/ocr).
+
+Field comparison normalizes case/spacing and uses fuzzy text matching. Digit changes are compared strictly. Agreement is supporting evidence, **not a guarantee of accuracy**; even three-engine majority hints leave disagreements in review. Missing engine readings or unknown confidence never count as agreement. A failed/timed-out engine is logged without document contents, and successful readings are retained.
+
+Word/character scores are aggregated conservatively using the minimum, so a weak digit cannot disappear in an average. Paddle exposes native **line** confidence; that granularity is recorded instead of inventing character probabilities. Fields below the threshold or with disagreements are first cropped, upscaled, converted to grayscale, denoised and binarised, then read by both engines again. Retry limits or an exhausted request budget leave explicit review reasons. One confident engine cannot resolve a cross-check by itself.
+
+Unresolved fields have `value: null`, retain all original/reprocessed candidates (including the provisional extractor reading), and appear in the API's `needs_review` list with their page/bbox. The **OCR review** card opens the existing field review form: compare the original source crop and candidates, choose a candidate or enter a correction, and save. The full page is available on demand. Corrections are audited; reset restores the pending machine state. Privacy mode masks candidate values and keeps original image crops unavailable; use the supplied bbox with your original document.
+
+Fields keep the existing schema and add:
+
+```json
+{
+  "field": "total_amount",
+  "value": "INR 500",
+  "candidates": [
+    {"engine": "tesseract", "value": "INR 500", "confidence": 0.98, "attempt": 0},
+    {"engine": "paddle", "value": "INR500", "confidence": 0.99, "attempt": 0}
+  ],
+  "agreement": true,
+  "agreementState": "agreed",
+  "confidence": 0.98,
+  "status": "accepted"
+}
+```
+
+`status` is `accepted`, `reprocessed` (accepted after retry), or `needs_review`. For cross-checked fields, `confidence` is the aggregate OCR confidence; `extractionConfidence` preserves the previous model/quote/validation score. A human correction follows the existing convention of confidence 1. The document's overall score gives withheld fields zero weight. JSON and CSV exports include OCR status and candidates. Summaries, tables and concept maps remain the existing extractor's output; their contents may still be provisional when a field needs review.
+
+Configure `server/.env` (defaults below). OCR settings participate in cache/checkpoint keys:
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `OCR_CROSSCHECK_ENABLED` | `1` | Use `0` for the previous OCR behavior. |
+| `OCR_ENGINES` | `tesseract,paddle` | Comma-separated independent engines. A single surviving engine requires review. |
+| `OCR_CONFIDENCE_THRESHOLD` | `0.80` | Minimum native score for text fields/tokens. |
+| `OCR_DIGIT_CONFIDENCE_THRESHOLD` | `0.95` | Minimum for amounts, dates, IDs, account/phone numbers and other digit-containing fields; never weaker than the text threshold. |
+| `OCR_FUZZY_THRESHOLD` | `0.92` | Minimum text similarity; changed digits cannot pass fuzzy matching. |
+| `OCR_ENGINE_TIMEOUT_MS` | `20000` | Maximum time per engine call, also bounded by the request deadline. |
+| `OCR_REPROCESS_ENABLED` | `1` | Retry uncertain regions before manual review. |
+| `OCR_VALIDATION_ENABLED` | `1` | Withhold agreed OCR values that fail format, checksum or consistency rules. Use `0` to keep rule warnings without the OCR validation gate. |
+| `OCR_MAX_REPROCESS_FIELDS` | `8` | Maximum crop retries per file/chunk. |
+
+Install with `npm install` and `npm install --prefix server`, then `npm run dev`. Paddle's ONNX models arrive with its npm dependency; neither local engine downloads models at runtime. Node **20.9+** is required by the image dependency. Models/recognition coverage differ; unsupported scripts or missed regions require review.
+
+Run `npm test`, `npm run lint`, `npm run build`, and `npm run test:ui` (Vite must be running). Existing regression fixtures explicitly disable cross-checks; new `server/test/ocr*.test.js` cases exercise agreement, disagreement, weak digits, retry, failures, masking, cache/page coordinates and the real two-engine upload/review API. `server/test/offlineOcr.test.js` also runs both engines on a real synthetic image; `scripts/test-ocr-ui.mjs` checks the manual UI.
+
+Cross-checked fields also include `validation: {passed, rule, rules}` and `steps_applied` (the extraction engine, OCR engines, `rescan`, `validator`, and `manual_review` when used). `passed: null` means validation was disabled or no value was available to check. An agreed reading can fail a checksum: its value is then withheld, its checked candidate is retained, and its status becomes `needs_review`. A reviewer can still record what the original document actually says; its rule warning remains if the manually reviewed value is invalid. Reset restores the machine state and validation evidence.
+
+### Measure each OCR stage
+
+`npm run benchmark:ocr -- --replay --only e,f` evaluates a fixed Gemini fixture baseline with **real** Tesseract/Paddle reads, crop retries, and validation. Omit `--replay` to use live Gemini. Select samples by prefix or full filename with `--only`; point `--samples` at another folder containing files and `ground-truth.json` in the same `{documents: {filename: {docType, fields}}}` format. Replay mode requires matching fixtures in `server/test/fixtures/gemini`.
+
+The JSON and Markdown reports in `docs/benchmark/ocr-stages-{replay,live}.*` compare Gemini only, cross-check, re-scan, validation, and human review. They report exact normalized field accuracy, accuracy among emitted values, coverage, pending fields, and **CER/WER over annotated field values**. Withheld/missing values count as deletions; these are not whole-page transcription metrics. Expected alternatives are supported. Failed stages stay in the denominator. Accuracy can decrease when uncertain values are withheld, so coverage and emitted accuracy must be read together. Replay cannot establish live Gemini accuracy or an improvement.
+
+Human review is unchanged unless you supply `--reviews corrections.json` with `{ "filename": { "field_key": "reviewed value" } }` (use `null` for absent values). For a demo upper bound, explicitly add `--simulate-review`: only pending annotated fields are corrected from ground truth, and the report labels this an **oracle simulation**, not measured human accuracy. Reports never fabricate an improving stage table.
+
   ## 📄 License
 
   ISC License © 2026 Mitarth Pathak

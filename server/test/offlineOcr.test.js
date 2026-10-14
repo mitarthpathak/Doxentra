@@ -5,6 +5,7 @@ import https from 'node:https';
 import { createCanvas } from '@napi-rs/canvas';
 import { PDFDocument } from 'pdf-lib';
 import { recognizeImageBuffer, recognizeScannedPdf, shutdownOfflineOcr } from '../lib/offlineOcr.js';
+import { OCR_ENGINES, shutdownPaddleOcr } from '../lib/ocr/engines.js';
 
 function sampleImage(mimeType = 'image/png') {
   const canvas = createCanvas(900, 180);
@@ -17,7 +18,16 @@ function sampleImage(mimeType = 'image/png') {
   return canvas.toBuffer(mimeType);
 }
 
-test.after(shutdownOfflineOcr);
+test.after(async () => { await shutdownOfflineOcr(); await shutdownPaddleOcr(); });
+
+test('two independent local engines read a real image and expose native confidence evidence', async () => {
+  const image = { data: sampleImage(), mimeType: 'image/png' };
+  const [tesseract, paddle] = await Promise.all([OCR_ENGINES.tesseract.extract(image, { timeoutMs: 30_000 }), OCR_ENGINES.paddle.extract(image, { timeoutMs: 30_000 })]);
+  assert.match(tesseract.text, /INVOICE\s*12345/); assert.match(paddle.text, /INVOICE\s*12345/);
+  assert.ok(tesseract.words.some(w => w.characters?.length && w.confidence > 0.5));
+  assert.ok(paddle.lines.some(l => l.confidence > 0.5 && l.box));
+  assert.equal(paddle.confidenceGranularity, 'line');
+});
 
 test('local image OCR reads text and lines without HTTP or HTTPS requests', async () => {
   const original = { fetch: globalThis.fetch, httpGet: http.get, httpRequest: http.request, httpsGet: https.get, httpsRequest: https.request };

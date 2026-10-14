@@ -8,7 +8,8 @@ import { rateLimit } from '../lib/rateLimit.js';
 import { MAX_UPLOAD_BYTES, detectFileType, precheckUpload } from '../lib/files.js';
 import { isPrivacyMode } from '../lib/privacy.js';
 import { processDocument } from '../lib/processDocument.js';
-import { updateDocument } from '../lib/db.js';
+import { updateDocument, getDocument } from '../lib/db.js';
+import { ocrConfig } from '../lib/ocr/config.js';
 
 export { MAX_UPLOAD_BYTES };
 
@@ -51,12 +52,16 @@ function toResponse(doc, extra = {}) {
 router.post('/upload', uploadLimiter, upload.single('pdf'), async (req, res) => {
   const startedAt = Date.now();
   if (!req.file) return res.status(400).json({ success: false, error: 'Please choose a PDF or image file to upload.' });
-  if (isPrivacyMode()) {
+  if (isPrivacyMode() || ocrConfig().enabled) {
     const local = await processDocument(req.file, { owner: req.owner, deadline: startedAt + AI_BUDGET_MS });
     if (!local.success) return res.status(local.status || 422).json(local);
-    const map = buildFallbackGraph([local.title, local.summary, ...local.fields.map(f => `${f.label}: ${f.value || ''}`)].join('\n'));
+    const stored = req.owner ? await getDocument(local.id, req.owner) : null;
+    const map = stored?.graph?.nodes?.length ? { graph: stored.graph, metadata: stored.metadata }
+      : buildFallbackGraph([local.title, local.summary, ...local.fields.map(f => `${f.label}: ${f.value || ''}`)].join('\n'));
     if (req.owner) await updateDocument(local.id, req.owner, { graph: map.graph, metadata: map.metadata });
-    return res.json({ success: true, id: local.id, filename: local.filename, graph: map.graph, metadata: map.metadata, createdAt: local.createdAt, fallbackUsed: true, warning: local.warning });
+    return res.json({ success: true, id: local.id, filename: local.filename, graph: map.graph, metadata: map.metadata, createdAt: local.createdAt,
+      fallbackUsed: !stored?.graph?.nodes?.length || local.fallbackUsed, warning: local.warning,
+      ...(local.ocr ? { ocr: local.ocr, needs_review: local.needs_review } : {}) });
   }
   const fileType = detectFileType(req.file.buffer, req.file);
   const isImage = fileType.kind === 'image';

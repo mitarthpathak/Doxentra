@@ -21,7 +21,7 @@ const MAX_ATTEMPTS = 2;
 
 /** Rough progress per stage, shown while an item is processed. */
 export const STAGE_PROGRESS = { queued: 0, downloading: 8, reading: 18, local_ocr: 22, reading_groq: 22, reading_groq_quota: 22,
-  extracting: 30, local_extract: 30, validating: 90, saving: 96, done: 100 };
+  extracting: 30, local_extract: 30, ocr_crosscheck: 70, ocr_reprocessing: 78, validating: 90, saving: 96, done: 100 };
 
 export async function createExtractionJob(owner, items) {
   return createJob({
