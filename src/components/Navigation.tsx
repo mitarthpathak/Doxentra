@@ -4,6 +4,7 @@ import { cn } from '../lib/utils';
 import { User } from '../types';
 import { ProcessingModeToggle } from './ProcessingModeToggle';
 import type { Screen } from '../App';
+import { useTheme } from '../lib/theme';
 
 interface TopAppBarProps {
   user: User | null;
@@ -16,6 +17,7 @@ interface TopAppBarProps {
 export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScreenChange }: TopAppBarProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { theme, toggleTheme } = useTheme();
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -45,7 +47,7 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
   ];
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] flex justify-between items-center px-6 h-16">
+    <header className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.08)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)] flex justify-between items-center px-6 h-16 transition-colors duration-300">
       <div className="flex items-center gap-3">
         <span className="material-symbols-outlined text-primary">hub</span>
         <h1 className="text-xl font-bold bg-gradient-to-br from-primary to-cyan-800 bg-clip-text text-transparent font-headline tracking-tight">
@@ -62,7 +64,7 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
                 "py-2 lg:py-0 transition-colors",
                 currentScreen === link.key 
                   ? "text-primary font-bold hover:text-cyan-700" 
-                  : "text-slate-500 hover:text-primary"
+                  : "text-slate-500 dark:text-slate-400 hover:text-primary"
               )}
             >
               {link.label}
@@ -71,6 +73,19 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
         </nav>
 
         <ProcessingModeToggle compact />
+
+        {/* Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+          title={theme === 'light' ? 'Dark mode' : 'Light mode'}
+          className="flex items-center justify-center w-9 h-9 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        >
+          <span className="material-symbols-outlined text-xl">
+            {theme === 'light' ? 'dark_mode' : 'light_mode'}
+          </span>
+        </button>
+
         {/* Auth Area */}
         {user ? (
           <div className="relative" ref={dropdownRef}>
@@ -78,7 +93,7 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
               onClick={() => setShowDropdown(!showDropdown)}
               aria-label="Account menu"
               aria-expanded={showDropdown}
-              className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-full hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200"
+              className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold">
                 {getInitials(user)}
@@ -99,10 +114,10 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 top-12 w-72 max-w-[calc(100vw-2rem)] max-h-[calc(100dvh-11rem)] md:max-h-[calc(100dvh-5rem)] bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] border border-slate-100 overflow-x-hidden overflow-y-auto z-50"
+                  className="absolute right-0 top-12 w-72 max-w-[calc(100vw-2rem)] max-h-[calc(100dvh-11rem)] md:max-h-[calc(100dvh-5rem)] bg-white dark:bg-slate-800 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-slate-700 overflow-x-hidden overflow-y-auto z-50"
                 >
                   {/* User Info Header */}
-                  <div className="p-5 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100">
+                  <div className="p-5 bg-gradient-to-br from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 border-b border-slate-100 dark:border-slate-700">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-lg font-bold shadow-md">
                         {getInitials(user)}
@@ -113,14 +128,14 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-white rounded-lg p-2.5 border border-slate-100">
+                      <div className="bg-white dark:bg-slate-700 rounded-lg p-2.5 border border-slate-100 dark:border-slate-600">
                         <div className="flex items-center gap-1.5 mb-0.5">
                           <span className="material-symbols-outlined text-primary text-xs">phone</span>
                           <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Phone</span>
                         </div>
                         <p className="text-xs font-medium text-on-surface truncate">{user.phone || '—'}</p>
                       </div>
-                      <div className="bg-white rounded-lg p-2.5 border border-slate-100">
+                      <div className="bg-white dark:bg-slate-700 rounded-lg p-2.5 border border-slate-100 dark:border-slate-600">
                         <div className="flex items-center gap-1.5 mb-0.5">
                           <span className="material-symbols-outlined text-secondary text-xs">cake</span>
                           <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Age</span>
@@ -134,7 +149,7 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
                   <div className="p-2">
                     <button
                       onClick={() => { setShowDropdown(false); onSignOut(); }}
-                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-500 hover:bg-red-50 transition-colors font-medium"
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors font-medium"
                     >
                       <span className="material-symbols-outlined text-lg">logout</span>
                       Sign Out
@@ -161,7 +176,7 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
 
 export function BottomNavBar({ currentScreen, onScreenChange, user }: { currentScreen: Screen; onScreenChange: (screen: Screen) => void, user: User | null }) {
   return (
-    <nav className="fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center sm:gap-1 md:gap-2 max-w-[calc(100vw-16px)] bg-white/70 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.1)] rounded-full px-1.5 min-[360px]:px-2 sm:px-4 py-2 border border-slate-200/60">
+    <nav className="fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center sm:gap-1 md:gap-2 max-w-[calc(100vw-16px)] bg-white/70 dark:bg-slate-900/70 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] rounded-full px-1.5 min-[360px]:px-2 sm:px-4 py-2 border border-slate-200/60 dark:border-slate-700/60 transition-colors duration-300">
       <NavItem icon="auto_awesome" label="Home" active={currentScreen === 'hero'} onClick={() => onScreenChange('hero')} />
       <NavItem icon="upload_file" label="Upload" active={currentScreen === 'upload'} onClick={() => onScreenChange('upload')} />
       <NavItem icon="plagiarism" label="Extract" active={currentScreen === 'document'} onClick={() => onScreenChange('document')} />
@@ -183,7 +198,7 @@ function NavItem({ icon, label, active = false, onClick, className }: { icon: st
       aria-current={active ? 'page' : undefined}
       className={cn(
         "flex flex-col items-center justify-center min-w-0 px-1 sm:px-3 md:px-5 py-2 rounded-full transition-all",
-        active ? "bg-primary/10 text-primary scale-90 shadow-[0_0_12px_rgba(8,145,178,0.15)]" : "text-slate-400 hover:bg-slate-100",
+        active ? "bg-primary/10 text-primary scale-90 shadow-[0_0_12px_rgba(8,145,178,0.15)]" : "text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800",
         className
       )}
     >

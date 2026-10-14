@@ -4,8 +4,8 @@ import { cn } from '../lib/utils';
 import { apiFetch } from '../lib/api';
 import type { AskCitation, AskTurn, DocumentSummary } from '../types';
 
-const inputClass = 'w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all';
-const selectClass = 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all';
+const inputClass = 'w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all';
+const selectClass = 'w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all';
 
 const SUGGESTIONS = [
   'What is the total amount on the invoice?',
@@ -53,7 +53,7 @@ function CitationCard({ c, onOpen, highlighted }: { c: AskCitation; onOpen: () =
       onClick={onOpen}
       className={cn(
         'w-full text-left bg-surface-container-low rounded-2xl border p-3 md:p-4 hover:shadow-sm transition-all group',
-        highlighted ? 'border-primary/40 ring-2 ring-primary/20' : 'border-slate-200'
+        highlighted ? 'border-primary/40 ring-2 ring-primary/20' : 'border-slate-200 dark:border-slate-700'
       )}
       aria-label={`Open source ${c.n}: ${c.title}${c.page ? `, page ${c.page}` : ''}`}
       data-testid="ask-citation"
@@ -62,12 +62,12 @@ function CitationCard({ c, onOpen, highlighted }: { c: AskCitation; onOpen: () =
         <div className="flex items-center gap-2 min-w-0">
           <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white text-[9px] font-black shrink-0">{c.n}</span>
           <p className="text-[11px] font-bold text-primary max-md:line-clamp-2 max-md:break-words md:truncate">{c.title}</p>
-          <span className="px-2 py-0.5 bg-slate-100 rounded-full text-[9px] font-black text-slate-500 uppercase tracking-widest border border-slate-200 shrink-0">{c.docTypeLabel}</span>
+          <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 rounded-full text-[9px] font-black text-slate-500 uppercase tracking-widest border border-slate-200 dark:border-slate-700 shrink-0">{c.docTypeLabel}</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {c.page && <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">p.{c.page}</span>}
           {c.kind === 'profile' ? (
-            <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border whitespace-nowrap bg-slate-100 text-slate-500 border-slate-200" title="From the document's AI summary">
+            <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border whitespace-nowrap bg-slate-100 dark:bg-slate-700 text-slate-500 border-slate-200 dark:border-slate-700" title="From the document's AI summary">
               From summary
             </span>
           ) : (
@@ -83,7 +83,7 @@ function CitationCard({ c, onOpen, highlighted }: { c: AskCitation; onOpen: () =
           )}
         </div>
       </div>
-      <blockquote className="border-l-4 border-primary bg-white rounded-r-xl px-3 py-2 text-xs text-on-surface leading-relaxed break-words">
+      <blockquote className="border-l-4 border-primary bg-white dark:bg-slate-800 rounded-r-xl px-3 py-2 text-xs text-on-surface leading-relaxed break-words">
         {c.quote}
       </blockquote>
       <div className="flex justify-between items-center gap-2 md:gap-0 mt-2">
@@ -173,7 +173,7 @@ export function AskPanel({ turns, setTurns, scopeId, setScopeId, onOpenCitation 
     <div className="space-y-8" data-testid="ask-panel">
       <form
         onSubmit={e => { e.preventDefault(); send(question); }}
-        className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-4 items-end"
+        className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-4 items-end"
       >
         <div className="md:col-span-7">
           <label htmlFor="ask-q" className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 block">Question</label>
@@ -214,7 +214,7 @@ export function AskPanel({ turns, setTurns, scopeId, setScopeId, onOpenCitation 
       {openError && <p role="alert" className="text-red-500 text-sm font-medium px-4 py-2 bg-red-50 rounded-lg border border-red-100">{openError}</p>}
 
       {turns.length === 0 ? (
-        <div className="text-center py-16 px-6 bg-surface-container-low rounded-[40px] border border-slate-200">
+        <div className="text-center py-16 px-6 bg-surface-container-low rounded-[40px] border border-slate-200 dark:border-slate-700">
           <span className="material-symbols-outlined text-6xl text-slate-300 mb-4 block">forum</span>
           <p className="text-slate-500 font-medium mb-6">Ask anything about your documents. Every answer cites the document and page it came from.</p>
           <div className="flex flex-wrap justify-center gap-2">
@@ -239,12 +239,12 @@ export function AskPanel({ turns, setTurns, scopeId, setScopeId, onOpenCitation 
                     {turn.scopeLabel && <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1 text-right truncate">{turn.scopeLabel}</p>}
                   </div>
                 ) : turn.pending ? (
-                  <div className="bg-white rounded-3xl p-4 md:p-6 border border-slate-200 shadow-sm flex items-center gap-3 text-sm text-on-surface-variant">
+                  <div className="bg-white dark:bg-slate-800 rounded-3xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-3 text-sm text-on-surface-variant">
                     <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                     Reading your documents…
                   </div>
                 ) : (
-                  <div className={cn('w-full md:max-w-[90%] rounded-3xl p-4 md:p-6 border shadow-sm space-y-4', turn.error ? 'bg-red-50 border-red-100' : 'bg-white border-slate-200')} data-testid="ask-turn">
+                  <div className={cn('w-full md:max-w-[90%] rounded-3xl p-4 md:p-6 border shadow-sm space-y-4', turn.error ? 'bg-red-50 border-red-100' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700')} data-testid="ask-turn">
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-primary text-lg">{turn.error ? 'error' : 'auto_awesome'}</span>
                       <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-60">

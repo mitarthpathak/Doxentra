@@ -158,11 +158,11 @@ export function HeroScreen({ onStartJourney, onOpenSaved, isSignedIn }: HeroScre
           <motion.div
             key={i}
             whileHover={{ scale: 1.05, y: -3 }}
-            className="flex items-center gap-3 px-6 py-3 bg-surface-container-low rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-primary/30 transition-all cursor-default"
+            className="flex items-center gap-3 px-6 py-3 bg-surface-container-low rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/30 transition-all cursor-default"
           >
             <span className="material-symbols-outlined text-primary text-lg">{feat.icon}</span>
             <div>
-              <p className="text-xs font-bold text-slate-900">{feat.value}</p>
+              <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{feat.value}</p>
               <p className="text-[9px] text-on-surface-variant uppercase tracking-widest">{feat.label}</p>
             </div>
           </motion.div>

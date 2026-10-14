@@ -193,7 +193,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
           <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Document Intelligence</p>
           <h2 className="text-4xl md:text-5xl font-headline font-bold">Extracted Information</h2>
         </div>
-        <div className="text-center py-24 bg-surface-container-low rounded-[40px] border border-slate-200">
+        <div className="text-center py-24 bg-surface-container-low rounded-[40px] border border-slate-200 dark:border-slate-700">
           <span className="material-symbols-outlined text-6xl text-slate-300 mb-4 block">plagiarism</span>
           <p className="text-slate-500 font-medium mb-5">No document yet. Upload a PDF, scan or photo to extract its information.</p>
           <button onClick={onUploadClick} className="px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:opacity-90">
@@ -241,7 +241,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={narrow ? undefined : { opacity: 0 }}
-      className={cn('bg-white rounded-[32px] border border-primary/20 shadow-sm space-y-5', narrow ? 'p-4 sm:p-6' : 'p-6 md:p-8')}
+      className={cn('bg-white dark:bg-slate-800 rounded-[32px] border border-primary/20 shadow-sm space-y-5', narrow ? 'p-4 sm:p-6' : 'p-6 md:p-8')}
       data-testid="source-panel"
       aria-live="polite"
     >
@@ -280,10 +280,10 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
       <div className="flex flex-wrap gap-2 items-center">
         <ConfidenceChip value={selected.confidence} band={selected.confidenceBand} />
         {selected.page && (
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border bg-slate-100 text-slate-500 border-slate-200">Page {selected.page}</span>
+          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border bg-slate-100 dark:bg-slate-700 text-slate-500 border-slate-200 dark:border-slate-700">Page {selected.page}</span>
         )}
         {selected.confidenceDetail?.source && (
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border bg-slate-100 text-slate-500 border-slate-200">
+          <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border bg-slate-100 dark:bg-slate-700 text-slate-500 border-slate-200 dark:border-slate-700">
             {selected.confidenceDetail.source === 'ocr' ? 'Read by OCR' : 'PDF text layer'}
           </span>
         )}
@@ -324,7 +324,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={narrow ? undefined : { opacity: 0 }}
-      className="bg-white p-6 md:p-8 rounded-[32px] border border-primary/20 shadow-sm space-y-5"
+      className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-[32px] border border-primary/20 shadow-sm space-y-5"
       data-testid="source-panel"
       aria-live="polite"
     >
@@ -349,7 +349,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
   ) : null;
 
   const issuesPanel = (
-    <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-5" data-testid="issues-panel">
+    <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm space-y-5" data-testid="issues-panel">
       <div className="flex flex-wrap lg:flex-nowrap justify-between items-center gap-x-4 gap-y-2">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50">Validation</p>
@@ -459,7 +459,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
               {doc.docTypeLabel} · {percent(doc.docTypeConfidence)}
             </span>
             {doc.docSubtypeLabel && (
-              <span className="px-4 py-1 bg-slate-100 text-slate-500 text-[10px] font-black uppercase rounded-full border border-slate-200 tracking-widest" data-testid="doc-subtype-badge" title={doc.docCategory ? `Category: ${doc.docCategory}` : undefined}>
+              <span className="px-4 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-[10px] font-black uppercase rounded-full border border-slate-200 dark:border-slate-700 tracking-widest" data-testid="doc-subtype-badge" title={doc.docCategory ? `Category: ${doc.docCategory}` : undefined}>
                 {doc.docSubtypeLabel}
               </span>
             )}
@@ -468,11 +468,11 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
                 OCR
               </span>
             )}
-            <span className="px-4 py-1 bg-slate-100 text-slate-500 text-[10px] font-black uppercase rounded-full border border-slate-200 tracking-widest">
+            <span className="px-4 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-[10px] font-black uppercase rounded-full border border-slate-200 dark:border-slate-700 tracking-widest">
               {doc.pageCount} {doc.pageCount === 1 ? 'Page' : 'Pages'}
             </span>
             {doc.language && (
-              <span className="px-4 py-1 bg-slate-100 text-slate-500 text-[10px] font-black uppercase rounded-full border border-slate-200 tracking-widest">
+              <span className="px-4 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 text-[10px] font-black uppercase rounded-full border border-slate-200 dark:border-slate-700 tracking-widest">
                 {doc.language}
               </span>
             )}
@@ -497,7 +497,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
             </p>
           )}
         </div>
-        <div className="bg-surface-container-high px-8 py-4 rounded-[32px] border border-slate-200 shadow-sm text-center self-start md:self-auto shrink-0">
+        <div className="bg-surface-container-high px-8 py-4 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm text-center self-start md:self-auto shrink-0">
           <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Confidence</p>
           <p className={cn('text-3xl font-headline font-bold', confidenceBand(doc.overallConfidence) === 'high' ? 'text-tertiary' : confidenceBand(doc.overallConfidence) === 'medium' ? 'text-amber-600' : 'text-red-500')} data-testid="overall-confidence">
             {percent(doc.overallConfidence)}
@@ -540,7 +540,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
               aria-pressed={masked}
               className={cn(
                 'flex items-center gap-2 px-3 py-2 lg:py-1.5 rounded-full text-[10px] font-bold uppercase transition-colors',
-                masked ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                masked ? 'bg-primary text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200'
               )}
               data-testid="mask-toggle"
             >
@@ -597,7 +597,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
       </div>
       {privacy && <p className="text-xs text-on-surface-variant">Personal data is masked automatically. Translation requires Deep Intelligence Mode.</p>}
       {masked && (
-        <div className="px-5 py-3 bg-surface-container-low border border-slate-200 rounded-2xl text-sm text-on-surface-variant" data-testid="mask-banner">
+        <div className="px-5 py-3 bg-surface-container-low border border-slate-200 dark:border-slate-700 rounded-2xl text-sm text-on-surface-variant" data-testid="mask-banner">
           Personal data is masked{doc.redaction?.fields.length ? `: ${doc.redaction.fields.map(f => f.label).join(', ')}` : ''}. Exports are redacted too; page images and review are off while masking.
         </div>
       )}
@@ -609,12 +609,12 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
         {/* ─── Left: summary, fields, tables, entities ──────── */}
         <div className="lg:col-span-7 space-y-8 min-w-0">
           {narrow && !selected && focus && <div ref={panelSlot} className="scroll-mt-24" />}
-          <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm">
+          <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm">
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-4 opacity-50">Summary</p>
             <p className="text-on-surface leading-relaxed font-medium" data-testid="doc-summary">{doc.summary}</p>
             <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mt-4 truncate">{doc.filename}</p>
             {privacy && doc.textByPage && (
-              <details className="mt-5 border-t border-slate-200 pt-4" data-testid="local-source-text">
+              <details className="mt-5 border-t border-slate-200 dark:border-slate-700 pt-4" data-testid="local-source-text">
                 <summary className="cursor-pointer text-sm font-bold text-primary">View recognised text (personal data masked)</summary>
                 <div className="mt-3 max-h-80 overflow-y-auto space-y-4">
                   {doc.textByPage.map((text, i) => (
@@ -635,7 +635,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
 
           {narrow && issuesPanel}
 
-          <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm">
+          <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm">
             <div className="flex flex-wrap justify-between items-center mb-6 gap-x-4 gap-y-2">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50">Extracted Fields</p>
@@ -665,7 +665,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
                       aria-label={`${f.label}: ${value ?? (f.status === 'needs_review' ? 'needs OCR review' : 'missing')}, ${percent(f.confidence)} confidence${f.page ? `, page ${f.page}` : ''}`}
                       className={cn(
                         'w-full text-left grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)_auto] items-center gap-x-3 gap-y-1 sm:gap-3 px-4 py-3 rounded-2xl border transition-all',
-                        isSelected ? 'bg-surface-container-high border-primary/30' : 'bg-white border-slate-200 hover:border-primary/30'
+                        isSelected ? 'bg-surface-container-high border-primary/30' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-primary/30'
                       )}
                       data-testid="field-row"
                     >
@@ -708,7 +708,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
           </div>
 
           {doc.tables.map((t, ti) => (
-            <div key={ti} className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm">
+            <div key={ti} className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm">
               <div className="flex justify-between items-center mb-4">
                 <p className="text-xl font-headline font-bold">{t.title}</p>
                 {t.page && <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">p.{t.page}</span>}
@@ -718,7 +718,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
                   <thead>
                     <tr>
                       {t.columns.map((c, ci) => (
-                        <th key={ci} className="text-left text-[10px] font-bold uppercase tracking-wider text-on-surface-variant px-3 py-2 border-b border-slate-200">{c}</th>
+                        <th key={ci} className="text-left text-[10px] font-bold uppercase tracking-wider text-on-surface-variant px-3 py-2 border-b border-slate-200 dark:border-slate-700">{c}</th>
                       ))}
                     </tr>
                   </thead>
@@ -735,7 +735,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
           ))}
 
           {doc.entities.length > 0 && (
-            <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-5">
+            <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm space-y-5">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50">Entities</p>
               {Object.entries(entityGroups).map(([type, list]) => (
                 <div key={type}>
@@ -748,7 +748,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
                       <span
                         key={i}
                         title={e.sourceQuote ? `“${e.sourceQuote}”${e.page ? ` (page ${e.page})` : ''}` : undefined}
-                        className="px-3 py-1 bg-white rounded-full text-xs font-medium text-on-surface border border-slate-200"
+                        className="px-3 py-1 bg-white dark:bg-slate-800 rounded-full text-xs font-medium text-on-surface border border-slate-200 dark:border-slate-700"
                       >
                         {e.value}
                         {e.page && <span className="text-[9px] font-bold text-slate-400 ml-1.5">p.{e.page}</span>}

@@ -33,7 +33,7 @@ export function StatusPanel({ uploads }: { uploads: UploadStatus[] }) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0 }}
-            className={cn('rounded-xl p-4 sm:p-6 border', failed ? 'bg-red-50 border-red-100' : 'bg-surface-container-low border-slate-200')}
+            className={cn('rounded-xl p-4 sm:p-6 border', failed ? 'bg-red-50 border-red-100' : 'bg-surface-container-low border-slate-200 dark:border-slate-700')}
             data-testid="upload-status-card"
           >
             <div className="flex justify-between items-start mb-4 gap-3 sm:gap-4">
@@ -77,7 +77,7 @@ export function StatusPanel({ uploads }: { uploads: UploadStatus[] }) {
               <p className="text-[11px] text-on-surface-variant mt-2">{bytes(upload.uploadBytes || 0)} / {bytes(upload.size)} sent{upload.stage === 'storing' ? ' · confirming storage' : ''}</p>
             )}
             {pages && (
-              <div className="rounded-lg bg-white/70 border border-slate-200 px-3 py-2 mt-3 text-xs" data-testid="upload-page-progress">
+              <div className="rounded-lg bg-white/70 border border-slate-200 dark:border-slate-700 px-3 py-2 mt-3 text-xs" data-testid="upload-page-progress">
                 <div className="flex flex-wrap justify-between gap-1 font-semibold">
                   <span>{pages.pagesCompleted} / {pages.pageCount} pages completed</span>
                   {!upload.cached && pages.chunkCount > 1 && <span className="text-primary">Chunk {pages.chunkIndex} / {pages.chunkCount}</span>}
@@ -97,7 +97,7 @@ export function StatusPanel({ uploads }: { uploads: UploadStatus[] }) {
                     className={cn('flex items-start gap-2 rounded-lg px-2 py-2 min-w-0',
                       state === 'active' ? 'bg-primary/10 text-primary' : state === 'failed' ? 'bg-red-100 text-red-600' : state === 'done' ? 'text-emerald-700' : 'text-slate-400')}>
                     <span aria-hidden="true" className={cn('flex items-center justify-center w-5 h-5 shrink-0 rounded-full text-[10px] font-bold',
-                      state === 'active' ? 'bg-primary text-white animate-pulse' : state === 'done' ? 'bg-emerald-100' : state === 'failed' ? 'bg-red-200' : 'bg-slate-100')}>
+                      state === 'active' ? 'bg-primary text-white animate-pulse' : state === 'done' ? 'bg-emerald-100' : state === 'failed' ? 'bg-red-200' : 'bg-slate-100 dark:bg-slate-700')}>
                       {state === 'done' ? '✓' : state === 'failed' ? '×' : index + 1}
                     </span>
                     <div className="min-w-0 text-[11px]">

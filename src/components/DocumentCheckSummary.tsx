@@ -51,7 +51,7 @@ export function DocumentCheckSummary({ documentId, masked = false, onOpenDocumen
   const band = confidenceBand(doc.overallConfidence);
 
   return (
-    <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6" data-testid="document-check-summary">
+    <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm space-y-6" data-testid="document-check-summary">
       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
         <div className="min-w-0">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50">Document check</p>
@@ -64,7 +64,7 @@ export function DocumentCheckSummary({ documentId, masked = false, onOpenDocumen
               className={cn('px-4 py-1 text-[10px] font-black uppercase rounded-full border tracking-widest max-lg:max-w-full max-lg:wrap-anywhere',
                 review?.status === 'approved' ? 'bg-tertiary/10 text-tertiary border-tertiary/20'
                   : review?.status === 'in_review' ? 'bg-amber-50 text-amber-600 border-amber-100'
-                  : 'bg-slate-100 text-slate-500 border-slate-200')}
+                  : 'bg-slate-100 dark:bg-slate-700 text-slate-500 border-slate-200 dark:border-slate-700')}
               data-testid="summary-review-status"
             >
               {review?.status === 'approved' ? `Approved${review.approvedBy ? ` by ${review.approvedBy}` : ''}`
@@ -107,7 +107,7 @@ export function DocumentCheckSummary({ documentId, masked = false, onOpenDocumen
         <div className="space-y-2">
           <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Audit trail · {doc.auditCount ?? recent.length}</p>
           {recent.length ? recent.map((a, n) => (
-            <p key={n} className="px-4 py-3 bg-white rounded-2xl border border-slate-200 text-xs max-lg:break-words" data-testid="summary-audit">
+            <p key={n} className="px-4 py-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs max-lg:break-words" data-testid="summary-audit">
               <span className="font-medium">{VERB[a.action]}{a.label ? ` ${a.label}` : ''}</span>
               <span className="block text-[10px] text-on-surface-variant mt-0.5">{a.by} · {new Date(a.at).toLocaleString()}</span>
             </p>

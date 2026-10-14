@@ -142,14 +142,14 @@ export function PagePreview({ docId, page, quote, value, fieldKey, box, showCrop
   return (
     <div className={cn('space-y-2', className)} data-testid="page-preview">
       {showCrop && status === 'ready' && rects.length > 0 && (
-        <div className="space-y-2 rounded-2xl border border-amber-200 bg-amber-50 p-3" data-testid="source-crop" data-ready={cropReady}>
+        <div className="space-y-2 rounded-2xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 p-3" data-testid="source-crop" data-ready={cropReady}>
           <p className="text-xs font-bold">Original source crop · page {page || 1}</p>
           <canvas ref={cropRef} className="block max-w-full h-auto rounded-lg bg-white" aria-label="Original document region for the selected field" />
         </div>
       )}
       {showCrop && cropReady && <button type="button" className="text-xs font-bold text-primary" aria-expanded={showFullPage}
         onClick={() => setShowFullPage(v => !v)}>{showFullPage ? 'Hide full page' : 'View full page'}</button>}
-      <div ref={scrollRef} className={cn('relative max-h-[340px] overflow-auto rounded-2xl border border-slate-200 bg-surface-container-low',
+      <div ref={scrollRef} className={cn('relative max-h-[340px] overflow-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-surface-container-low',
         showCrop && cropReady && !showFullPage && 'hidden')}>
         <div ref={frameRef} className="relative w-full">
           <canvas ref={canvasRef} className={kind === 'pdf' ? 'block w-full' : 'hidden'} aria-label={`Page ${page || 1} of the document`} />

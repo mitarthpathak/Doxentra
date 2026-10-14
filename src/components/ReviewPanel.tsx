@@ -60,7 +60,7 @@ export function FieldReview({ doc, field, onChange }: { doc: DocumentResult; fie
             onChange={e => setValue(e.target.value)}
             aria-label={`Correct value of ${field.label}`}
             placeholder="Leave empty if it is not in the document"
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base lg:text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl text-base lg:text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
             data-testid="review-value"
           />
           <input
@@ -69,14 +69,14 @@ export function FieldReview({ doc, field, onChange }: { doc: DocumentResult; fie
             aria-label="Note (optional)"
             placeholder="Note (optional)"
             maxLength={300}
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base lg:text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl text-base lg:text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           />
           <div className="flex flex-wrap gap-2">
             <button type="submit" disabled={busy} className={cn(pill, 'bg-primary text-white hover:opacity-90')} data-testid="review-save">
               <span className="material-symbols-outlined text-sm">save</span>
               {busy ? 'Saving…' : 'Save correction'}
             </button>
-            <button type="button" onClick={() => setEditing(false)} className={cn(pill, 'bg-slate-100 text-slate-500 hover:bg-slate-200')}>
+            <button type="button" onClick={() => setEditing(false)} className={cn(pill, 'bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200')}>
               Cancel
             </button>
           </div>
@@ -94,7 +94,7 @@ export function FieldReview({ doc, field, onChange }: { doc: DocumentResult; fie
             {field.value == null ? 'Add value' : 'Correct'}
           </button>
           {field.review && (
-            <button type="button" disabled={busy} onClick={() => act({ action: 'reset' })} className={cn(pill, 'bg-slate-100 text-slate-500 hover:bg-slate-200')} data-testid="review-reset">
+            <button type="button" disabled={busy} onClick={() => act({ action: 'reset' })} className={cn(pill, 'bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200')} data-testid="review-reset">
               <span className="material-symbols-outlined text-sm">undo</span>
               Back to AI value
             </button>
@@ -151,7 +151,7 @@ export function ReviewHistory({ doc }: { doc: DocumentResult }) {
   const entries = [...(doc.audit || [])].reverse();
   if (!entries.length) return null;
   return (
-    <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-5" data-testid="review-history">
+    <div className="bg-surface-container-low p-6 md:p-8 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm space-y-5" data-testid="review-history">
       <div>
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50">Audit trail</p>
         <p className="text-xl font-headline font-bold mt-1">Review history · {doc.auditCount ?? entries.length}</p>
@@ -161,7 +161,7 @@ export function ReviewHistory({ doc }: { doc: DocumentResult }) {
           const t = ACTION_TEXT[e.action];
           const errorsDelta = e.issuesAfter.error - e.issuesBefore.error;
           return (
-            <li key={`${e.at}-${i}`} className="flex gap-3 px-4 py-3 bg-white rounded-2xl border border-slate-200" data-testid="audit-entry">
+            <li key={`${e.at}-${i}`} className="flex gap-3 px-4 py-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700" data-testid="audit-entry">
               <span className="material-symbols-outlined text-[18px] text-primary shrink-0">{t.icon}</span>
               <div className="min-w-0 text-sm space-y-1">
                 <p className="font-medium break-words">

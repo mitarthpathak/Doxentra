@@ -9,7 +9,7 @@ const categoryColors: Record<string, { bg: string; text: string; border: string 
   'Computer Science': { bg: 'bg-primary/10', text: 'text-primary', border: 'border-primary/20' },
   'Mathematics': { bg: 'bg-secondary/10', text: 'text-secondary', border: 'border-secondary/20' },
   'Physics': { bg: 'bg-tertiary/10', text: 'text-tertiary', border: 'border-tertiary/20' },
-  default: { bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200' },
+  default: { bg: 'bg-slate-100 dark:bg-slate-700', text: 'text-slate-600 dark:text-slate-300', border: 'border-slate-200 dark:border-slate-600' },
 };
 const getCategoryStyle = (cat: string) => categoryColors[cat] || categoryColors.default;
 
@@ -107,7 +107,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ delay: Math.min(idx, 10) * 0.05 }}
               whileHover={{ y: -5 }}
-              className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition-shadow cursor-pointer group overflow-hidden relative"
+              className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-shadow cursor-pointer group overflow-hidden relative"
               onClick={() => onLoadGraph(item)}
               data-testid="history-card"
             >
@@ -152,7 +152,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
                   </span>
                 )}
                 {item.metadata?.complexity ? (
-                  <span className="px-3 py-1 bg-slate-100 rounded-full text-[9px] font-black text-slate-500 uppercase tracking-widest border border-slate-200">
+                  <span className="px-3 py-1 bg-slate-100 dark:bg-slate-700 rounded-full text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest border border-slate-200 dark:border-slate-600">
                     Level {item.metadata.complexity}
                   </span>
                 ) : null}
@@ -165,11 +165,11 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
 
               <div className="flex items-center justify-between gap-2 md:gap-0 pt-4 border-t border-slate-50">
                 <div className="flex max-md:flex-wrap gap-2">
-                  <span className="px-2.5 py-1 bg-slate-100 rounded-lg text-[9px] font-bold text-slate-500 uppercase flex items-center gap-1">
+                  <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 rounded-lg text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase flex items-center gap-1">
                     <span className="material-symbols-outlined text-[10px]">hub</span>
                     {item.graph?.nodes?.length || 0} Nodes
                   </span>
-                  <span className="px-2.5 py-1 bg-slate-100 rounded-lg text-[9px] font-bold text-slate-500 uppercase flex items-center gap-1">
+                  <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 rounded-lg text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase flex items-center gap-1">
                     <span className="material-symbols-outlined text-[10px]">link</span>
                     {item.graph?.edges?.length || 0} Edges
                   </span>
@@ -195,7 +195,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
       </div>
 
       {!user ? (
-        <div className="text-center py-20 px-6 md:px-0 bg-surface-container-low rounded-[40px] border border-slate-200">
+        <div className="text-center py-20 px-6 md:px-0 bg-surface-container-low rounded-[40px] border border-slate-200 dark:border-slate-700">
           <span className="material-symbols-outlined text-6xl text-slate-300 mb-4 block">lock</span>
           <p className="text-slate-500 font-medium mb-4">Sign in to view your saved graphs.</p>
           <button onClick={onSignInClick} className="px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-xl hover:opacity-90">Sign In</button>
@@ -237,7 +237,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
                       tabIndex={0}
                       aria-label={`Open ${doc.title || doc.filename}`}
                       onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), openDocument(doc.id))}
-                      className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition-shadow cursor-pointer group overflow-hidden relative"
+                      className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-lg transition-shadow cursor-pointer group overflow-hidden relative"
                       onClick={() => openDocument(doc.id)}
                       data-testid="document-card"
                     >
@@ -286,13 +286,13 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
 
                       <div className="flex items-center justify-between gap-2 md:gap-0 pt-4 border-t border-slate-50">
                         <div className="flex max-md:flex-wrap gap-2">
-                          <span className="px-2.5 py-1 bg-slate-100 rounded-lg text-[9px] font-bold text-slate-500 uppercase flex items-center gap-1">
+                          <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 rounded-lg text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase flex items-center gap-1">
                             <span className="material-symbols-outlined text-[10px]">list_alt</span>
                             {doc.fieldCount} Fields
                           </span>
                           <span className={cn(
                             'px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase flex items-center gap-1',
-                            doc.issueCounts.error ? 'bg-red-50 text-red-500' : doc.issueCounts.warning ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'
+                            doc.issueCounts.error ? 'bg-red-50 text-red-500' : doc.issueCounts.warning ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                           )} title={`${doc.issueCounts.error} errors, ${doc.issueCounts.warning} warnings`}>
                             <span className="material-symbols-outlined text-[10px]">{doc.issueCounts.error ? 'error' : doc.issueCounts.warning ? 'warning' : 'check_circle'}</span>
                             {doc.issueCounts.total} {doc.issueCounts.total === 1 ? 'Issue' : 'Issues'}
@@ -316,7 +316,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
           ) : renderGraphs())}
         </div>
       ) : (
-        <div className="text-center py-20 px-6 md:px-0 bg-surface-container-low rounded-[40px] border border-slate-200">
+        <div className="text-center py-20 px-6 md:px-0 bg-surface-container-low rounded-[40px] border border-slate-200 dark:border-slate-700">
           <span className="material-symbols-outlined text-6xl text-slate-300 mb-4 block">folder_open</span>
           <p className="text-slate-500 font-medium">No saved graphs yet. Upload a PDF to create your first one.</p>
         </div>

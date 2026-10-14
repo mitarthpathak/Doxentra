@@ -246,7 +246,7 @@ function QuestionCard({
 
       {/* Question text */}
       <motion.h3
-        className="text-xl sm:text-2xl md:text-3xl font-headline font-bold text-slate-900 leading-snug mb-6 sm:mb-10 max-lg:break-words"
+        className="text-xl sm:text-2xl md:text-3xl font-headline font-bold text-slate-900 dark:text-slate-100 leading-snug mb-6 sm:mb-10 max-lg:break-words"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.15, duration: 0.5 }}
@@ -270,11 +270,11 @@ function QuestionCard({
               disabled={isRevealed}
               className={cn(
                 'relative text-left p-4 sm:p-5 rounded-2xl border-2 transition-all duration-300 group overflow-hidden',
-                !isRevealed && !isSelected && 'border-slate-200 bg-white hover:border-primary/40 hover:shadow-md hover:shadow-primary/5',
+                !isRevealed && !isSelected && 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary/40 hover:shadow-md hover:shadow-primary/5',
                 !isRevealed && isSelected && 'border-primary bg-primary/5 shadow-md shadow-primary/10',
                 showCorrect && 'border-tertiary bg-tertiary/5 shadow-md shadow-tertiary/10',
                 showWrong && 'border-red-400 bg-red-50 shadow-md shadow-red-100',
-                isRevealed && !isSelected && !isCorrect && 'opacity-40 border-slate-200 bg-white',
+                isRevealed && !isSelected && !isCorrect && 'opacity-40 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800',
               )}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -292,7 +292,7 @@ function QuestionCard({
               <div className="flex items-start gap-3 sm:gap-4 relative z-10">
                 <div className={cn(
                   'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-sm font-bold transition-all duration-300',
-                  !isRevealed && !isSelected && 'bg-slate-100 text-slate-500 group-hover:bg-primary/10 group-hover:text-primary',
+                  !isRevealed && !isSelected && 'bg-slate-100 dark:bg-slate-700 text-slate-500 group-hover:bg-primary/10 group-hover:text-primary',
                   !isRevealed && isSelected && 'bg-primary text-white',
                   showCorrect && 'bg-tertiary text-white',
                   showWrong && 'bg-red-400 text-white',
@@ -496,7 +496,7 @@ export function ScrollQuiz({ data }: { data: any }) {
             <span className="material-symbols-outlined text-secondary text-2xl">quiz</span>
           </div>
           <div className="max-lg:min-w-0">
-            <h3 className="text-2xl sm:text-3xl font-headline font-bold text-slate-900">Knowledge Check</h3>
+            <h3 className="text-2xl sm:text-3xl font-headline font-bold text-slate-900 dark:text-slate-100">Knowledge Check</h3>
             <p className="text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.25em] text-on-surface-variant opacity-50 mt-1">
               Scroll-driven assessment • {questions.length} Questions
             </p>
@@ -505,7 +505,7 @@ export function ScrollQuiz({ data }: { data: any }) {
       </motion.div>
 
       {/* Quiz Container */}
-      <div ref={cardRef} className="relative bg-surface-container-low rounded-[40px] border border-slate-200 shadow-sm overflow-hidden">
+      <div ref={cardRef} className="relative bg-surface-container-low rounded-[40px] border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
         {/* Decorative background blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
@@ -587,7 +587,7 @@ export function ScrollQuiz({ data }: { data: any }) {
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <motion.span
-                      className="text-4xl font-headline font-bold text-slate-900"
+                      className="text-4xl font-headline font-bold text-slate-900 dark:text-slate-100"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.8 }}
@@ -599,7 +599,7 @@ export function ScrollQuiz({ data }: { data: any }) {
                 </div>
 
                 <motion.h3
-                  className="text-2xl sm:text-3xl font-headline font-bold text-slate-900 mb-3"
+                  className="text-2xl sm:text-3xl font-headline font-bold text-slate-900 dark:text-slate-100 mb-3"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
@@ -656,7 +656,7 @@ export function ScrollQuiz({ data }: { data: any }) {
               className={cn(
                 'flex items-center gap-2 px-4 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all duration-300',
                 currentIndex === 0
-                  ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400'
+                  ? 'opacity-30 cursor-not-allowed bg-slate-100 dark:bg-slate-700 text-slate-400'
                   : 'bg-surface-container-highest text-on-surface hover:bg-slate-200 hover:scale-105',
               )}
             >
@@ -680,7 +680,7 @@ export function ScrollQuiz({ data }: { data: any }) {
               className={cn(
                 'flex items-center gap-2 px-4 sm:px-6 py-3 rounded-2xl font-bold text-sm transition-all duration-300',
                 !revealed[currentIndex]
-                  ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400'
+                  ? 'opacity-30 cursor-not-allowed bg-slate-100 dark:bg-slate-700 text-slate-400'
                   : 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:scale-105',
               )}
             >

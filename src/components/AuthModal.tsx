@@ -102,14 +102,14 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed inset-0 z-[101] flex flex-col items-center p-4 overflow-y-auto"
           >
-            <div className="my-auto shrink-0 bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-full max-w-md overflow-hidden border border-slate-100">
+            <div className="my-auto shrink-0 bg-white dark:bg-slate-800 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] w-full max-w-md overflow-hidden border border-slate-100 dark:border-slate-700">
               {/* Header */}
               <div className="relative p-6 sm:p-8 pb-0 sm:pb-0">
                 <button
                   type="button"
                   aria-label="Close"
                   onClick={onClose}
-                  className="absolute top-4 right-4 w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors"
+                  className="absolute top-4 right-4 w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-colors"
                 >
                   <span className="material-symbols-outlined text-slate-500 text-lg">close</span>
                 </button>
@@ -122,15 +122,15 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
                 </div>
 
                 {/* Tab Switcher */}
-                <div className="flex bg-slate-100 rounded-xl p-1 gap-1">
+                <div className="flex bg-slate-100 dark:bg-slate-700 rounded-xl p-1 gap-1">
                   <button
                     type="button"
                     onClick={() => switchMode('signin')}
                     className={cn(
                       "flex-1 py-2.5 text-sm font-bold rounded-lg transition-all duration-200",
                       mode === 'signin' 
-                        ? "bg-white text-on-surface shadow-sm" 
-                        : "text-slate-400 hover:text-slate-600"
+                        ? "bg-white dark:bg-slate-600 text-on-surface shadow-sm" 
+                        : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                     )}
                   >
                     Sign In
@@ -141,8 +141,8 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
                     className={cn(
                       "flex-1 py-2.5 text-sm font-bold rounded-lg transition-all duration-200",
                       mode === 'signup' 
-                        ? "bg-white text-on-surface shadow-sm" 
-                        : "text-slate-400 hover:text-slate-600"
+                        ? "bg-white dark:bg-slate-600 text-on-surface shadow-sm" 
+                        : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                     )}
                   >
                     Sign Up
@@ -171,7 +171,7 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
                           value={email}
                           onChange={e => setEmail(e.target.value)}
                           placeholder="you@example.com"
-                          className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                          className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-base sm:text-sm text-on-surface placeholder:text-slate-300 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                         />
                       </div>
                     </div>
@@ -191,7 +191,7 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
                             value={phone}
                             onChange={e => setPhone(e.target.value)}
                             placeholder="+91 98765 43210"
-                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                            className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-base sm:text-sm text-on-surface placeholder:text-slate-300 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                           />
                         </div>
                       </motion.div>
@@ -207,7 +207,7 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
                           value={password}
                           onChange={e => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="w-full pl-10 pr-11 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                          className="w-full pl-10 pr-11 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-base sm:text-sm text-on-surface placeholder:text-slate-300 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                         />
                         <button
                           type="button"
@@ -238,7 +238,7 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
                             placeholder="25"
                             min="1"
                             max="120"
-                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm text-on-surface placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                            className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-base sm:text-sm text-on-surface placeholder:text-slate-300 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                           />
                         </div>
                       </motion.div>

@@ -7,7 +7,7 @@ const STYLES: Record<ConceptCategory, { border: string; text: string; tag: strin
   'Core Concept': { border: 'border-primary', text: 'text-primary', tag: 'text-primary/80 border-primary/10', icon: 'hub' },
   'Main Topic': { border: 'border-secondary', text: 'text-secondary', tag: 'text-secondary/80 border-secondary/10', icon: 'account_tree' },
   'Sub-topic': { border: 'border-tertiary', text: 'text-tertiary', tag: 'text-tertiary/80 border-tertiary/10', icon: 'schema' },
-  'Key Detail': { border: 'border-slate-400', text: 'text-slate-500', tag: 'text-slate-500 border-slate-200', icon: 'lightbulb' },
+  'Key Detail': { border: 'border-slate-400', text: 'text-slate-500', tag: 'text-slate-500 border-slate-200 dark:border-slate-700', icon: 'lightbulb' },
 };
 
 export function ConceptCard({ concept }: { concept: Concept }) {
