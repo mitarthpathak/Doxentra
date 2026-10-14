@@ -72,12 +72,16 @@ export async function recognizeImageBuffer(imageBuffer, options = {}) {
   await loadImage(imageBuffer);
   const timeoutMs = options.timeoutMs ?? OCR_TIMEOUT_MS;
   return exclusive(async w => {
+    if (options.signal?.aborted) throw Object.assign(new Error('Local OCR cancelled.'), { code: 'OCR_TIMEOUT' });
     let timer;
+    let cancel;
     try {
       const recognition = w.recognize(imageBuffer);
       const timeout = new Promise((_, reject) => {
         timer = setTimeout(() => reject(new Error('Local OCR timed out.')), timeoutMs);
         timer.unref?.();
+        cancel = () => reject(Object.assign(new Error('Local OCR cancelled.'), { code: 'OCR_TIMEOUT' }));
+        options.signal?.addEventListener('abort', cancel, { once: true });
       });
       const { data } = await Promise.race([recognition, timeout]);
       const lines = (data.blocks || []).flatMap(block => (block.paragraphs || []).flatMap(p => p.lines || []));
@@ -85,12 +89,16 @@ export async function recognizeImageBuffer(imageBuffer, options = {}) {
         text: String(data.text || '').trim(),
         confidence: Number(data.confidence) || 0,
         lines: lines.map(line => ({ text: String(line.text || '').trim(), bbox: line.bbox, confidence: Number(line.confidence) || 0 })),
+        words: (data.words || lines.flatMap(line => line.words || [])).map(word => ({
+          text: word.text, bbox: word.bbox, confidence: Number(word.confidence) || 0,
+          symbols: (word.symbols || []).map(s => ({ text: s.text, bbox: s.bbox, confidence: Number(s.confidence) || 0 })),
+        })),
       };
     } catch (err) {
       // A timed-out or failed worker may still be busy; discard it before reuse.
       await shutdownOfflineOcr();
       throw err;
-    } finally { clearTimeout(timer); }
+    } finally { clearTimeout(timer); options.signal?.removeEventListener('abort', cancel); }
   });
 }
 

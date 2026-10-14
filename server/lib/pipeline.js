@@ -3,6 +3,7 @@ import { lowConfidenceIssues, sortIssues, validateExtraction } from './validate.
 import { calibrateClassification } from './classify.js';
 import { isPoorImage, qualityIssues } from './quality.js';
 import { applyFieldPolicy } from './fieldPolicy.js';
+import { ocrValidationInput, validateOcrFields, ocrValidationIssues } from './ocr/validation.js';
 
 /**
  * Post-processing after the model (or rule-based) extraction:
@@ -14,11 +15,12 @@ import { applyFieldPolicy } from './fieldPolicy.js';
  *  4. overall document confidence.
  * ctx: { textByPage, textLayerPages, ocrUsed, quality?, now? }.
  */
-export function finalizeExtraction(rawExtraction, { now, ...ctx }) {
+export function finalizeExtraction(rawExtraction, { now, ocrValidation, ...ctx }) {
   rawExtraction = applyFieldPolicy(rawExtraction);
   const extraction = calibrateClassification(rawExtraction, { textByPage: ctx.textByPage });
-  const ruleIssues = [...validateExtraction(extraction, { now, textByPage: ctx.textByPage }), ...qualityIssues(ctx.quality)];
-  const scored = scoreExtraction(extraction, { ...ctx, poorImage: isPoorImage(ctx.quality), issues: ruleIssues });
-  const issues = sortIssues([...ruleIssues, ...lowConfidenceIssues(scored.fields)]);
+  const ruleIssues = [...validateExtraction(ocrValidationInput(extraction), { now, textByPage: ctx.textByPage }), ...qualityIssues(ctx.quality)];
+  const scored = validateOcrFields(scoreExtraction(extraction, { ...ctx, poorImage: isPoorImage(ctx.quality), issues: ruleIssues }), ruleIssues,
+    { enabled: ocrValidation ?? extraction.ocr?.validationEnabled !== false });
+  const issues = sortIssues([...ruleIssues, ...ocrValidationIssues(scored.fields, ruleIssues), ...lowConfidenceIssues(scored.fields)]);
   return { ...scored, issues, overallConfidence: overallConfidence(scored.fields, issues) };
 }

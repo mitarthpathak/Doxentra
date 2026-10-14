@@ -3,6 +3,7 @@ import { reviewSummary } from './review.js';
 import { redactDocument } from './redact.js';
 import { hasDevanagari, transliterate } from './translit.js';
 import { applyFieldPolicy } from './fieldPolicy.js';
+import { needsReview } from './ocr/state.js';
 
 /** A Hindi value in Latin letters, so it can be read (and checked) without Hindi. */
 const withTransliteration = f => (typeof f.value === 'string' && hasDevanagari(f.value)
@@ -49,6 +50,7 @@ export function toDocumentResponse(doc, extra = {}) {
     pageCount: x.pageCount,
     overallConfidence: x.overallConfidence ?? null,
     fields: (x.fields || []).map(withTransliteration),
+    ...(x.ocr ? { ocr: x.ocr, needs_review: needsReview(x.fields || []) } : {}),
     entities: x.entities || [],
     tables: x.tables || [],
     issues: x.issues || [],
@@ -103,7 +105,7 @@ const csvCell = v => {
  */
 export function toCsv(doc, { redact = false } = {}) {
   const d = redact ? redactDocument(toDocumentResponse(doc)) : toDocumentResponse(doc);
-  const header = ['section', 'key', 'label', 'value', 'normalized_value', 'confidence', 'confidence_band', 'page', 'source_quote', 'review'];
+  const header = ['section', 'key', 'label', 'value', 'normalized_value', 'confidence', 'confidence_band', 'page', 'source_quote', 'review', 'ocr_status', 'agreement', 'ocr_confidence', 'ocr_candidates', 'validation', 'steps_applied'];
   const rows = [
     ['document', 'filename', 'File', d.filename],
     ['document', 'doc_type', 'Document type', d.docTypeLabel, d.docType, d.docTypeConfidence],
@@ -114,7 +116,7 @@ export function toCsv(doc, { redact = false } = {}) {
     ['document', 'review_status', 'Review status', d.review.status, `${d.review.reviewed}/${d.review.total} fields reviewed`],
     ...(d.redacted ? [['document', 'redacted', 'Personal data masked', d.redaction.fields.map(f => f.label).join('; ') || 'none found']] : []),
     ...d.fields.map(f => ['field', f.key, f.label, f.value, f.normalizedValue, f.confidence, f.confidenceBand, f.page, f.sourceQuote,
-      f.review ? `${f.review.status} by ${f.review.by} at ${f.review.at}` : '']),
+      f.review ? `${f.review.status} by ${f.review.by} at ${f.review.at}` : '', f.status, f.agreement, f.ocr?.confidence, f.candidates?.length ? JSON.stringify(f.candidates) : '', f.validation, f.steps_applied]),
     ...d.entities.map(e => ['entity', e.type, e.type, e.value, '', e.confidence, e.confidenceBand, e.page, e.sourceQuote]),
     ...d.issues.map(i => ['issue', i.type, i.severity, i.message, (i.fieldKeys || []).join('; ')]),
     ...d.tables.flatMap((t, ti) => [

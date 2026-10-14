@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { cn } from '../lib/utils';
 import { apiFetch, percent } from '../lib/api';
 import type { AuditEntry, DocumentResult, ExtractedField } from '../types';
+import { OcrCandidates } from './OcrReviewPanel';
 
 const send = (doc: DocumentResult, path: string, method: 'PATCH' | 'POST', body: object) =>
   apiFetch<DocumentResult>(`/documents/${encodeURIComponent(doc.id)}${path}`, { method, body: JSON.stringify(body) });
@@ -100,6 +101,7 @@ export function FieldReview({ doc, field, onChange }: { doc: DocumentResult; fie
           )}
         </div>
       )}
+      <OcrCandidates field={field} onChoose={candidate => { setValue(candidate); setEditing(true); }} />
       {error && <p role="alert" className="text-red-500 text-xs font-medium">{error}</p>}
     </div>
   );

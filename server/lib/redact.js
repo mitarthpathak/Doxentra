@@ -108,6 +108,15 @@ function textMasker(replacements) {
 /** Add the personal values of one document's fields and entities to `replacements`. */
 function collect(replacements, fields = [], entities = []) {
   for (const f of fields) {
+    // OCR candidates may contain personal values while the field is withheld.
+    for (const candidate of f.candidates || []) {
+      if (candidate.value == null) continue;
+      const masked = maskField({ ...f, value: candidate.value });
+      if (masked) {
+        replacements.set(String(candidate.value), masked.masked);
+        replacements.set(asciiDigits(String(candidate.value)), masked.masked);
+      }
+    }
     const m = maskField(f);
     if (!m) continue;
     replacements.set(String(f.value), m.masked);
@@ -160,7 +169,10 @@ export function redactDocument(doc) {
     const f = byKey.get(key);
     return (f && maskField({ ...f, value: v })?.masked) || mask(v);
   };
-  const maskDeep = v => (typeof v === 'string' ? mask(v) : Array.isArray(v) ? v.map(maskDeep) : v);
+  const maskDeep = v => (typeof v === 'string' ? mask(v) : Array.isArray(v) ? v.map(maskDeep)
+    : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([key, value]) => [key, maskDeep(value)])) : v);
+  const maskCandidates = f => (f.candidates || []).map(c => ({ ...maskDeep(c),
+    ...(maskField({ ...f, value: c.value }) ? { lowConfidenceTokens: [] } : {}) }));
 
   return {
     ...doc,
@@ -169,6 +181,8 @@ export function redactDocument(doc) {
     summary: mask(doc.summary),
     fields: fields.map(f => ({
       ...f,
+      ...(f.candidates ? { candidates: maskCandidates(f) } : {}),
+      ...(f.ocr ? { ocr: maskDeep(f.ocr) } : {}),
       sourceQuote: mask(f.sourceQuote),
       ...(f.masked ? {} : { value: mask(f.value), normalizedValue: maskDeep(f.normalizedValue), transliteration: mask(f.transliteration) }),
       // The AI's own answer kept by a review: every text in it (value, normalised value, quote).
@@ -182,6 +196,9 @@ export function redactDocument(doc) {
     audit: (doc.audit || []).map(a => ({ ...a, by: maskEmail(a.by), from: maskTrail(a.fieldKey, a.from), to: maskTrail(a.fieldKey, a.to), note: mask(a.note) })),
     // Translations name people in another script; they are not shown while masking.
     translations: {},
+    ...(doc.rawTextByPage ? { rawTextByPage: maskDeep(doc.rawTextByPage) } : {}),
+    ...(doc.textByPage ? { textByPage: maskDeep(doc.textByPage) } : {}),
+    ...(doc.needs_review ? { needs_review: doc.needs_review.map(item => ({ ...maskDeep(item), candidates: maskCandidates(byKey.get(item.field) || { candidates: item.candidates }) })) } : {}),
     redacted: true,
     redaction: {
       fields: maskedFields,

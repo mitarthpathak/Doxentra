@@ -114,7 +114,7 @@ export function verificationTargets(result, pages) {
   return targets;
 }
 
-function maskPrivateIds(result, pages) {
+export function maskPrivateIds(result, pages) {
   const aadhaar = /aadhaar|aadhar|आधार/i.test(`${result.docSubtype || ''} ${result.title} ${pages.join(' ')} ${result.fields.map(f => `${f.key} ${f.label} ${f.value || ''}`).join(' ')}`);
   if (!aadhaar) return { result, pages, checksumIssues: [] };
   const id = result.fields.find(f => f.key === 'id_number' || /aadhaar|aadhar/i.test(`${f.key} ${f.label}`));

@@ -27,6 +27,7 @@ const issue = (rule, severity, type, fieldKeys, message) => ({ rule, severity, t
 
 /** Every rule the engine can raise: [id, severity, type, description]. */
 export const RULES = [
+  ['ocr.needs_review', 'warning', 'low_confidence', 'Independent OCR evidence is unresolved; a person must confirm or correct it.'],
   ['extraction.empty', 'warning', 'missing', 'No structured values were extracted, so consistency could not be checked.'],
   ['text.unreadable', 'warning', 'quality', 'One or more pages contain no readable text.'],
   ['required.missing', 'error', 'missing', 'A required field of the detected document type has no value.'],
@@ -106,7 +107,7 @@ function fieldMap(extraction) {
 // ─── Required fields and formats ─────────────────────────────────────
 function missingIssues(extraction) {
   const required = extraction.fields.filter(f => f.required);
-  const missing = required.filter(f => f.value == null);
+  const missing = required.filter(f => f.value == null && f.status !== 'needs_review');
   const out = missing.map(f => issue('required.missing', 'error', 'missing', [f.key], `${f.label} is missing.`));
   // Most of a type's required fields absent: more likely the wrong type than a bad document.
   if (extraction.docType !== 'other' && required.length >= 3 && missing.length / required.length > 0.5) {
@@ -513,7 +514,11 @@ export function validateExtraction(extraction, { now = new Date(), textByPage = 
     ...duplicateIdIssues(extraction),
     ...idNumberIssues(extraction),
   ];
-  if (!extraction.fields.some(f => f.value != null) && !(extraction.tables || []).some(t => t.rows?.length)) {
+  for (const field of extraction.fields) if (field.status === 'needs_review') {
+    issues.push(issue('ocr.needs_review', 'warning', 'low_confidence', [field.key],
+      `${field.label} needs manual OCR review (${(field.ocr?.reasons || []).join(', ').replace(/_/g, ' ')}). Candidate values are retained; none was auto-accepted.`));
+  }
+  if (!extraction.fields.some(f => f.value != null || f.candidates?.some(c => c.value != null)) && !(extraction.tables || []).some(t => t.rows?.length)) {
     issues.push(issue('extraction.empty', 'warning', 'missing', [],
       'No structured values were extracted. Consistency could not be checked; review the document or try a clearer scan.'));
   }

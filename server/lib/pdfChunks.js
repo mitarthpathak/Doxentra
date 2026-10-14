@@ -11,12 +11,14 @@ import { overallConfidence } from './confidence.js';
 import { listDocuments } from './db.js';
 import { crossDocumentIssues } from './crossdoc.js';
 import { buildEntityGraph } from './entityGraph.js';
+import { ocrConfig, ocrConfigHash } from './ocr/config.js';
 
 export const PDF_CHUNK_PAGES = 5;
 
 /** Merge citations in original page coordinates, retaining conflicting field values. */
 export function mergeChunk(previous, result, offset) {
-  const shift = entry => ({ ...entry, page: entry.page ? entry.page + offset : null });
+  const shift = entry => ({ ...entry, page: entry.page ? entry.page + offset : null,
+    ...(entry.candidates ? { candidates: entry.candidates.map(c => ({ ...c, page: c.page ? c.page + offset : null })) } : {}) });
   const raw = result.rawExtraction;
   const merged = previous ? structuredClone(previous) : {
     ...raw, fields: [], entities: [], tables: [], textByPage: [], textLayerPages: [], ocrUsed: false, graphChunks: [], checksumIssues: [],
@@ -26,6 +28,9 @@ export function mergeChunk(previous, result, offset) {
     const value = shift(field);
     const existing = merged.fields.find(f => f.key === value.key);
     if (!existing) merged.fields.push(value);
+    else if (existing.status === 'needs_review' || value.status === 'needs_review') {
+      merged.fields.push({ ...value, key: `${value.key}_page_${value.page || offset + 1}`, field: `${value.key}_page_${value.page || offset + 1}`, extra: true });
+    }
     else if (existing.value == null && value.value != null) Object.assign(existing, value);
     else if (value.value != null && existing.value !== value.value) {
       merged.fields.push({ ...value, key: `${value.key}_page_${value.page || offset + 1}`, extra: true });
@@ -41,6 +46,11 @@ export function mergeChunk(previous, result, offset) {
   merged.ocrUsed ||= result.doc.extraction.ocrUsed;
   merged.checksumIssues ||= [];
   merged.checksumIssues.push(...(result.checksumIssues || []));
+  if (raw.ocr) {
+    const previousPages = previous?.ocr?.pages || [];
+    merged.ocr = { ...raw.ocr, pages: [...previousPages, ...raw.ocr.pages.map(p => ({ ...p, page: p.page + offset }))],
+      reprocessedFields: (previous?.ocr?.reprocessedFields || 0) + raw.ocr.reprocessedFields };
+  }
   merged.graphChunks ||= [];
   if (result.doc.graph?.nodes?.length) merged.graphChunks.push({ graph: result.doc.graph, metadata: result.doc.metadata });
   return merged;
@@ -66,7 +76,8 @@ export function mergeConceptMaps(chunks) {
 export async function processPdfChunk(file, options) {
   if (isPrivacyMode()) return processDocument(file, options);
   const fileHash = crypto.createHash('sha256').update(file.buffer).digest('hex');
-  if (!options.checkpoint && await findExtractionByHash(fileHash, EXTRACTION_VERSION)) return processDocument(file, options);
+  const configHash = ocrConfigHash(ocrConfig());
+  if (!options.checkpoint && await findExtractionByHash(fileHash, EXTRACTION_VERSION, configHash)) return processDocument(file, options);
   await options.onStage?.('reading');
   const pdf = await PDFDocument.load(file.buffer);
   const pageCount = pdf.getPageCount();
@@ -78,6 +89,7 @@ export async function processPdfChunk(file, options) {
   // Bound checkpoint size below MongoDB's document limit, without silently truncating pages.
   if (pageCount > 500) return { success: false, error: 'Please split PDFs longer than 500 pages before uploading.' };
   const checkpoint = options.checkpoint;
+  if (checkpoint?.ocrConfigHash && checkpoint.ocrConfigHash !== configHash) return { success: false, error: 'OCR settings changed during processing. Please upload this PDF again.' };
   if (checkpoint && checkpoint.fileHash !== fileHash) return { success: false, error: 'The uploaded file changed during processing. Please upload it again.' };
   const part = await PDFDocument.create();
   for (const page of await part.copyPages(pdf, Array.from({ length: end - offset }, (_, i) => offset + i))) part.addPage(page);
@@ -90,7 +102,7 @@ export async function processPdfChunk(file, options) {
   const fallback = checkpoint?.fallback || result.doc.source === 'fallback';
   const warning = checkpoint?.warning || result.warning;
   if (end < pageCount) {
-    await options.saveCheckpoint({ nextPage: end, pageCount, fileHash, merged, fallback, warning });
+    await options.saveCheckpoint({ nextPage: end, pageCount, fileHash, ocrConfigHash: configHash, merged, fallback, warning });
     return { pending: true };
   }
   const { textByPage, textLayerPages, ocrUsed, graphChunks = [], checksumIssues = [], ...raw } = merged;

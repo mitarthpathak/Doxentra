@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { getProcessingMode } from '../lib/processingMode';
+import { OcrReviewQueue, OcrCandidates } from './OcrReviewPanel';
 import { apiFetch, confidenceBand, percent } from '../lib/api';
 import { PagePreview } from './PagePreview';
 import { IntegrityCard } from './IntegrityCard';
@@ -218,7 +219,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
   const found = doc.fields.filter(f => f.value != null);
   const privacy = doc.processingMode === 'privacy' || getProcessingMode() === 'privacy';
   const missingFields = doc.fields.filter(f => f.value == null);
-  const visibleFields = showEmpty ? doc.fields : found.concat(missingFields.filter(f => f.required));
+  const visibleFields = showEmpty ? doc.fields : found.concat(missingFields.filter(f => f.required || f.status === 'needs_review'));
   const issueKeys = new Map<string, DocumentIssue['severity']>();
   for (const i of doc.issues) for (const k of i.fieldKeys) if (!issueKeys.has(k) || i.severity === 'error') issueKeys.set(k, i.severity);
   for (const i of crossIssues) {
@@ -258,16 +259,17 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
         </button>
       </div>
       <div>
-        <p className="text-sm font-medium break-words">{display(selected) ?? 'Not found in the document'}</p>
+        <p className="text-sm font-medium break-words">{display(selected) ?? (selected.status === 'needs_review' ? 'Value withheld pending OCR review' : 'Not found in the document')}</p>
         {selected.transliteration && <p className="text-[10px] text-on-surface-variant mt-1" lang="en">In Latin letters: {selected.transliteration}</p>}
         {selected.normalizedValue != null && !Array.isArray(selected.normalizedValue) && String(selected.normalizedValue) !== selected.value && (
           <p className="text-[10px] text-on-surface-variant mt-1 break-words">Normalised: <span className="font-mono">{String(selected.normalizedValue)}</span></p>
         )}
       </div>
-      {onDocumentChange && doc.review && <FieldReview doc={doc} field={selected} onChange={onDocumentChange} />}
-      {doc.hasFile && selected.value != null && !masked && (
-        <PagePreview docId={doc.id} page={selected.page} quote={selected.sourceQuote} value={selected.value} fieldKey={selected.key} box={selected.box} />
+      {doc.hasFile && (selected.value != null || selected.status === 'needs_review') && !masked && (
+        <PagePreview docId={doc.id} page={selected.page} quote={selected.sourceQuote} value={selected.value} fieldKey={selected.key} box={selected.box} showCrop={Boolean(selected.ocr)} />
       )}
+      {onDocumentChange && doc.review && <FieldReview doc={doc} field={selected} onChange={onDocumentChange} />}
+      {(!onDocumentChange || !doc.review) && <OcrCandidates field={selected} />}
       {selected.sourceQuote ? (
         <blockquote className="border-l-4 border-primary bg-surface-container-low rounded-r-2xl px-4 py-3 text-sm text-on-surface leading-relaxed break-words">
           <QuoteWithValue quote={selected.sourceQuote} value={selected.value} />
@@ -288,7 +290,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
       </div>
       {selected.confidenceDetail && selected.value != null && (
         <div className="space-y-2" aria-label="How the confidence was calculated">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">How the confidence was calculated</p>
+          <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">{selected.ocr ? 'Additional extraction checks' : 'How the confidence was calculated'}</p>
           {[
             ['AI certainty', selected.confidenceDetail.model, '50%'],
             ['Quote found in document', selected.confidenceDetail.verification, '30%'],
@@ -627,6 +629,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
           </div>
 
           {translation && <TranslationPanel translation={translation} onClose={() => setTranslation(null)} />}
+          <OcrReviewQueue doc={doc} onSelectField={onSelectField} />
 
           {!masked && <TwinPanel doc={doc} onDocumentChange={onDocumentChange} />}
 
@@ -659,7 +662,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
                     <button
                       onClick={() => onSelectField(isSelected ? null : f.key)}
                       aria-pressed={isSelected}
-                      aria-label={`${f.label}: ${value ?? 'missing'}, ${percent(f.confidence)} confidence${f.page ? `, page ${f.page}` : ''}`}
+                      aria-label={`${f.label}: ${value ?? (f.status === 'needs_review' ? 'needs OCR review' : 'missing')}, ${percent(f.confidence)} confidence${f.page ? `, page ${f.page}` : ''}`}
                       className={cn(
                         'w-full text-left grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)_auto] items-center gap-x-3 gap-y-1 sm:gap-3 px-4 py-3 rounded-2xl border transition-all',
                         isSelected ? 'bg-surface-container-high border-primary/30' : 'bg-white border-slate-200 hover:border-primary/30'
@@ -680,12 +683,13 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
                         )}
                       </span>
                       <span className={cn('col-span-2 sm:col-span-1 text-sm break-words min-w-0', value == null ? 'text-slate-400 italic' : 'font-medium text-on-surface')}>
-                        {value ?? (f.required ? 'Missing' : 'Not found')}
+                        {value ?? (f.status === 'needs_review' ? 'Needs OCR review' : f.required ? 'Missing' : 'Not found')}
                         {f.transliteration && <span className="block text-[10px] font-normal text-on-surface-variant mt-0.5" lang="en" data-testid="field-transliteration">{f.transliteration}</span>}
                       </span>
                       </span>
                       <span className="col-start-2 row-start-1 max-w-[7.5rem] flex flex-wrap items-center justify-end gap-x-2 gap-y-1 sm:col-auto sm:row-auto sm:max-w-none sm:flex-col sm:flex-nowrap sm:items-end sm:justify-start sm:gap-1">
                         <ConfidenceChip value={f.confidence} band={f.confidenceBand} />
+                        {f.status && !f.review && <span className={cn('text-[9px] font-bold uppercase', f.status === 'needs_review' ? 'text-amber-600' : 'text-on-surface-variant')}>{f.status.replace(/_/g, ' ')}</span>}
                         {f.review && (
                           <span className="flex items-center gap-1 text-[9px] font-bold text-tertiary uppercase tracking-widest" data-testid="field-reviewed">
                             <span className="material-symbols-outlined text-[12px]">{f.review.status === 'confirmed' ? 'check_circle' : 'edit'}</span>

@@ -18,12 +18,14 @@ import { toDocumentResponse } from './documentView.js';
 import { ownerFields } from './owner.js';
 import { withoutReview } from './review.js';
 import { isTransientError } from './serviceErrors.js';
-import { analyzeGemini } from './geminiPipeline.js';
+import { analyzeGemini, maskPrivateIds } from './geminiPipeline.js';
 import { recognizeImageBuffer, recognizeScannedPdf } from './offlineOcr.js';
 import { isGeminiRateLimit } from './geminiPool.js';
 import { sortIssues } from './validate.js';
 import { crossDocumentIssues } from './crossdoc.js';
 import { buildEntityGraph } from './entityGraph.js';
+import { ocrConfig, ocrConfigHash } from './ocr/config.js';
+import { crosscheckExtraction, readOcrInput } from './ocr/crosscheck.js';
 
 // Page text kept for search and quote verification.
 const MAX_PAGE_CHARS = 20_000;
@@ -42,8 +44,8 @@ export const failResult = (filename, status, error, extra = {}) => ({ success: f
 
 /** Fields copied when a cached extraction is saved for another owner (without its review or audit trail). */
 function pickStored(d) {
-  const { filename, fileHash, extractionVersion, mimeType, fileSize, source, model, warning, metadata, extraction, file, quality } = d;
-  return { filename, fileHash, extractionVersion, mimeType, fileSize, source, model, warning, metadata, extraction: withoutReview(extraction), file, quality, graph: d.graph || null };
+  const { filename, fileHash, extractionVersion, ocrConfigHash, processingMode, mimeType, fileSize, source, model, warning, metadata, extraction, file, quality } = d;
+  return { filename, fileHash, extractionVersion, ocrConfigHash, processingMode, mimeType, fileSize, source, model, warning, metadata, extraction: withoutReview(extraction), file, quality, graph: d.graph || null };
 }
 
 /**
@@ -57,6 +59,8 @@ function pickStored(d) {
 export async function processDocument(file, { owner = null, deadline, fileRef = null, quality = null, onStage = () => {}, onPageProgress = () => {}, deferSave = false, maxBytes, requirePersistence = false, pageOffset = 0, pipeline = process.env.DOXENTRA_ANALYSIS_PIPELINE || 'gemini' } = {}) {
   const filename = file.originalname || 'document';
   const privacy = isPrivacyMode();
+  const config = ocrConfig();
+  const configHash = ocrConfigHash(config);
   if (privacy) fileRef = null;
   let fileType;
   try {
@@ -73,14 +77,14 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
       return null;
     });
   };
-  const cached = privacy || deferSave ? null : await findExtractionByHash(fileHash, EXTRACTION_VERSION).catch(() => null);
+  const cached = privacy || deferSave ? null : await findExtractionByHash(fileHash, EXTRACTION_VERSION, configHash).catch(() => null);
   if (cached) {
     console.log('[Extract] cache hit', fileHash.slice(0, 12));
     let doc = cached;
     const sameOwner = owner && (owner._id ? String(cached.userId ?? '') === String(owner._id) : cached.guestId === owner.guestId && !cached.userId);
     if (!sameOwner && (owner || cached.userId || cached.guestId)) {
       // Give this owner their own copy so it shows up in their documents.
-      doc = (await findUserExtractionByHash(fileHash, EXTRACTION_VERSION, owner).catch(() => null)) ||
+      doc = (await findUserExtractionByHash(fileHash, EXTRACTION_VERSION, owner, configHash).catch(() => null)) ||
         (await (async () => {
           const ref = (await storedRef()) || cached.file || null;
           return saveGraph({ ...pickStored(cached), filename, ...ownerFields(owner), file: ref, ...(quality ? { quality } : {}) });
@@ -91,7 +95,27 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
 
   await onStage('reading');
   const input = await prepareDocumentInput({ buffer: file.buffer, kind: fileType.kind, mimeType: fileType.mimeType });
-  if (privacy && (fileType.kind === 'image' || input.mode !== 'text' || input.unreliablePages?.length)) {
+  const ocrInput = { ...input, file: { data: file.buffer, mimeType: fileType.mimeType } };
+  // Start local engines alongside cloud reasoning; reuse their reads for field
+  // alignment and for graceful fallback if the primary OCR service fails.
+  const recordsPromise = readOcrInput(ocrInput, { config, deadline,
+    onPage: async (_page, completed, count) => {
+      if (privacy || fileType.kind === 'image') await onPageProgress({ pageCount: input.pageCount,
+        pagesCompleted: input.pageCount - count + completed, pageStart: 1, pageEnd: input.pageCount, chunkIndex: 1, chunkCount: 1 });
+    },
+  });
+  let records;
+  if (privacy && config.enabled && (fileType.kind === 'image' || input.unreliablePages?.length)) {
+    await onStage('local_ocr');
+    records = await recordsPromise;
+    if (records.length && records.every(r => r.reads.every(read => read.status === 'failed')) && !input.pages.some(text => String(text).trim())) {
+      return failResult(filename, 422, 'All configured local OCR engines failed. Please try a clearer image or check the OCR engine installation.');
+    }
+    input.pages = Array.from({ length: input.pageCount }, (_, i) =>
+      records.find(r => r.page === i + 1)?.reads.find(r => r.status === 'ok' && r.text.trim())?.text || input.pages[i] || '');
+    input.mode = 'text'; input.ocrUsed = true;
+    input.textLayer = records.length === input.pageCount ? 'scanned' : 'mixed';
+  } else if (privacy && (fileType.kind === 'image' || input.mode !== 'text' || input.unreliablePages?.length)) {
     await onStage('local_ocr');
     try {
       if (fileType.kind === 'image') {
@@ -121,7 +145,7 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
       return failResult(filename, 422, 'Local OCR could not read this file. Please try a clearer scan or another image.');
     }
   }
-  if (fileType.kind === 'image') await onPageProgress({ pageCount: 1, pagesCompleted: privacy ? 1 : 0, pageStart: 1, pageEnd: 1, chunkIndex: 1, chunkCount: 1 });
+  if (fileType.kind === 'image' && !config.enabled) await onPageProgress({ pageCount: 1, pagesCompleted: privacy ? 1 : 0, pageStart: 1, pageEnd: 1, chunkIndex: 1, chunkCount: 1 });
   let result;
   let source = 'ai';
   let warning;
@@ -153,10 +177,19 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
     }
   } catch (err) {
     console.error('[Extract] AI extraction failed:', err.code || err.status || err.name);
-    if (isGeminiRateLimit(err)) return failResult(filename, 429,
+    records ||= await recordsPromise;
+    if (isGeminiRateLimit(err) && !records.some(r => r.reads.some(read => read.status === 'ok' && read.text.trim()))) return failResult(filename, 429,
       'Gemini is rate-limited. Your uploaded file is retained and will retry when quota is available.',
       { retryable: true, deferUntil: Number(err.retryAt) || Date.now() + 60_000 });
     const what = fileType.kind === 'image' ? 'This image needs OCR' : 'This PDF has no selectable text';
+    if (input.mode !== 'text') {
+      records ||= await recordsPromise;
+      const localPages = Array.from({ length: input.pageCount }, (_, i) =>
+        records.find(r => r.page === i + 1)?.reads.find(r => r.status === 'ok' && r.text.trim())?.text || input.pages[i] || '');
+      if (config.enabled && localPages.some(text => text.trim())) {
+        input.pages = localPages; input.mode = 'text'; input.ocrUsed = true;
+      }
+    }
     if (input.mode !== 'text') {
       const error = err.code === 'NO_API_KEY'
         ? `${what} and the AI service is not configured.`
@@ -178,6 +211,10 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
       : 'The AI service is busy right now, so a basic rule-based extraction was done. Upload again later for a full AI extraction.';
   }
 
+  records ||= await recordsPromise;
+  result = await crosscheckExtraction(result, ocrInput, { config, deadline, onStage, records });
+  // Cross-check candidates must follow the existing Aadhaar storage policy too.
+  if (!privacy && config.enabled) result = maskPrivateIds(result, input.pages).result;
   await onStage('validating');
   const { model, ocrText, pipeline: analysis, conceptMap, ...rawExtraction } = result;
   if (analysis?.visionPageNumbers?.length) input.ocrUsed = true;
@@ -206,6 +243,7 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
     filename,
     fileHash,
     extractionVersion: EXTRACTION_VERSION,
+    ocrConfigHash: configHash,
     mimeType: fileType.mimeType,
     fileSize: file.size ?? file.buffer.length,
     source,

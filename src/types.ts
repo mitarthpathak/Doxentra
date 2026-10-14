@@ -130,6 +130,21 @@ export interface SavedGraph {
 export type ConfidenceBand = 'high' | 'medium' | 'low';
 
 export interface ExtractedField {
+  validation?: { passed: boolean | null; rule: string; rules: string[] };
+  steps_applied?: string[];
+  field?: string;
+  candidates?: OcrCandidate[];
+  agreement?: boolean;
+  agreementState?: 'agreed' | 'uncertain';
+  status?: 'accepted' | 'reprocessed' | 'needs_review';
+  ocr?: {
+    confidence: number;
+    threshold: number;
+    reasons: string[];
+    majorityHint?: { value: string; engines: string[]; guaranteed: false };
+    reprocess?: { attempted: boolean; steps?: string[]; region?: number[]; error?: string };
+    manualReview?: { by: string; at: string; action: string };
+  };
   key: string;
   label: string;
   type: string;
@@ -139,6 +154,8 @@ export interface ExtractedField {
   value: string | null;
   normalizedValue: string | number | string[] | null;
   modelConfidence: number;
+  /** Legacy model/quote/validation score, retained for OCR cross-checked fields. */
+  extractionConfidence?: number;
   confidence: number;
   confidenceBand?: ConfidenceBand;
   confidenceDetail?: {
@@ -157,6 +174,31 @@ export interface ExtractedField {
   transliteration?: string;
   /** Set once a person confirmed or corrected the value. */
   review?: { status: 'confirmed' | 'corrected'; by: string; at: string; original: { value: string | null } };
+}
+
+export interface OcrCandidate {
+  sourceQuote?: string;
+  engine: string;
+  role?: 'extraction';
+  value: string | null;
+  confidence: number | null;
+  confidenceGranularity?: 'line' | 'word' | 'character';
+  page?: number | null;
+  box?: number[] | null;
+  attempt?: number;
+  error?: string;
+  lowConfidenceTokens?: { text: string; confidence: number | null; box?: number[] | null }[];
+}
+
+export interface OcrReviewItem {
+  field: string;
+  label: string;
+  candidates: OcrCandidate[];
+  confidence: number;
+  threshold?: number;
+  page: number | null;
+  box: number[] | null;
+  reasons: string[];
 }
 
 /** POST /api/documents/:id/translate. */
@@ -250,6 +292,9 @@ export interface IssueCounts {
 
 /** A document extraction as returned by /api/extract and /api/documents/:id. */
 export interface DocumentResult {
+  needs_review?: OcrReviewItem[];
+  ocr?: { engines: string[]; pages: { page: number; engines: { engine: string; status: string; error?: string; confidenceGranularity?: string }[] }[];
+    reprocessedFields: number; validationEnabled?: boolean; agreementIsGuarantee: false };
   processingMode?: 'deep' | 'privacy';
   /** Locally recognised text, with personal data masked by the server. */
   textByPage?: string[];

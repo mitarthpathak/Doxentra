@@ -178,6 +178,8 @@ export const STAGE_TEXT: Record<string, string> = {
   reading_groq_quota: 'Gemini OCR limit reached; reading the image with Groq',
   extracting: 'Classifying and extracting fields with Gemini AI',
   local_extract: 'Extracting fields locally without cloud AI',
+  ocr_crosscheck: 'Comparing independent OCR engine readings',
+  ocr_reprocessing: 'Re-reading uncertain regions with enhanced images',
   validating: 'Checking confidence and consistency',
   saving: 'Saving results',
   loading_result: 'Loading the saved result',
@@ -201,5 +203,5 @@ export function uploadStepIndex(upload: UploadStatus): number {
   if (!stage) stage = Object.entries(STAGE_TEXT).find(([, text]) => text === upload.subtext)?.[0];
   return ({ preparing: 0, uploading: 0, storing: 0, queued: 1, queueing: 1, downloading: 1, reading: 2,
     local_ocr: 2, reading_groq: 2, reading_groq_quota: 2,
-    extracting: 3, local_extract: 3, validating: 4, saving: 5, loading_result: 5, done: 5 } as Record<string, number>)[stage || 'uploading'] ?? 0;
+    extracting: 3, local_extract: 3, ocr_crosscheck: 4, ocr_reprocessing: 4, validating: 4, saving: 5, loading_result: 5, done: 5 } as Record<string, number>)[stage || 'uploading'] ?? 0;
 }

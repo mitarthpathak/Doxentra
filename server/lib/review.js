@@ -24,6 +24,7 @@ import { QUALITY_CAP } from './quality.js';
 import { cleanValue, normalizeValue } from './normalize.js';
 import { getDocType } from './schemas.js';
 import { lowConfidenceIssues, sortIssues, validateExtraction } from './validate.js';
+import { ocrValidationInput, validateOcrFields, ocrValidationIssues } from './ocr/validation.js';
 
 export const FIELD_ACTIONS = ['confirm', 'correct', 'reset'];
 export const DOCUMENT_ACTIONS = ['approve', 'reopen'];
@@ -47,7 +48,9 @@ function rescore(field, issues) {
   if (d.capped?.includes('image_quality')) c = Math.min(c, QUALITY_CAP);
   if (d.capped?.includes('unverified')) c = Math.min(c, HALLUCINATION_CAP);
   const confidence = round2(c);
-  return { ...field, confidence, confidenceBand: confidenceBand(confidence), confidenceDetail: { ...d, validation: round2(validation) } };
+  return { ...field, confidence: field.ocr ? field.ocr.confidence : confidence,
+    confidenceBand: confidenceBand(field.ocr ? field.ocr.confidence : confidence),
+    ...(field.ocr ? { extractionConfidence: confidence } : {}), confidenceDetail: { ...d, validation: round2(validation) } };
 }
 
 const isReviewed = f => f.review && f.review.status !== 'reset';
@@ -56,12 +59,13 @@ const isReviewed = f => f.review && f.review.status !== 'reset';
 export function revalidate(extraction, { now = new Date() } = {}) {
   const textByPage = extraction.rawTextByPage || [];
   // Image-quality issues come from the upload, not from the values: they stay.
-  const ruleIssues = [...validateExtraction(extraction, { now, textByPage }), ...(extraction.issues || []).filter(i => i.type === 'quality')];
+  const ruleIssues = [...validateExtraction(ocrValidationInput(extraction), { now, textByPage }), ...(extraction.issues || []).filter(i => i.type === 'quality')];
   const fields = extraction.fields.map(f => (isReviewed(f)
     ? { ...f, confidence: f.value == null ? 0 : 1, confidenceBand: f.value == null ? 'low' : 'high' }
     : rescore(f, ruleIssues)));
-  const issues = sortIssues([...ruleIssues, ...lowConfidenceIssues(fields)]);
-  return { ...extraction, fields, issues, overallConfidence: overallConfidence(fields, issues) };
+  const validated = validateOcrFields({ ...extraction, fields }, ruleIssues);
+  const issues = sortIssues([...ruleIssues, ...ocrValidationIssues(validated.fields, ruleIssues), ...lowConfidenceIssues(validated.fields)]);
+  return { ...validated, issues, overallConfidence: overallConfidence(validated.fields, issues) };
 }
 
 /**
@@ -82,7 +86,7 @@ export function withoutReview(extraction) {
 
 /** Review progress of an extraction: { status, reviewed, total, approvedAt?, approvedBy? }. */
 export function reviewSummary(extraction) {
-  const fields = (extraction.fields || []).filter(f => f.value != null || f.required);
+  const fields = (extraction.fields || []).filter(f => f.value != null || f.required || f.status === 'needs_review');
   const reviewed = fields.filter(isReviewed).length;
   const prev = extraction.review || {};
   const status = prev.status === 'approved' ? 'approved' : reviewed ? 'in_review' : 'unreviewed';
@@ -112,7 +116,8 @@ export function reviewField(extraction, fieldKey, { action, value, note } = {}, 
   const cleanNote = note == null ? null : String(note).trim().slice(0, MAX_NOTE) || null;
   // The AI's own answer, kept on the first change so it can be restored.
   const original = field.review?.original ?? { value: field.value, normalizedValue: field.normalizedValue, confidence: field.confidence,
-    confidenceBand: field.confidenceBand, page: field.page, sourceQuote: field.sourceQuote };
+    confidenceBand: field.confidenceBand, page: field.page, sourceQuote: field.sourceQuote,
+    ...(field.box ? { box: field.box } : {}), ...(field.status ? { status: field.status, ocr: structuredClone(field.ocr), steps_applied: [...(field.steps_applied || [])] } : {}) };
 
   let next;
   if (action === 'confirm') {
@@ -121,7 +126,7 @@ export function reviewField(extraction, fieldKey, { action, value, note } = {}, 
   } else if (action === 'correct') {
     if (value !== null && typeof value !== 'string') throw fail(400, 'Send the corrected value as text (or null when it is not in the document).');
     const v = value === null ? null : cleanValue(value, MAX_VALUE);
-    if (v === field.value) throw fail(400, 'The value is unchanged; confirm it instead.');
+    if (v === field.value && field.status !== 'needs_review') throw fail(400, 'The value is unchanged; confirm it instead.');
     const def = getDocType(extraction.docType).fields.find(d => d.key === field.key) || {};
     // The quote and box located the old value; a corrected value has no machine source.
     const { box, ...rest } = field;
@@ -132,6 +137,11 @@ export function reviewField(extraction, fieldKey, { action, value, note } = {}, 
     if (!field.review) throw fail(400, 'This field has not been reviewed.');
     const { review, ...rest } = field;
     next = { ...rest, ...review.original };
+  }
+  if (action !== 'reset' && field.ocr) {
+    next.status = 'accepted';
+    next.ocr = { ...next.ocr, manualReview: { by, at, action } };
+    next.steps_applied = [...new Set([...(next.steps_applied || []), 'manual_review'])];
   }
   const fields = extraction.fields.map((f, i) => (i === index ? next : f));
   const after = revalidate({ ...extraction, fields }, { now });
