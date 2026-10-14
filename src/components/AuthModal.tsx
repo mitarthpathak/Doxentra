@@ -253,7 +253,7 @@ export function AuthModal({ isOpen, onClose, onAuth }: AuthModalProps) {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
-                      className="text-red-500 text-xs font-medium bg-red-50 border border-red-100 rounded-lg px-3 py-2 flex items-center gap-2"
+                      className="text-red-500 dark:text-red-300 text-xs font-medium bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900/60 rounded-lg px-3 py-2 flex items-center gap-2"
                     >
                       <span className="material-symbols-outlined text-sm">error</span>
                       {error}

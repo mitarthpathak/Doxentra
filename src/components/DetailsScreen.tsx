@@ -127,11 +127,11 @@ export function DetailsScreen({ data, viewedNodeIds, onNavigate, masked = false,
       {/* ─── Top Hero Card with PDF info ──────────────────────── */}
       <div className="relative md:h-64 rounded-[40px] overflow-hidden group">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/10 to-tertiary/20 transition-transform duration-700 group-hover:scale-105" />
-        <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/50 to-transparent backdrop-blur-[2px]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/50 to-transparent dark:from-slate-900/90 dark:via-slate-900/70 dark:to-slate-900/30 backdrop-blur-[2px]"></div>
         <div className="relative min-h-64 md:absolute md:inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between gap-5 md:gap-0">
           <div className="flex flex-wrap justify-between items-start gap-3">
             {/* PDF file badge */}
-            <div className="flex items-center gap-3 max-lg:min-w-0 max-lg:max-w-full px-5 py-2.5 bg-white/70 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+            <div className="flex items-center gap-3 max-lg:min-w-0 max-lg:max-w-full px-5 py-2.5 bg-white/70 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
               <span className="material-symbols-outlined text-primary text-lg">picture_as_pdf</span>
               <div className="max-lg:min-w-0">
                 <p className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate max-w-[200px]">{filename}</p>

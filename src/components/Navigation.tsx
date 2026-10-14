@@ -149,7 +149,7 @@ export function TopAppBar({ user, onSignInClick, onSignOut, currentScreen, onScr
                   <div className="p-2">
                     <button
                       onClick={() => { setShowDropdown(false); onSignOut(); }}
-                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors font-medium"
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-red-500 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors font-medium"
                     >
                       <span className="material-symbols-outlined text-lg">logout</span>
                       Sign Out

@@ -273,7 +273,7 @@ function QuestionCard({
                 !isRevealed && !isSelected && 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary/40 hover:shadow-md hover:shadow-primary/5',
                 !isRevealed && isSelected && 'border-primary bg-primary/5 shadow-md shadow-primary/10',
                 showCorrect && 'border-tertiary bg-tertiary/5 shadow-md shadow-tertiary/10',
-                showWrong && 'border-red-400 bg-red-50 shadow-md shadow-red-100',
+                showWrong && 'border-red-400 bg-red-50 dark:bg-red-950/40 shadow-md shadow-red-100',
                 isRevealed && !isSelected && !isCorrect && 'opacity-40 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800',
               )}
               initial={{ opacity: 0, y: 20 }}
@@ -318,7 +318,7 @@ function QuestionCard({
                 <p className={cn(
                   'max-lg:min-w-0 max-lg:break-words text-sm font-medium leading-relaxed pt-1.5 transition-colors',
                   showCorrect && 'text-tertiary font-semibold',
-                  showWrong && 'text-red-500 line-through',
+                  showWrong && 'text-red-500 dark:text-red-300 line-through',
                   !isRevealed && 'text-slate-700',
                 )}>
                   {opt}
@@ -337,7 +337,7 @@ function QuestionCard({
               'mt-6 p-4 sm:p-5 rounded-2xl flex items-center gap-3 sm:gap-4',
               selectedAnswer === question.correctIndex
                 ? 'bg-tertiary/10 border border-tertiary/20'
-                : 'bg-red-50 border border-red-200',
+                : 'bg-red-50 dark:bg-red-950/40 border border-red-200',
             )}
             initial={{ opacity: 0, y: 20, height: 0 }}
             animate={{ opacity: 1, y: 0, height: 'auto' }}
@@ -351,7 +351,7 @@ function QuestionCard({
             </span>
             <p className={cn(
               'max-lg:min-w-0 max-lg:break-words text-sm font-medium',
-              selectedAnswer === question.correctIndex ? 'text-tertiary' : 'text-red-600',
+              selectedAnswer === question.correctIndex ? 'text-tertiary' : 'text-red-600 dark:text-red-300',
             )}>
               {selectedAnswer === question.correctIndex
                 ? 'Brilliant! You nailed it. Keep the momentum going!'

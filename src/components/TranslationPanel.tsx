@@ -52,7 +52,7 @@ export function TranslationPanel({ translation, onClose }: { translation: Docume
       <span
         className={cn(
           'inline-block px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border',
-          translation.method === 'ai' ? 'bg-tertiary/10 text-tertiary border-tertiary/20' : 'bg-amber-50 text-amber-600 border-amber-100'
+          translation.method === 'ai' ? 'bg-tertiary/10 text-tertiary border-tertiary/20' : 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300 border-amber-100 dark:border-amber-900/60'
         )}
         data-testid="translation-method"
       >

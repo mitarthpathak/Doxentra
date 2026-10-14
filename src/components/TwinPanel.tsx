@@ -51,12 +51,12 @@ export function TwinPanel({ doc, onDocumentChange }: { doc: DocumentResult; onDo
       </button>
       {open === change.key && <div className="grid md:grid-cols-2 gap-4 mt-4"><Evidence source={change.before} fieldKey={change.key} /><Evidence source={change.after} fieldKey={change.key} /></div>}
     </div>)}</div> : <p className="text-sm text-tertiary">No field changes found.</p>}
-    {twin.conflicts.length > 0 && <p className="text-sm text-amber-700 font-medium">{twin.conflicts.length} related cross document check{twin.conflicts.length === 1 ? '' : 's'} in the earlier packet. See validation for sources.</p>}
+    {twin.conflicts.length > 0 && <p className="text-sm text-amber-700 dark:text-amber-300 font-medium">{twin.conflicts.length} related cross document check{twin.conflicts.length === 1 ? '' : 's'} in the earlier packet. See validation for sources.</p>}
     {twin.review && <p className="text-xs font-bold text-primary">{twin.review.status === 'approve' ? 'Approved' : 'Needs review'} by {twin.review.by} · {new Date(twin.review.at).toLocaleString()}</p>}
     {twin.changes.length > 0 && onDocumentChange && <div className="flex gap-2 flex-wrap">
       <button disabled={busy} onClick={() => decide('approve')} className="px-4 py-2 rounded-full bg-tertiary/10 text-tertiary text-xs font-bold disabled:opacity-50">Approve changes</button>
-      <button disabled={busy} onClick={() => decide('needs_review')} className="px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-xs font-bold disabled:opacity-50">Needs review</button>
+      <button disabled={busy} onClick={() => decide('needs_review')} className="px-4 py-2 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 text-xs font-bold disabled:opacity-50">Needs review</button>
     </div>}
-    {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
+    {error && <p role="alert" className="text-xs text-red-600 dark:text-red-300">{error}</p>}
   </section>;
 }

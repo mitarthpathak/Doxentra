@@ -266,7 +266,7 @@ export function UploadZone({ onDocumentsReady, setUploads }: UploadZoneProps) {
             </p>
             <p className="text-xs text-on-surface-variant mt-2">{active?.subtext || 'Preparing your document'}</p>
             {active?.stage === 'local_ocr' && (
-              <span className="mt-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-800" role="status">
+              <span className="mt-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 text-xs font-medium text-emerald-800 dark:text-emerald-200" role="status">
                 Performing local on-device OCR...
               </span>
             )}
@@ -297,11 +297,11 @@ export function UploadZone({ onDocumentsReady, setUploads }: UploadZoneProps) {
             </div>
             <h3 className="text-xl font-headline mb-2">Upload a Document</h3>
             {error ? (
-              <p role="alert" className="text-red-500 text-sm font-medium mb-2 px-4 py-2 bg-red-50 rounded-lg border border-red-100 max-lg:wrap-anywhere">
+              <p role="alert" className="text-red-500 dark:text-red-300 text-sm font-medium mb-2 px-4 py-2 bg-red-50 dark:bg-red-950/40 rounded-lg border border-red-100 dark:border-red-900/60 max-lg:wrap-anywhere">
                 {error}
               </p>
             ) : notice ? (
-              <p className="text-amber-700 text-sm font-medium mb-2 px-4 py-2 bg-amber-50 rounded-lg border border-amber-100 max-lg:wrap-anywhere">
+              <p className="text-amber-700 dark:text-amber-300 text-sm font-medium mb-2 px-4 py-2 bg-amber-50 dark:bg-amber-950/40 rounded-lg border border-amber-100 dark:border-amber-900/60 max-lg:wrap-anywhere">
                 {notice}
               </p>
             ) : (

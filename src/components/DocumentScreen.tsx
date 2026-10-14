@@ -15,13 +15,13 @@ import type { CrossDocumentIssue, DocumentIssue, DocumentResult, DocumentTransla
 // Existing palette: tertiary = good, amber = attention, red = problem.
 export const BAND_STYLES = {
   high: 'bg-tertiary/10 text-tertiary border-tertiary/20',
-  medium: 'bg-amber-50 text-amber-600 border-amber-100',
-  low: 'bg-red-50 text-red-500 border-red-100',
+  medium: 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300 border-amber-100 dark:border-amber-900/60',
+  low: 'bg-red-50 dark:bg-red-950/40 text-red-500 dark:text-red-300 border-red-100 dark:border-red-900/60',
 } as const;
 
 const SEVERITY = {
-  error: { icon: 'error', text: 'text-red-500', box: 'bg-red-50 border-red-100' },
-  warning: { icon: 'warning', text: 'text-amber-600', box: 'bg-amber-50 border-amber-100' },
+  error: { icon: 'error', text: 'text-red-500 dark:text-red-300', box: 'bg-red-50 dark:bg-red-950/40 border-red-100 dark:border-red-900/60' },
+  warning: { icon: 'warning', text: 'text-amber-600 dark:text-amber-300', box: 'bg-amber-50 dark:bg-amber-950/40 border-amber-100 dark:border-amber-900/60' },
   info: { icon: 'info', text: 'text-primary', box: 'bg-primary/5 border-primary/20' },
 } as const;
 
@@ -310,10 +310,10 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
             <p className="text-[10px] text-on-surface-variant">Capped at 90%: values read by OCR cannot be checked against a text layer.</p>
           )}
           {selected.confidenceDetail.capped?.includes('image_quality') && (
-            <p className="text-[10px] text-amber-600 font-medium">Capped at 75%: the photo or scan is blurry, dark or faint (see Image quality).</p>
+            <p className="text-[10px] text-amber-600 dark:text-amber-300 font-medium">Capped at 75%: the photo or scan is blurry, dark or faint (see Image quality).</p>
           )}
           {selected.confidenceDetail.capped?.includes('unverified') && (
-            <p className="text-[10px] text-red-500 font-medium">Capped at 40%: neither the quote nor the value could be found in the document.</p>
+            <p className="text-[10px] text-red-500 dark:text-red-300 font-medium">Capped at 40%: neither the quote nor the value could be found in the document.</p>
           )}
         </div>
       )}
@@ -365,7 +365,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
         </div>
       </div>
       {doc.issues.length === 0 && crossIssues.length === 0 ? (
-        <div className={cn('flex items-center gap-3 text-sm font-medium', found.length ? 'text-tertiary' : 'text-amber-600')}>
+        <div className={cn('flex items-center gap-3 text-sm font-medium', found.length ? 'text-tertiary' : 'text-amber-600 dark:text-amber-300')}>
           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>{found.length ? 'check_circle' : 'warning'}</span>
           {found.length ? 'No issues detected in the extracted values. Review the source for completeness.' : 'No values were extracted. Consistency could not be checked.'}
         </div>
@@ -477,13 +477,13 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
               </span>
             )}
             {doc.fallbackUsed && (
-              <span className="px-4 py-1 bg-amber-50 text-amber-600 text-[10px] font-black uppercase rounded-full border border-amber-100 tracking-widest">
+              <span className="px-4 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300 text-[10px] font-black uppercase rounded-full border border-amber-100 dark:border-amber-900/60 tracking-widest">
                 {privacy ? 'Local extraction' : 'Basic extraction'}
               </span>
             )}
             {doc.review && doc.review.status !== 'unreviewed' && (
               <span
-                className={cn('px-4 py-1 text-[10px] font-black uppercase rounded-full border tracking-widest', doc.review.status === 'approved' ? 'bg-tertiary/10 text-tertiary border-tertiary/20' : 'bg-amber-50 text-amber-600 border-amber-100')}
+                className={cn('px-4 py-1 text-[10px] font-black uppercase rounded-full border tracking-widest', doc.review.status === 'approved' ? 'bg-tertiary/10 text-tertiary border-tertiary/20' : 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300 border-amber-100 dark:border-amber-900/60')}
                 data-testid="review-badge"
                 title={doc.review.approvedBy ? `Approved by ${doc.review.approvedBy}` : undefined}
               >
@@ -499,14 +499,14 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
         </div>
         <div className="bg-surface-container-high px-8 py-4 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm text-center self-start md:self-auto shrink-0">
           <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Confidence</p>
-          <p className={cn('text-3xl font-headline font-bold', confidenceBand(doc.overallConfidence) === 'high' ? 'text-tertiary' : confidenceBand(doc.overallConfidence) === 'medium' ? 'text-amber-600' : 'text-red-500')} data-testid="overall-confidence">
+          <p className={cn('text-3xl font-headline font-bold', confidenceBand(doc.overallConfidence) === 'high' ? 'text-tertiary' : confidenceBand(doc.overallConfidence) === 'medium' ? 'text-amber-600 dark:text-amber-300' : 'text-red-500 dark:text-red-300')} data-testid="overall-confidence">
             {percent(doc.overallConfidence)}
           </p>
         </div>
       </div>
 
       {(doc.warning || doc.fallbackUsed) && (
-        <div role="status" data-testid="document-processing-warning" className="px-5 py-3 bg-amber-50 border border-amber-100 rounded-2xl text-sm text-amber-700">
+        <div role="status" data-testid="document-processing-warning" className="px-5 py-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900/60 rounded-2xl text-sm text-amber-700 dark:text-amber-300">
           {doc.warning || 'This is a basic rule-based extraction because the AI service was unavailable. Upload the document again later for a full AI extraction.'}
         </div>
       )}
@@ -602,7 +602,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
         </div>
       )}
       {actionError && (
-        <p role="alert" className="text-red-500 text-sm font-medium px-4 py-2 bg-red-50 rounded-lg border border-red-100">{actionError}</p>
+        <p role="alert" className="text-red-500 dark:text-red-300 text-sm font-medium px-4 py-2 bg-red-50 dark:bg-red-950/40 rounded-lg border border-red-100 dark:border-red-900/60">{actionError}</p>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

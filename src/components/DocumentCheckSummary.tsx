@@ -4,8 +4,8 @@ import { apiFetch, confidenceBand, percent } from '../lib/api';
 import type { AuditEntry, CrossDocumentIssue, DocumentResult } from '../types';
 
 const SEVERITY = {
-  error: { icon: 'error', text: 'text-red-500', box: 'bg-red-50 border-red-100' },
-  warning: { icon: 'warning', text: 'text-amber-600', box: 'bg-amber-50 border-amber-100' },
+  error: { icon: 'error', text: 'text-red-500 dark:text-red-300', box: 'bg-red-50 dark:bg-red-950/40 border-red-100 dark:border-red-900/60' },
+  warning: { icon: 'warning', text: 'text-amber-600 dark:text-amber-300', box: 'bg-amber-50 dark:bg-amber-950/40 border-amber-100 dark:border-amber-900/60' },
   info: { icon: 'info', text: 'text-primary', box: 'bg-primary/5 border-primary/10' },
 } as const;
 
@@ -63,7 +63,7 @@ export function DocumentCheckSummary({ documentId, masked = false, onOpenDocumen
             <span
               className={cn('px-4 py-1 text-[10px] font-black uppercase rounded-full border tracking-widest max-lg:max-w-full max-lg:wrap-anywhere',
                 review?.status === 'approved' ? 'bg-tertiary/10 text-tertiary border-tertiary/20'
-                  : review?.status === 'in_review' ? 'bg-amber-50 text-amber-600 border-amber-100'
+                  : review?.status === 'in_review' ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300 border-amber-100 dark:border-amber-900/60'
                   : 'bg-slate-100 dark:bg-slate-700 text-slate-500 border-slate-200 dark:border-slate-700')}
               data-testid="summary-review-status"
             >
@@ -76,7 +76,7 @@ export function DocumentCheckSummary({ documentId, masked = false, onOpenDocumen
         <div className="flex items-center gap-4 shrink-0">
           <div className="text-center">
             <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Confidence</p>
-            <p className={cn('text-3xl font-headline font-bold', band === 'high' ? 'text-tertiary' : band === 'medium' ? 'text-amber-600' : 'text-red-500')}>{percent(doc.overallConfidence)}</p>
+            <p className={cn('text-3xl font-headline font-bold', band === 'high' ? 'text-tertiary' : band === 'medium' ? 'text-amber-600 dark:text-amber-300' : 'text-red-500 dark:text-red-300')}>{percent(doc.overallConfidence)}</p>
           </div>
           <div className="flex gap-1" aria-label="Issues by severity" data-testid="summary-issue-counts">
             {(['error', 'warning', 'info'] as const).map(s => (

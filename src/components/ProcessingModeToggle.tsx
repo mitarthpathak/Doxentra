@@ -6,7 +6,7 @@ export function ProcessingModeToggle({ compact = false }: { compact?: boolean })
   return <div className={compact ? '' : 'rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 space-y-2'} data-testid="processing-mode">
     {!compact && <p className="text-xs font-bold text-slate-500">Processing Mode</p>}
     <button type="button" role="switch" aria-checked={privacy} aria-label="Air-Gapped / High-Privacy Mode" disabled={busy} onClick={switchProcessingMode} title={busy ? 'Finish the current upload before switching modes.' : description}
-      className={`flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold disabled:opacity-50 ${privacy ? 'bg-emerald-50 text-emerald-800' : 'bg-cyan-50 text-cyan-800'}`}>
+      className={`flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold disabled:opacity-50 ${privacy ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-200' : 'bg-cyan-50 dark:bg-cyan-950/30 text-cyan-800 dark:text-cyan-200'}`}>
       <span className={`relative w-8 h-5 shrink-0 rounded-full ${privacy ? 'bg-emerald-600' : 'bg-slate-300'}`}><span className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white dark:bg-slate-800 shadow transition-transform ${privacy ? 'translate-x-3' : 'translate-x-0'}`} /></span>
       {compact ? privacy ? 'Privacy' : 'Deep AI' : privacy ? 'Air-Gapped / High-Privacy Mode' : 'Deep Intelligence Mode'}
     </button>

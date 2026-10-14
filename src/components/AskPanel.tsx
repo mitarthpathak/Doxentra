@@ -74,7 +74,7 @@ function CitationCard({ c, onOpen, highlighted }: { c: AskCitation; onOpen: () =
             <span
               className={cn(
                 'px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border whitespace-nowrap',
-                c.verified ? 'bg-tertiary/10 text-tertiary border-tertiary/20' : 'bg-amber-50 text-amber-600 border-amber-100'
+                c.verified ? 'bg-tertiary/10 text-tertiary border-tertiary/20' : 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300 border-amber-100 dark:border-amber-900/60'
               )}
               title={c.verified ? 'The quote was found word for word in the document' : 'The quote could not be found word for word in the document'}
             >
@@ -211,7 +211,7 @@ export function AskPanel({ turns, setTurns, scopeId, setScopeId, onOpenCitation 
         </div>
       </form>
 
-      {openError && <p role="alert" className="text-red-500 text-sm font-medium px-4 py-2 bg-red-50 rounded-lg border border-red-100">{openError}</p>}
+      {openError && <p role="alert" className="text-red-500 dark:text-red-300 text-sm font-medium px-4 py-2 bg-red-50 dark:bg-red-950/40 rounded-lg border border-red-100 dark:border-red-900/60">{openError}</p>}
 
       {turns.length === 0 ? (
         <div className="text-center py-16 px-6 bg-surface-container-low rounded-[40px] border border-slate-200 dark:border-slate-700">
@@ -244,7 +244,7 @@ export function AskPanel({ turns, setTurns, scopeId, setScopeId, onOpenCitation 
                     Reading your documents…
                   </div>
                 ) : (
-                  <div className={cn('w-full md:max-w-[90%] rounded-3xl p-4 md:p-6 border shadow-sm space-y-4', turn.error ? 'bg-red-50 border-red-100' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700')} data-testid="ask-turn">
+                  <div className={cn('w-full md:max-w-[90%] rounded-3xl p-4 md:p-6 border shadow-sm space-y-4', turn.error ? 'bg-red-50 dark:bg-red-950/40 border-red-100 dark:border-red-900/60 text-red-700 dark:text-red-200' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700')} data-testid="ask-turn">
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-primary text-lg">{turn.error ? 'error' : 'auto_awesome'}</span>
                       <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-60">
@@ -252,10 +252,10 @@ export function AskPanel({ turns, setTurns, scopeId, setScopeId, onOpenCitation 
                       </p>
                     </div>
                     {turn.notice && (
-                      <div className="px-4 py-2 bg-amber-50 border border-amber-100 rounded-2xl text-xs text-amber-700">{turn.notice}</div>
+                      <div className="px-4 py-2 bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900/60 rounded-2xl text-xs text-amber-700 dark:text-amber-300">{turn.notice}</div>
                     )}
                     {turn.error ? (
-                      <p className="text-sm text-red-500 font-medium">{turn.content}</p>
+                      <p className="text-sm text-red-500 dark:text-red-300 font-medium">{turn.content}</p>
                     ) : (
                       <AnswerText text={turn.content} onCite={n => cite(turn, n)} />
                     )}

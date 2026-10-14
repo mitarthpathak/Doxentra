@@ -61,7 +61,7 @@ interface GraphScreenProps {
 }
 
 const SEVERITY_RING: Record<string, string> = { error: 'ring-2 ring-red-400 ring-offset-2', warning: 'ring-2 ring-amber-400 ring-offset-2', info: '' };
-const SEVERITY_BOX: Record<string, string> = { error: 'bg-red-50 border-red-100 text-red-700', warning: 'bg-amber-50 border-amber-100 text-amber-700', info: 'bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300' };
+const SEVERITY_BOX: Record<string, string> = { error: 'bg-red-50 dark:bg-red-950/40 border-red-100 dark:border-red-900/60 text-red-700 dark:text-red-300', warning: 'bg-amber-50 dark:bg-amber-950/40 border-amber-100 dark:border-amber-900/60 text-amber-700 dark:text-amber-300', info: 'bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300' };
 
 /** Concept map ↔ people & documents (same tabs as Search ↔ Ask). */
 function ModeTabs({ mode, onModeChange }: { mode: GraphMode; onModeChange?: (mode: GraphMode) => void }) {
@@ -187,7 +187,7 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
         </div>
         <div className="text-center py-24 px-6 md:px-0 bg-surface-container-low rounded-[40px] border border-slate-200 dark:border-slate-700" data-testid="graph-empty">
           <span className="material-symbols-outlined text-6xl text-slate-300 mb-4 block">{entities ? 'groups' : 'account_tree'}</span>
-          <p className={cn('font-medium mb-5', error ? 'text-red-500' : 'text-slate-500')}>
+          <p className={cn('font-medium mb-5', error ? 'text-red-500 dark:text-red-300' : 'text-slate-500')}>
             {error || (loading ? 'Linking your documents…' : entities ? 'No documents yet. Upload documents to see the people and organisations in them.' : 'No knowledge graph yet. Upload a PDF to generate one.')}
           </p>
           {!loading && (
@@ -222,7 +222,7 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
           {entities ? (
             <div className="bg-surface-container-high px-5 py-2 md:px-8 md:py-4 rounded-[32px] border border-slate-200 dark:border-slate-700 shadow-sm text-center self-start md:self-auto flex items-center gap-3 md:block">
               <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Conflicts</p>
-              <p className={cn('text-2xl md:text-3xl font-headline font-bold', data.stats?.mismatches ? 'text-red-500' : 'text-tertiary')} data-testid="graph-conflicts">
+              <p className={cn('text-2xl md:text-3xl font-headline font-bold', data.stats?.mismatches ? 'text-red-500 dark:text-red-300' : 'text-tertiary')} data-testid="graph-conflicts">
                 {data.stats?.mismatches ?? 0} <span className="text-sm text-slate-400">/ {data.stats?.documents ?? 0} docs</span>
               </p>
             </div>
@@ -238,7 +238,7 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
       )}
 
       {!isMaximized && data.fallbackUsed && (
-        <div className="px-5 py-3 bg-amber-50 border border-amber-100 rounded-2xl text-sm text-amber-700">
+        <div className="px-5 py-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-900/60 rounded-2xl text-sm text-amber-700 dark:text-amber-300">
           This is a basic keyword map because the AI service was unavailable. Upload the PDF again later for a full AI analysis.
         </div>
       )}
@@ -491,7 +491,7 @@ function ConceptModal({ node, nodeById, edges, onSelect, onClose, onOpenDocument
         className="relative w-full max-w-5xl bg-white dark:bg-slate-800 rounded-[32px] md:rounded-[40px] shadow-[0_32px_128px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col lg:flex-row max-h-[90dvh] lg:h-[650px]"
       >
         {/* Left Side: Info (below lg its content scrolls while Close stays in view) */}
-        <div className="w-full lg:w-[380px] p-6 md:p-10 flex flex-col justify-between border-r border-slate-100 bg-white dark:bg-slate-800 z-10 min-h-0 lg:overflow-y-auto">
+        <div className="w-full lg:w-[380px] p-6 md:p-10 flex flex-col justify-between border-r border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 z-10 min-h-0 lg:overflow-y-auto">
           <div ref={infoRef} className="space-y-8 min-h-0 overflow-y-auto -mx-6 -mt-6 px-6 pt-6 md:-mx-10 md:-mt-10 md:px-10 md:pt-10 lg:m-0 lg:p-0 lg:min-h-auto lg:overflow-visible">
             <div className="space-y-3">
               <div className="w-12 h-1 bg-primary rounded-full mb-4"></div>
@@ -499,7 +499,7 @@ function ConceptModal({ node, nodeById, edges, onSelect, onClose, onOpenDocument
               <h3 className="text-3xl md:text-4xl font-headline font-bold text-slate-900 dark:text-slate-100 leading-[1.1] break-words">{node.label}</h3>
             </div>
 
-            <p className="text-sm text-slate-700 font-medium leading-relaxed border-l-4 border-primary/20 pl-4 py-1 break-words" data-testid="concept-desc">
+            <p className="text-sm text-slate-700 dark:text-slate-300 font-medium leading-relaxed border-l-4 border-primary/20 pl-4 py-1 break-words" data-testid="concept-desc">
               {node.desc || 'No detailed explanation is available for this concept.'}
             </p>
 
@@ -541,7 +541,7 @@ function ConceptModal({ node, nodeById, edges, onSelect, onClose, onOpenDocument
         </div>
 
         {/* Right Side: Mini Graph (on top of the info on tablets tall enough to keep the info usable) */}
-        <div className="hidden md:[@media(min-height:800px)]:flex lg:flex md:order-first lg:order-none shrink-0 h-[360px] lg:h-auto lg:flex-1 bg-slate-50/50 relative overflow-hidden items-center justify-center">
+        <div className="hidden md:[@media(min-height:800px)]:flex lg:flex md:order-first lg:order-none shrink-0 h-[360px] lg:h-auto lg:flex-1 bg-slate-50/50 dark:bg-slate-900/50 relative overflow-hidden items-center justify-center">
           <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: 'radial-gradient(#e2e8f0 1.5px, transparent 1.5px)', backgroundSize: '24px 24px' }}></div>
 
           <div className="absolute left-1/2 top-1/2 w-0 h-0">
@@ -566,11 +566,11 @@ function ConceptModal({ node, nodeById, edges, onSelect, onClose, onOpenDocument
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.35, delay: 0.1 + i * 0.06, type: 'spring' }}
-                className="absolute rounded-2xl px-4 py-2 bg-white/95 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/40 max-w-40 max-lg:w-max"
+                className="absolute rounded-2xl px-4 py-2 bg-white/95 dark:bg-slate-700/95 border border-slate-200 dark:border-slate-600 shadow-sm hover:shadow-md hover:border-primary/40 max-w-40 max-lg:w-max"
                 style={{ left: n.x, top: n.y, x: '-50%', y: '-50%' }}
               >
-                <span className="block text-[9px] uppercase tracking-wider text-slate-400 font-bold">{n.label}</span>
-                <span className="block text-[11px] text-slate-700 font-bold leading-tight">{n.node.label}</span>
+                <span className="block text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-300 font-bold">{n.label}</span>
+                <span className="block text-[11px] text-slate-700 dark:text-slate-100 font-bold leading-tight">{n.node.label}</span>
               </motion.button>
             ))}
 
@@ -595,17 +595,17 @@ function RelatedNodeItem({ node, relation, onOpen }: { node: GraphNode; relation
   return (
     <div
       className={cn(
-        'group bg-slate-50/50 rounded-2xl border border-slate-100/50 transition-all overflow-hidden',
-        isOpen ? 'bg-white dark:bg-slate-800 border-primary/20 shadow-lg shadow-primary/5' : 'hover:bg-slate-50 hover:border-slate-200'
+        'group bg-slate-50/50 dark:bg-slate-800/60 rounded-2xl border border-slate-100/50 dark:border-slate-700/70 transition-all overflow-hidden',
+        isOpen ? 'bg-white dark:bg-slate-800 border-primary/20 shadow-lg shadow-primary/5' : 'hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-200 dark:hover:border-slate-600'
       )}
     >
       <button type="button" className="w-full flex items-center justify-between p-3 text-left" onClick={() => setIsOpen(!isOpen)}>
         <div className="flex items-center gap-3 min-w-0">
           <div className={cn('w-2 h-2 rounded-full shrink-0', isOpen ? 'bg-primary' : 'bg-slate-300')}></div>
-          <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold shrink-0">{relation}</span>
-          <span className={cn('text-[11px] font-bold max-sm:line-clamp-2 max-sm:wrap-anywhere sm:truncate', isOpen ? 'text-slate-900 dark:text-slate-100' : 'text-slate-600')}>{node.label}</span>
+          <span className="text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-400 font-bold shrink-0">{relation}</span>
+          <span className={cn('text-[11px] font-bold max-sm:line-clamp-2 max-sm:wrap-anywhere sm:truncate', isOpen ? 'text-slate-900 dark:text-slate-100' : 'text-slate-600 dark:text-slate-200')}>{node.label}</span>
         </div>
-        <span className={cn('material-symbols-outlined text-sm transition-transform duration-300', isOpen ? 'rotate-180 text-primary' : 'text-slate-300')}>
+        <span className={cn('material-symbols-outlined text-sm transition-transform duration-300', isOpen ? 'rotate-180 text-primary' : 'text-slate-300 dark:text-slate-500')}>
           expand_more
         </span>
       </button>
@@ -618,7 +618,7 @@ function RelatedNodeItem({ node, relation, onOpen }: { node: GraphNode; relation
             exit={{ height: 0, opacity: 0 }}
             className="px-8 pb-4"
           >
-            <p className="text-[11px] leading-relaxed text-slate-600 font-medium border-l-2 border-primary/20 pl-4 py-1">
+            <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300 font-medium border-l-2 border-primary/20 pl-4 py-1">
               {node.desc || 'Linked concept within the document hierarchy.'}
             </p>
             <button type="button" onClick={onOpen} className="relative mt-2 ml-4 text-[10px] font-bold text-primary hover:underline max-lg:after:absolute max-lg:after:-inset-x-2 max-lg:after:-inset-y-2.5">

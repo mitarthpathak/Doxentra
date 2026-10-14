@@ -125,7 +125,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
                     onClick={e => handleDelete(e, id)}
                     disabled={deletingId === id}
                     aria-label="Delete saved map"
-                    className="w-10 h-10 lg:w-8 lg:h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="w-10 h-10 lg:w-8 lg:h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors"
                   >
                     <span className="material-symbols-outlined text-lg">delete</span>
                   </button>
@@ -157,7 +157,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
                   </span>
                 ) : null}
                 {item.fallbackUsed && (
-                  <span className="px-3 py-1 bg-amber-50 rounded-full text-[9px] font-black text-amber-600 uppercase tracking-widest border border-amber-100">
+                  <span className="px-3 py-1 bg-amber-50 dark:bg-amber-950/40 rounded-full text-[9px] font-black text-amber-600 dark:text-amber-300 uppercase tracking-widest border border-amber-100 dark:border-amber-900/60">
                     Basic map
                   </span>
                 )}
@@ -205,7 +205,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : error ? (
-        <div role="alert" className="bg-red-50 text-red-500 p-6 rounded-2xl border border-red-100 text-center">
+        <div role="alert" className="bg-red-50 dark:bg-red-950/40 text-red-500 dark:text-red-300 p-6 rounded-2xl border border-red-100 dark:border-red-900/60 text-center">
           {error}
         </div>
       ) : documents.length > 0 || graphs.length > 0 ? (
@@ -255,7 +255,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
                             onClick={e => handleDeleteDocument(e, doc.id)}
                             disabled={deletingId === doc.id}
                             aria-label="Delete saved document"
-                            className="w-10 h-10 lg:w-8 lg:h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                            className="w-10 h-10 lg:w-8 lg:h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors"
                           >
                             <span className="material-symbols-outlined text-lg">delete</span>
                           </button>
@@ -280,7 +280,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
                           <span className="px-3 py-1 bg-secondary/10 rounded-full text-[9px] font-black text-secondary uppercase tracking-widest border border-secondary/20">OCR</span>
                         )}
                         {doc.fallbackUsed && (
-                          <span className="px-3 py-1 bg-amber-50 rounded-full text-[9px] font-black text-amber-600 uppercase tracking-widest border border-amber-100">Basic extraction</span>
+                          <span className="px-3 py-1 bg-amber-50 dark:bg-amber-950/40 rounded-full text-[9px] font-black text-amber-600 dark:text-amber-300 uppercase tracking-widest border border-amber-100 dark:border-amber-900/60">Basic extraction</span>
                         )}
                       </div>
 
@@ -292,7 +292,7 @@ export function HistoryScreen({ onLoadGraph, onOpenDocument, onSearchClick, user
                           </span>
                           <span className={cn(
                             'px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase flex items-center gap-1',
-                            doc.issueCounts.error ? 'bg-red-50 text-red-500' : doc.issueCounts.warning ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                            doc.issueCounts.error ? 'bg-red-50 dark:bg-red-950/40 text-red-500 dark:text-red-300' : doc.issueCounts.warning ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                           )} title={`${doc.issueCounts.error} errors, ${doc.issueCounts.warning} warnings`}>
                             <span className="material-symbols-outlined text-[10px]">{doc.issueCounts.error ? 'error' : doc.issueCounts.warning ? 'warning' : 'check_circle'}</span>
                             {doc.issueCounts.total} {doc.issueCounts.total === 1 ? 'Issue' : 'Issues'}
