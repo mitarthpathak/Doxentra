@@ -102,7 +102,7 @@ export function FieldReview({ doc, field, onChange }: { doc: DocumentResult; fie
         </div>
       )}
       <OcrCandidates field={field} onChoose={candidate => { setValue(candidate); setEditing(true); }} />
-      {error && <p role="alert" className="text-red-500 text-xs font-medium">{error}</p>}
+      {error && <p role="alert" className="text-red-500 dark:text-red-300 text-xs font-medium">{error}</p>}
     </div>
   );
 }
@@ -173,9 +173,9 @@ export function ReviewHistory({ doc }: { doc: DocumentResult }) {
                 {e.note && <p className="text-xs text-on-surface-variant italic break-words">“{e.note}”</p>}
                 <p className="text-[10px] text-on-surface-variant break-words">
                   {e.by} · {new Date(e.at).toLocaleString()}
-                  {errorsDelta !== 0 && <span className={errorsDelta > 0 ? 'text-red-500' : 'text-tertiary'}> · {errorsDelta > 0 ? '+' : ''}{errorsDelta} error{Math.abs(errorsDelta) === 1 ? '' : 's'}</span>}
+                  {errorsDelta !== 0 && <span className={errorsDelta > 0 ? 'text-red-500 dark:text-red-300' : 'text-tertiary'}> · {errorsDelta > 0 ? '+' : ''}{errorsDelta} error{Math.abs(errorsDelta) === 1 ? '' : 's'}</span>}
                   {e.overallBefore != null && e.overallAfter != null && e.overallBefore !== e.overallAfter && <> · confidence {percent(e.overallBefore)} → {percent(e.overallAfter)}</>}
-                  {e.approvalWithdrawn && <span className="text-amber-600"> · approval withdrawn</span>}
+                  {e.approvalWithdrawn && <span className="text-amber-600 dark:text-amber-300"> · approval withdrawn</span>}
                 </p>
               </div>
             </li>

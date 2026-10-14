@@ -33,7 +33,7 @@ export function StatusPanel({ uploads }: { uploads: UploadStatus[] }) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0 }}
-            className={cn('rounded-xl p-4 sm:p-6 border', failed ? 'bg-red-50 border-red-100' : 'bg-surface-container-low border-slate-200 dark:border-slate-700')}
+            className={cn('rounded-xl p-4 sm:p-6 border', failed ? 'bg-red-50 dark:bg-red-950/40 border-red-100 dark:border-red-900/60' : 'bg-surface-container-low border-slate-200 dark:border-slate-700')}
             data-testid="upload-status-card"
           >
             <div className="flex justify-between items-start mb-4 gap-3 sm:gap-4">
@@ -46,11 +46,11 @@ export function StatusPanel({ uploads }: { uploads: UploadStatus[] }) {
                 </span>
                 <div className="min-w-0">
                   <h4 className="text-sm font-bold truncate">{upload.fileName}</h4>
-                  <p className={cn('text-xs mt-1 break-words', failed ? 'text-red-500' : 'text-on-surface-variant')} aria-live="polite">
+                  <p className={cn('text-xs mt-1 break-words', failed ? 'text-red-500 dark:text-red-300' : 'text-on-surface-variant')} aria-live="polite">
                     {failed ? `Failed at: ${UPLOAD_STEPS[step].title}` : upload.subtext || 'Processing...'}
                   </p>
                   {upload.warning && !failed && (
-                    <p className="flex items-center gap-1 text-[10px] font-bold text-amber-600 mt-1" data-testid="upload-quality-warning">
+                    <p className="flex items-center gap-1 text-[10px] font-bold text-amber-600 dark:text-amber-300 mt-1" data-testid="upload-quality-warning">
                       <span className="material-symbols-outlined text-[12px]">warning</span>
                       {upload.warning}
                     </p>
@@ -71,13 +71,13 @@ export function StatusPanel({ uploads }: { uploads: UploadStatus[] }) {
               <span className="font-semibold">{completed ? upload.cached ? 'Ready · cached result' : '6 of 6 steps complete' : `Step ${step + 1} of 6 · ${step} complete`}</span>
               {upload.startedAt && <span>{duration(end - upload.startedAt)} elapsed</span>}
               {!failed && !completed && upload.stageStartedAt && <span>{duration(now - upload.stageStartedAt)} in this step</span>}
-              {((upload.attempts || 0) > 1 || retrying) && <span className="text-amber-700">Attempt {Math.max(1, (upload.attempts || 0) + (retrying ? 1 : 0))}</span>}
+              {((upload.attempts || 0) > 1 || retrying) && <span className="text-amber-700 dark:text-amber-300">Attempt {Math.max(1, (upload.attempts || 0) + (retrying ? 1 : 0))}</span>}
             </div>
             {upload.status === 'uploading' && upload.size != null && (
               <p className="text-[11px] text-on-surface-variant mt-2">{bytes(upload.uploadBytes || 0)} / {bytes(upload.size)} sent{upload.stage === 'storing' ? ' · confirming storage' : ''}</p>
             )}
             {pages && (
-              <div className="rounded-lg bg-white/70 border border-slate-200 dark:border-slate-700 px-3 py-2 mt-3 text-xs" data-testid="upload-page-progress">
+              <div className="rounded-lg bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 px-3 py-2 mt-3 text-xs" data-testid="upload-page-progress">
                 <div className="flex flex-wrap justify-between gap-1 font-semibold">
                   <span>{pages.pagesCompleted} / {pages.pageCount} pages completed</span>
                   {!upload.cached && pages.chunkCount > 1 && <span className="text-primary">Chunk {pages.chunkIndex} / {pages.chunkCount}</span>}
@@ -95,7 +95,7 @@ export function StatusPanel({ uploads }: { uploads: UploadStatus[] }) {
                   <li key={item.title} aria-current={state === 'active' ? 'step' : undefined}
                     data-step-state={state}
                     className={cn('flex items-start gap-2 rounded-lg px-2 py-2 min-w-0',
-                      state === 'active' ? 'bg-primary/10 text-primary' : state === 'failed' ? 'bg-red-100 text-red-600' : state === 'done' ? 'text-emerald-700' : 'text-slate-400')}>
+                      state === 'active' ? 'bg-primary/10 text-primary' : state === 'failed' ? 'bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-300' : state === 'done' ? 'text-emerald-700' : 'text-slate-400')}>
                     <span aria-hidden="true" className={cn('flex items-center justify-center w-5 h-5 shrink-0 rounded-full text-[10px] font-bold',
                       state === 'active' ? 'bg-primary text-white animate-pulse' : state === 'done' ? 'bg-emerald-100' : state === 'failed' ? 'bg-red-200' : 'bg-slate-100 dark:bg-slate-700')}>
                       {state === 'done' ? '✓' : state === 'failed' ? '×' : index + 1}
@@ -110,8 +110,8 @@ export function StatusPanel({ uploads }: { uploads: UploadStatus[] }) {
             </ol>
             {!failed && !completed && <p className="text-[11px] text-on-surface-variant mt-3" data-testid="upload-current-detail">{UPLOAD_STEPS[step].detail}</p>}
             {upload.cached && <p className="text-xs text-primary mt-3">Loaded a saved analysis; AI processing was skipped.</p>}
-            {upload.lastError && !completed && <p className="text-xs text-amber-700 mt-3 break-words">Previous attempt: {upload.lastError}</p>}
-            {failed && <p role="alert" className="text-xs text-red-600 mt-3 break-words" data-testid="upload-stage-error">{upload.error || upload.subtext}</p>}
+            {upload.lastError && !completed && <p className="text-xs text-amber-700 dark:text-amber-300 mt-3 break-words">Previous attempt: {upload.lastError}</p>}
+            {failed && <p role="alert" className="text-xs text-red-600 dark:text-red-300 mt-3 break-words" data-testid="upload-stage-error">{upload.error || upload.subtext}</p>}
           </motion.div>
         );
       })}

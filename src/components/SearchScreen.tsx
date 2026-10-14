@@ -172,7 +172,7 @@ export function SearchScreen({ user, onSignInClick, onOpenHit, mode, onModeChang
 
           <div ref={resultsRef} aria-live="polite" className="scroll-mt-20">
             {error ? (
-              <div role="alert" className="bg-red-50 text-red-500 p-6 rounded-2xl border border-red-100 text-center">{error}</div>
+              <div role="alert" className="bg-red-50 dark:bg-red-950/40 text-red-500 dark:text-red-300 p-6 rounded-2xl border border-red-100 dark:border-red-900/60 text-center">{error}</div>
             ) : loading && !results ? (
               <div className="flex justify-center py-20">
                 <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
