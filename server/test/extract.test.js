@@ -5,9 +5,51 @@ import { parseJson, setGeminiClient } from '../lib/ai.js';
 import { EXTRACTION_SCHEMA, extractDocument, fallbackExtract, normalizeExtraction } from '../lib/extract.js';
 import { DOCUMENT_TYPES, DOC_TYPE_IDS, FIELD_TYPES } from '../lib/schemas.js';
 import { fakeGemini } from './helpers/fakeGemini.js';
+import { finalizeExtraction } from '../lib/pipeline.js';
 
 const invoice = JSON.parse(readFileSync(new URL('./fixtures/gemini/invoice.json', import.meta.url)));
 const soon = () => Date.now() + 30_000;
+
+test('local roadmap keeps its heading, sections and honest classification confidence', () => {
+  const pages = ['Cloud + Security\nMONTH 1: Linux + Networking\nLinux CLI + bash; curl, dig, ss, tcpdump, nmap\nMONTH 2: Cloud fundamentals'];
+  const result = finalizeExtraction(fallbackExtract(pages, { local: true }), { textByPage: pages, ocrUsed: true });
+  const title = result.fields.find(f => f.key === 'title');
+  assert.equal(title.value, 'Cloud + Security');
+  assert.equal(title.sourceQuote, title.value);
+  assert.equal(title.page, 1);
+  assert.equal(result.fields.find(f => f.key === 'month_1').value, 'Linux + Networking');
+  assert.equal(result.fields.find(f => f.key === 'month_2').value, 'Cloud fundamentals');
+  assert.equal(result.docTypeConfidence, 0.2);
+  assert.ok(result.overallConfidence > 0);
+  assert.match(result.summary, /Local rule-based extraction/);
+  assert.ok(!result.summary.includes('AI unavailable'));
+});
+
+test('local forms support labels above values and OCR that drops separators', () => {
+  const result = fallbackExtract(['TAX INVOICE\nInvoice No\nLOCAL-123\nInvoice date 05/01/2024\nSeller name: Demo Co\nTotal INR 500']);
+  const fields = Object.fromEntries(result.fields.map(f => [f.key, f]));
+  assert.equal(fields.invoice_number.value, 'LOCAL-123');
+  assert.equal(fields.invoice_date.normalizedValue, '2024-01-05');
+  assert.equal(fields.total_amount.normalizedValue, 500);
+  const missing = fallbackExtract(['TAX INVOICE\nInvoice No\nSeller name: Demo Co\nTotal: INR 500']);
+  assert.equal(missing.fields.find(f => f.key === 'invoice_number').value, null);
+  const split = fallbackExtract(['TAX INVOICE\nInvoice No', 'LOCAL-123']);
+  assert.equal(split.fields.find(f => f.key === 'invoice_number').value, null);
+  const parent = fallbackExtract(["Application form\nFather's name: Demo Parent"]);
+  assert.equal(parent.fields.find(f => f.key === 'applicant_name').value, null);
+  const ambiguous = fallbackExtract(['TAX INVOICE\nInvoice No\nSeller name Demo Co\nDate of birth: 05/01/2000\nTotal INR 500']);
+  assert.equal(ambiguous.fields.find(f => f.key === 'invoice_number').value, null);
+  assert.equal(ambiguous.fields.find(f => f.key === 'invoice_date').value, null, 'date of birth is not the invoice date');
+  assert.equal(fallbackExtract(['Progress Report\nFindings: Completed']).fields.find(f => f.key === 'title').value, 'Progress Report');
+  assert.equal(fallbackExtract(['NOTICE\nOffice hours updated']).fields.find(f => f.key === 'title_or_subject').value, 'NOTICE');
+});
+
+test('blank and entirely empty extractions cannot pass validation silently', () => {
+  const result = finalizeExtraction(fallbackExtract([''], { local: true }), { textByPage: [''], ocrUsed: true });
+  assert.ok(result.issues.some(i => i.rule === 'extraction.empty'));
+  assert.ok(result.issues.some(i => i.rule === 'text.unreadable'));
+  assert.equal(result.overallConfidence, 0);
+});
 
 test('schemas: every type has well-formed fields and the required types exist', () => {
   for (const id of ['invoice', 'certificate', 'marksheet', 'application_form', 'report', 'identity_document', 'institutional_record', 'other']) {

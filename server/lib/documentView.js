@@ -29,6 +29,8 @@ export function toDocumentResponse(doc, extra = {}) {
     fileSize: doc.fileSize,
     createdAt: doc.createdAt,
     fallbackUsed: doc.source === 'fallback',
+    processingMode: doc.processingMode || 'deep',
+    ...(doc.processingMode === 'privacy' ? { textByPage: x.rawTextByPage || [] } : {}),
     ...(doc.warning ? { warning: doc.warning } : {}),
     model: doc.model,
     docType: x.docType,

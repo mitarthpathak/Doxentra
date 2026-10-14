@@ -22,6 +22,7 @@
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "4.10.38",
+    "tesseract.js": "^5.1.1",
     "undici": "^6.29.0"
   },
   "engines": {

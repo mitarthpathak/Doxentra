@@ -250,6 +250,9 @@ export interface IssueCounts {
 
 /** A document extraction as returned by /api/extract and /api/documents/:id. */
 export interface DocumentResult {
+  processingMode?: 'deep' | 'privacy';
+  /** Locally recognised text, with personal data masked by the server. */
+  textByPage?: string[];
   id: string;
   filename: string;
   mimeType?: string;

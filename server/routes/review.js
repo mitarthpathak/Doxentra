@@ -4,6 +4,8 @@ import { ownerLabel, requireOwner } from '../lib/owner.js';
 import { reviewDocument, reviewField } from '../lib/review.js';
 import { issueCounts, toDocumentResponse } from '../lib/documentView.js';
 import { documentTwin } from '../lib/twins.js';
+import { isPrivacyMode } from '../lib/privacy.js';
+import { maskPrivacyDocument } from '../lib/privacyDocument.js';
 
 const router = express.Router();
 const notFound = res => res.status(404).json({ success: false, error: 'Document not found.' });
@@ -18,6 +20,11 @@ async function apply(req, res, act) {
   } catch (err) {
     if (err.status) return res.status(err.status).json({ success: false, error: err.message });
     throw err;
+  }
+  if (isPrivacyMode()) {
+    const masked = maskPrivacyDocument({ ...doc, extraction: result.extraction, audit: [...(doc.audit || []), result.audit] });
+    result.extraction = masked.extraction;
+    result.audit = masked.audit.at(-1);
   }
   const saved = await updateDocument(req.params.id, req.owner, { extraction: result.extraction },
     { audit: result.audit, auditLength: (doc.audit || []).length });

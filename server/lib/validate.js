@@ -27,6 +27,8 @@ const issue = (rule, severity, type, fieldKeys, message) => ({ rule, severity, t
 
 /** Every rule the engine can raise: [id, severity, type, description]. */
 export const RULES = [
+  ['extraction.empty', 'warning', 'missing', 'No structured values were extracted, so consistency could not be checked.'],
+  ['text.unreadable', 'warning', 'quality', 'One or more pages contain no readable text.'],
   ['required.missing', 'error', 'missing', 'A required field of the detected document type has no value.'],
   ['type.required_mostly_missing', 'warning', 'missing', 'More than half of the required fields are missing, so the document type may be wrong.'],
   ['type.uncertain', 'info', 'low_confidence', 'The document type was detected with low confidence.'],
@@ -511,6 +513,16 @@ export function validateExtraction(extraction, { now = new Date(), textByPage = 
     ...duplicateIdIssues(extraction),
     ...idNumberIssues(extraction),
   ];
+  if (!extraction.fields.some(f => f.value != null) && !(extraction.tables || []).some(t => t.rows?.length)) {
+    issues.push(issue('extraction.empty', 'warning', 'missing', [],
+      'No structured values were extracted. Consistency could not be checked; review the document or try a clearer scan.'));
+  }
+  const unreadable = Array.from({ length: extraction.pageCount || textByPage.length }, (_, i) => i + 1)
+    .filter(page => !String(textByPage[page - 1] || '').trim());
+  if (textByPage.length && unreadable.length) {
+    issues.push(issue('text.unreadable', 'warning', 'quality', [],
+      `No readable text was found on page${unreadable.length > 1 ? 's' : ''} ${unreadable.join(', ')}. Try a clearer scan; extraction may be incomplete.`));
+  }
   // A runner-up type that is nearly as likely (see classify.js).
   const runnerUp = (extraction.typeCandidates || []).find(c => c.docType !== extraction.docType);
   if (runnerUp && runnerUp.confidence >= AMBIGUOUS_AT) {

@@ -173,9 +173,11 @@ export const STAGE_TEXT: Record<string, string> = {
   retrying: 'The service is busy; retrying your uploaded file',
   downloading: 'Fetching the file from storage',
   reading: 'Reading text (OCR for scans and photos)',
+  local_ocr: 'Reading scans with local OCR on this server',
   reading_groq: 'Gemini OCR failed; reading the image with Groq',
   reading_groq_quota: 'Gemini OCR limit reached; reading the image with Groq',
   extracting: 'Classifying and extracting fields with Gemini AI',
+  local_extract: 'Extracting fields locally without cloud AI',
   validating: 'Checking confidence and consistency',
   saving: 'Saving results',
   loading_result: 'Loading the saved result',
@@ -185,8 +187,8 @@ export const STAGE_TEXT: Record<string, string> = {
 export const UPLOAD_STEPS = [
   { title: 'Upload file', detail: 'Transfer the file and confirm it is stored.' },
   { title: 'Load & check file', detail: 'Fetch the stored file and verify its format.' },
-  { title: 'Read text / prepare OCR', detail: 'Read selectable PDF text; prepare scans and photos for AI.' },
-  { title: 'Classify + extract', detail: 'AI reads scanned pages, identifies the document type and extracts fields together.' },
+  { title: 'Read text / prepare OCR', detail: 'Read selectable PDF text and recognize scanned pages or photos.' },
+  { title: 'Classify + extract', detail: 'Identify the document type and extract fields from the recognized text.' },
   { title: 'Validate details', detail: 'Check confidence, missing fields and inconsistent values.' },
   { title: 'Save & load result', detail: 'Save the analysis and load your result.' },
 ] as const;
@@ -198,6 +200,6 @@ export function uploadStepIndex(upload: UploadStatus): number {
   // Keep already-running uploads readable across a frontend hot reload.
   if (!stage) stage = Object.entries(STAGE_TEXT).find(([, text]) => text === upload.subtext)?.[0];
   return ({ preparing: 0, uploading: 0, storing: 0, queued: 1, queueing: 1, downloading: 1, reading: 2,
-    reading_groq: 2, reading_groq_quota: 2,
-    extracting: 3, validating: 4, saving: 5, loading_result: 5, done: 5 } as Record<string, number>)[stage || 'uploading'] ?? 0;
+    local_ocr: 2, reading_groq: 2, reading_groq_quota: 2,
+    extracting: 3, local_extract: 3, validating: 4, saving: 5, loading_result: 5, done: 5 } as Record<string, number>)[stage || 'uploading'] ?? 0;
 }

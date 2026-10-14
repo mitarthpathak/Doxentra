@@ -265,6 +265,11 @@ export function UploadZone({ onDocumentsReady, setUploads }: UploadZoneProps) {
               {active?.stage ? `Step ${step + 1} of ${UPLOAD_STEPS.length}: ${UPLOAD_STEPS[step].title}` : 'Processing your document · detailed status below'}
             </p>
             <p className="text-xs text-on-surface-variant mt-2">{active?.subtext || 'Preparing your document'}</p>
+            {active?.stage === 'local_ocr' && (
+              <span className="mt-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-800" role="status">
+                Performing local on-device OCR...
+              </span>
+            )}
             {active?.pageProgress && (
               <p className="text-xs font-medium text-primary mt-2" data-testid="active-page-progress">
                 {active.pageProgress.pagesCompleted} / {active.pageProgress.pageCount} pages completed

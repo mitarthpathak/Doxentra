@@ -15,6 +15,7 @@
  */
 import { generateStructured, parseJson } from './ai.js';
 import { looseText } from './confidence.js';
+import { isPrivacyMode } from './privacy.js';
 import { tokenMatch, tokenize } from './search.js';
 
 const CHUNK_CHARS = 700;
@@ -301,6 +302,10 @@ export async function askDocuments(question, docs, { history = [], deadline } = 
     { text: `SOURCES:\n${sources.map(sourceBlock).join('\n\n')}` },
     { text: `${turns ? `CONVERSATION SO FAR:\n${turns}\n\n` : ''}QUESTION: ${str(question, 1000)}` },
   ];
+  if (isPrivacyMode()) return {
+    ...extractiveAnswer(question, sources), mode: 'extractive', sourcesConsidered: sources.length,
+    notice: 'High-Privacy Mode: these are matching passages from the document, found locally without cloud AI.',
+  };
   try {
     const result = await generateStructured({
       parts,

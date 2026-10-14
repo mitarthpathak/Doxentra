@@ -17,7 +17,7 @@
  */
 import { asciiDigits } from './normalize.js';
 
-const NAME_KEYS = new Set(['student_name', 'recipient_name', 'applicant_name', 'holder_name', 'father_or_guardian_name', 'mother_name', 'addressed_to']);
+const NAME_KEYS = new Set(['student_name', 'recipient_name', 'applicant_name', 'holder_name', 'father_or_guardian_name', 'mother_name', 'addressed_to', 'name', 'full_name', 'person_name', 'author', 'author_name']);
 const ID_KEYS = new Set(['roll_number', 'enrollment_number', 'application_number', 'id_number', 'certificate_number']);
 const ADDRESS_KEYS = new Set(['address']);
 

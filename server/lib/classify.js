@@ -87,7 +87,9 @@ export function calibrateClassification(extraction, { textByPage = [] } = {}) {
     for (const k of Object.keys(model)) model[k] /= sum;
     sum = 1;
   }
-  if (sum < 1) model.other = (model.other || 0) + (1 - sum);
+  // Unknown probability is not evidence that an unrecognised document is
+  // certainly "other". Preserve the supplied confidence for that choice.
+  if (sum < 1 && chosen !== 'other') model.other = (model.other || 0) + (1 - sum);
 
   const text = textByPage.join('\n');
   const keywords = keywordDistribution(text);

@@ -7,7 +7,7 @@ import { asciiDigits, cleanValue, normalizeValue, parseAmount, parseDate } from 
  * Bump when the prompt, schema or normalisation changes so cached
  * extractions of the same file are recomputed.
  */
-export const EXTRACTION_VERSION = 13;
+export const EXTRACTION_VERSION = 14;
 
 const MAX_QUOTE = 120;
 const MAX_FIELDS = 60;
@@ -356,6 +356,11 @@ const ENTITY_PATTERNS = [
 
 const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+const fieldLabels = [...new Set(DOCUMENT_TYPES.flatMap(type => type.fields.flatMap(def =>
+  [def.label, def.key.replace(/_/g, ' '), ...(def.aliases || [])])).map(label => label.toLowerCase()))]
+  .sort((a, b) => b.length - a.length)
+  .map(label => ({ label, re: new RegExp(`^${escapeRe(label).replace(/\s+/g, '\\s+')}(?=\\s|[:：–-]|$)`, 'i') }));
+
 /** Type guess from keywords only (no AI): the most matched type, at most 0.6 confident. */
 function guessDocType(text) {
   const dist = keywordDistribution(text);
@@ -369,25 +374,38 @@ function guessDocType(text) {
   };
 }
 
-/** "Label: value" lookup for one field on the page lines. */
+/** Label/value lookup, including label-above-value forms and OCR without punctuation. */
 function findLabelled(def, lines) {
-  const labels = [def.label, def.key.replace(/_/g, ' '), ...(def.aliases || [])].map(l => l.toLowerCase());
+  const labels = [...new Set([def.label, def.key.replace(/_/g, ' '), ...(def.aliases || [])])]
+    .sort((a, b) => b.length - a.length);
   for (const label of labels) {
-    const re = new RegExp(`(?:^|\\b)${escapeRe(label)}\\s*(?:#|no\\.?)?\\s*[:\\-–]\\s*(.+)$`, 'i');
-    for (const { text, page } of lines) {
+    const pattern = escapeRe(label).replace(/\s+/g, '\\s+');
+    const re = new RegExp(`^${pattern}(?:\\s*(?:#|no\\.?))?(?:\\s*[:：–-]\\s*|\\s+)(.+)$`, 'i');
+    const standalone = new RegExp(`^${pattern}\\s*[:：-]?$`, 'i');
+    for (let i = 0; i < lines.length; i++) {
+      const { text, page } = lines[i];
       const m = text.match(re);
-      if (m && cleanValue(m[1])) return { value: m[1].trim(), page, sourceQuote: text };
+      const longerLabel = fieldLabels.find(candidate => candidate.label.length > label.length && candidate.re.test(text));
+      if (m && !longerLabel && cleanValue(m[1])) return { value: m[1].trim(), page, sourceQuote: text };
+      const next = lines[i + 1];
+      if (standalone.test(text) && next?.page === page && !isFieldLabel(next.text) && cleanValue(next.text)) {
+        return { value: next.text, page, sourceQuote: `${text}\n${next.text}` };
+      }
     }
   }
   return null;
 }
 
+function isFieldLabel(text) {
+  return fieldLabels.some(candidate => candidate.re.test(text));
+}
+
 /**
- * Basic extraction without the AI, for digital PDFs: keyword-based type
- * guess, "Label: value" matching and regex entities. Confidences are low by
+ * Basic extraction without the AI, from PDF text or local OCR: keyword-based
+ * type guessing, label/value matching and regex entities. Confidences are low by
  * design; the result is marked as a fallback and never cached.
  */
-export function fallbackExtract(pages) {
+export function fallbackExtract(pages, { local = false } = {}) {
   const lines = pages.flatMap((p, i) => String(p || '').split('\n').map(text => ({ text: text.trim(), page: i + 1 }))).filter(l => l.text);
   const fullText = lines.map(l => l.text).join('\n');
   const { docType, docTypeConfidence, typeCandidates } = guessDocType(fullText);
@@ -397,6 +415,24 @@ export function fallbackExtract(pages) {
     const hit = findLabelled(def, lines);
     return hit ? { key: def.key, label: def.label, value: hit.value, confidence: 0.4, page: hit.page, sourceQuote: hit.sourceQuote } : { key: def.key, value: null };
   });
+
+  const titleKey = { other: 'title', certificate: 'certificate_title', report: 'title', institutional_record: 'title_or_subject' }[docType];
+  const heading = lines.find(line => line.text.length <= 120 && !isFieldLabel(line.text) && /\p{L}/u.test(line.text));
+  const titleField = rawFields.find(field => field.key === titleKey);
+  if (titleField && !titleField.value && heading) {
+    Object.assign(titleField, { value: heading.text, confidence: 0.4, page: heading.page, sourceQuote: heading.text });
+  }
+
+  // Retain explicit sections in notes and roadmaps outside the fixed schemas.
+  const usedQuotes = new Set(rawFields.filter(f => f.value).map(f => f.sourceQuote));
+  for (const line of lines) {
+    if (rawFields.length >= type.fields.length + 15 || usedQuotes.has(line.text)) continue;
+    const match = line.text.match(/^([\p{L}][\p{L}\p{N} /&()_.-]{1,59}?)\s*[:：]\s*(.+)$/u);
+    if (!match) continue;
+    const key = toKey(match[1]);
+    if (!key || rawFields.some(f => f.key === key)) continue;
+    rawFields.push({ key, label: match[1].trim(), value: match[2].trim(), confidence: 0.4, page: line.page, sourceQuote: line.text });
+  }
 
   const entities = [];
   for (const [etype, re] of ENTITY_PATTERNS) {
@@ -412,7 +448,7 @@ export function fallbackExtract(pages) {
     typeCandidates,
     title: lines[0]?.text.slice(0, 80) || type.label,
     language: /[ऀ-ॿ]/.test(fullText) ? (/[a-z]/i.test(fullText) ? 'hi+en' : 'hi') : 'en',
-    summary: `Basic rule-based extraction (AI unavailable). Looks like a ${type.label.toLowerCase()}${firstLines ? ` beginning "${firstLines}"` : ''}.`,
+    summary: `${local ? 'Local rule-based extraction' : 'Basic rule-based extraction (AI unavailable)'}. ${firstLines ? `Document begins "${firstLines}". ` : 'No readable text was found. '}${rawFields.filter(f => f.value).length} fields found; review the values against the source.`,
     fields: rawFields,
     entities,
     tables: [],

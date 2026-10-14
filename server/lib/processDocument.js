@@ -7,8 +7,7 @@
  */
 import crypto from 'crypto';
 import { isPrivacyMode } from './privacy.js';
-import { redactDocument, maskerFor } from './redact.js';
-import { asciiDigits } from './normalize.js';
+import { maskPrivacyDocument } from './privacyDocument.js';
 import { EXTRACTION_VERSION, extractDocument, fallbackExtract } from './extract.js';
 import { detectFileType } from './files.js';
 import { SCANNED_CHARS_PER_PAGE, prepareDocumentInput } from './pdfText.js';
@@ -20,6 +19,7 @@ import { ownerFields } from './owner.js';
 import { withoutReview } from './review.js';
 import { isTransientError } from './serviceErrors.js';
 import { analyzeGemini } from './geminiPipeline.js';
+import { recognizeImageBuffer, recognizeScannedPdf } from './offlineOcr.js';
 import { isGeminiRateLimit } from './geminiPool.js';
 import { sortIssues } from './validate.js';
 import { crossDocumentIssues } from './crossdoc.js';
@@ -92,22 +92,49 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
   await onStage('reading');
   const input = await prepareDocumentInput({ buffer: file.buffer, kind: fileType.kind, mimeType: fileType.mimeType });
   if (privacy && (fileType.kind === 'image' || input.mode !== 'text' || input.unreliablePages?.length)) {
-    return failResult(filename, 422, 'Scanned document requires vision processing. Switch to Deep Intelligence Mode or upload a digital PDF.');
+    await onStage('local_ocr');
+    try {
+      if (fileType.kind === 'image') {
+        input.pages = [(await recognizeImageBuffer(file.buffer)).text];
+        input.pageCount = 1;
+        input.textLayer = 'scanned';
+        input.unreliablePages = [1];
+      } else {
+        const pageNumbers = input.unreliablePages?.length
+          ? input.unreliablePages
+          : Array.from({ length: input.pageCount }, (_, i) => i + 1);
+        const scanned = await recognizeScannedPdf(file.buffer, {
+          pageNumbers,
+          onPage: async (_page, completed) => onPageProgress({
+            pageCount: input.pageCount, pagesCompleted: input.pageCount - pageNumbers.length + completed, pageStart: 1,
+            pageEnd: input.pageCount, chunkIndex: 1, chunkCount: 1,
+          }),
+        });
+        input.pages = Array.from({ length: input.pageCount }, (_, i) =>
+          pageNumbers.includes(i + 1) ? scanned.pages[i] : input.pages[i] || '');
+        input.textLayer = pageNumbers.length === input.pageCount ? 'scanned' : 'mixed';
+      }
+      input.mode = 'text';
+      input.ocrUsed = true;
+    } catch (err) {
+      console.error('[Privacy] local OCR failed:', err.message);
+      return failResult(filename, 422, 'Local OCR could not read this file. Please try a clearer scan or another image.');
+    }
   }
-  if (fileType.kind === 'image') await onPageProgress({ pageCount: 1, pagesCompleted: 0, pageStart: 1, pageEnd: 1, chunkIndex: 1, chunkCount: 1 });
+  if (fileType.kind === 'image') await onPageProgress({ pageCount: 1, pagesCompleted: privacy ? 1 : 0, pageStart: 1, pageEnd: 1, chunkIndex: 1, chunkCount: 1 });
   let result;
   let source = 'ai';
   let warning;
-  if (pipeline === 'legacy') await onStage('extracting');
+  if (pipeline === 'legacy' && !privacy) await onStage('extracting');
   try {
     if (privacy) {
-      await onStage('extracting');
-      result = fallbackExtract(input.pages);
+      await onStage('local_extract');
+      result = fallbackExtract(input.pages, { local: true });
       const identity = result.fields.find(f => f.key === 'id_number');
       if (identity?.value && /aadhaar|aadhar/i.test(input.pages.join(' '))) identity.format = 'aadhaar';
       else if (identity?.value && /^[A-Z]{5}\d{4}[A-Z]$/.test(identity.value.replace(/\s/g, ''))) identity.format = 'pan';
       source = 'fallback';
-      warning = 'High-Privacy Mode: local parsing and validation with automated PII masking. This session is stored only in server memory and is lost on restart.';
+      warning = 'High-Privacy Mode: local OCR, parsing and validation with automated PII masking. This session is stored only in server memory and is lost on restart.';
     } else result = pipeline === 'legacy' ? await extractDocument(input, { deadline }) : await analyzeGemini({ ...input,
       // Keep original bytes available for selective re-verification of digital pages too.
       file: input.file || { data: file.buffer, mimeType: fileType.mimeType },
@@ -175,6 +202,7 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
     extraction.overallConfidence = overallConfidence(extraction.fields, extraction.issues);
   }
   const doc = {
+    processingMode: privacy ? 'privacy' : 'deep',
     filename,
     fileHash,
     extractionVersion: EXTRACTION_VERSION,
@@ -196,13 +224,7 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
     },
   };
   if (privacy) {
-    const mask = maskerFor([doc]).text;
-    const redacted = redactDocument({ ...doc.extraction, filename: doc.filename });
-    const sweep = value => typeof value === 'string' ? mask(asciiDigits(value)).replace(/\d{4}[\s_-]?\d{4}[\s_-]?\d{4}/g, v => `XXXX XXXX ${v.replace(/\D/g, '').slice(-4)}`).replace(/[A-Z]{5}\d{4}[A-Z]/gi, v => v.replace(/\d/g, 'X')).replace(/(?<!\d)\d{10}(?!\d)/g, v => `XXXXXX${v.slice(-4)}`)
-      : Array.isArray(value) ? value.map(sweep) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k,v]) => [k,sweep(v)])) : value;
-    doc.filename = sweep(redacted.filename);
-    doc.extraction = sweep({ ...doc.extraction, ...redacted, rawTextByPage: doc.extraction.rawTextByPage });
-    doc.metadata = sweep(doc.metadata);
+    Object.assign(doc, maskPrivacyDocument(doc));
     console.log(`[Privacy] local parsing complete pages=${input.pageCount}`);
   }
   // Keep the crosscheck/entity-graph route shapes and owner boundary. These

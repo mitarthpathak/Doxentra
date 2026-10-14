@@ -20,8 +20,8 @@ const AI_BUDGET_MS = 48_000;
 const MAX_ATTEMPTS = 2;
 
 /** Rough progress per stage, shown while an item is processed. */
-export const STAGE_PROGRESS = { queued: 0, downloading: 8, reading: 18, reading_groq: 22, reading_groq_quota: 22,
-  extracting: 30, validating: 90, saving: 96, done: 100 };
+export const STAGE_PROGRESS = { queued: 0, downloading: 8, reading: 18, local_ocr: 22, reading_groq: 22, reading_groq_quota: 22,
+  extracting: 30, local_extract: 30, validating: 90, saving: 96, done: 100 };
 
 export async function createExtractionJob(owner, items) {
   return createJob({
@@ -66,14 +66,28 @@ export async function runItem(job, itemId) {
   const startedAt = Date.now();
   let stage = item.stage;
   let pageProgress = item.pageProgress;
-  const set = async patch => {
-    if (patch.stage && patch.stage !== stage) patch.stageStartedAt = new Date();
-    const updated = await updateJobItem(job._id, itemId, patch, { leaseUntil: item.leaseUntil });
-    if (!updated) throw new Error('Processing lease is no longer owned by this request');
-    if (patch.stage) stage = patch.stage;
-    if (patch.pageProgress) pageProgress = patch.pageProgress;
-    return updated;
+  let leaseUntil = item.leaseUntil;
+  let updates = Promise.resolve();
+  // Serialize progress and heartbeat writes so they use the current lease token.
+  const set = patch => {
+    const update = updates.then(async () => {
+      if (patch.stage && patch.stage !== stage) patch.stageStartedAt = new Date();
+      if (isPrivacyMode() && (!patch.status || patch.status === 'running')) patch.leaseUntil = new Date(Date.now() + LEASE_MS);
+      const updated = await updateJobItem(job._id, itemId, patch, { leaseUntil });
+      if (!updated) throw new Error('Processing lease is no longer owned by this request');
+      if (patch.leaseUntil) leaseUntil = patch.leaseUntil;
+      if (patch.stage) stage = patch.stage;
+      if (patch.pageProgress) pageProgress = patch.pageProgress;
+      return updated;
+    });
+    updates = update.catch(() => {});
+    return update;
   };
+  // Local OCR may process many pages or wait behind another upload.
+  const heartbeat = isPrivacyMode() ? setInterval(() => {
+    void set({}).catch(err => console.error('[Jobs] local OCR lease renewal failed:', err.message));
+  }, 25_000) : null;
+  heartbeat?.unref?.();
   const fail = error => set({ status: 'failed', stage: 'failed', errorStage: stage, error, finishedAt: new Date(), elapsedMs: Date.now() - startedAt });
   const deferForQuota = (error, retryAt) => set({
     status: 'queued', stage: 'retrying', retryStage: stage, lastError: error,
@@ -139,7 +153,7 @@ export async function runItem(job, itemId) {
       ? 'The file was uploaded, but it could not be downloaded from storage. Please try again.'
       : 'Something went wrong while reading this file. Please try again.';
     await retryOrFail(error, Boolean(isTransientError(err))).catch(error => console.error('[Jobs] status update failed:', error.message));
-  }
+  } finally { clearInterval(heartbeat); }
 }
 
 /** Overall state of a job from its items. */

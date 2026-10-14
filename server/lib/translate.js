@@ -15,6 +15,7 @@
  */
 import { generateStructured, isAiConfigured } from './ai.js';
 import { hasDevanagari, transliterate } from './translit.js';
+import { isPrivacyMode } from './privacy.js';
 
 export const LANGUAGES = { en: 'English', hi: 'Hindi' };
 const MAX_PAGES = 5;
@@ -122,9 +123,10 @@ function transliterated(source) {
  */
 export async function translateDocument(doc, { to = 'en', now = new Date() } = {}) {
   if (!LANGUAGES[to]) throw Object.assign(new Error(`Language must be one of: ${Object.keys(LANGUAGES).join(', ')}.`), { status: 400 });
+  if (isPrivacyMode() && to !== 'en') throw Object.assign(new Error('Translation to Hindi requires cloud AI and is unavailable in High-Privacy Mode.'), { status: 422 });
   const source = sourceOf(doc.extraction || {}, to);
   const base = { language: to, basedOn: (doc.audit || []).length, createdAt: now.toISOString() };
-  if (isAiConfigured()) {
+  if (!isPrivacyMode() && isAiConfigured()) {
     try {
       const result = await generateStructured({
         parts: [{ text: prompt(source, to) }], schema: SCHEMA, deadline: Date.now() + AI_BUDGET_MS, tag: 'Translate',

@@ -148,7 +148,11 @@ router.post('/documents/:id/concept-map', requireOwner, mapLimiter, async (req, 
   let warning;
   let graphFallback = false;
   try {
-    result = await analyzeDocument({ text }, { deadline: startedAt + AI_BUDGET_MS });
+    if (isPrivacyMode()) {
+      result = buildFallbackGraph(text);
+      graphFallback = true;
+      warning = 'High-Privacy Mode: a local keyword map was generated without cloud AI.';
+    } else result = await analyzeDocument({ text }, { deadline: startedAt + AI_BUDGET_MS });
   } catch (err) {
     console.error('[ConceptMap] AI analysis failed:', err.code || err.status || '', err.message);
     result = buildFallbackGraph(text);

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
+import { getProcessingMode } from '../lib/processingMode';
 import { apiFetch, confidenceBand, percent } from '../lib/api';
 import { PagePreview } from './PagePreview';
 import { IntegrityCard } from './IntegrityCard';
@@ -52,7 +53,7 @@ export function ConfidenceChip({ value, band, className }: { value: number | nul
 function classificationNote(doc: DocumentResult) {
   const c = doc.classification;
   if (!c) return undefined;
-  const parts = [`AI ${percent(c.modelConfidence)}`];
+  const parts = [`${doc.fallbackUsed ? 'Local rules' : 'AI'} ${percent(c.modelConfidence)}`];
   if (c.keywordShare != null) parts.push(`keywords ${percent(c.keywordShare)}`);
   parts.push(`required fields found ${percent(c.requiredCoverage)}`);
   return `${doc.docCategory ? `${doc.docCategory} · ` : ''}${parts.join(', ')}`;
@@ -215,6 +216,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
   };
 
   const found = doc.fields.filter(f => f.value != null);
+  const privacy = doc.processingMode === 'privacy' || getProcessingMode() === 'privacy';
   const missingFields = doc.fields.filter(f => f.value == null);
   const visibleFields = showEmpty ? doc.fields : found.concat(missingFields.filter(f => f.required));
   const issueKeys = new Map<string, DocumentIssue['severity']>();
@@ -361,9 +363,9 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
         </div>
       </div>
       {doc.issues.length === 0 && crossIssues.length === 0 ? (
-        <div className="flex items-center gap-3 text-sm text-tertiary font-medium">
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-          No missing or inconsistent information found.
+        <div className={cn('flex items-center gap-3 text-sm font-medium', found.length ? 'text-tertiary' : 'text-amber-600')}>
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>{found.length ? 'check_circle' : 'warning'}</span>
+          {found.length ? 'No issues detected in the extracted values. Review the source for completeness.' : 'No values were extracted. Consistency could not be checked.'}
         </div>
       ) : (
         ISSUE_GROUPS.map(group => {
@@ -474,7 +476,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
             )}
             {doc.fallbackUsed && (
               <span className="px-4 py-1 bg-amber-50 text-amber-600 text-[10px] font-black uppercase rounded-full border border-amber-100 tracking-widest">
-                Basic extraction
+                {privacy ? 'Local extraction' : 'Basic extraction'}
               </span>
             )}
             {doc.review && doc.review.status !== 'unreviewed' && (
@@ -530,7 +532,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
           </div>
         )}
         <div className="flex flex-wrap gap-2 md:ml-auto">
-          {onToggleMask && (
+          {onToggleMask && !privacy && (
             <button
               onClick={onToggleMask}
               aria-pressed={masked}
@@ -548,7 +550,8 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
           {!masked && (
             <button
               onClick={() => run('translate', async () => setTranslation(await fetchTranslation(doc, targetLanguage(doc))))}
-              disabled={!!busy}
+              disabled={!!busy || privacy}
+              title={privacy ? 'Translation requires cloud AI and is unavailable in High-Privacy Mode.' : undefined}
               className="flex items-center gap-2 px-3 py-2 lg:py-1.5 bg-primary/10 rounded-full text-[10px] text-primary font-bold uppercase hover:bg-primary/20 transition-colors disabled:opacity-50"
               data-testid="translate"
             >
@@ -590,6 +593,7 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
           </button>
         </div>
       </div>
+      {privacy && <p className="text-xs text-on-surface-variant">Personal data is masked automatically. Translation requires Deep Intelligence Mode.</p>}
       {masked && (
         <div className="px-5 py-3 bg-surface-container-low border border-slate-200 rounded-2xl text-sm text-on-surface-variant" data-testid="mask-banner">
           Personal data is masked{doc.redaction?.fields.length ? `: ${doc.redaction.fields.map(f => f.label).join(', ')}` : ''}. Exports are redacted too; page images and review are off while masking.
@@ -607,6 +611,19 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-4 opacity-50">Summary</p>
             <p className="text-on-surface leading-relaxed font-medium" data-testid="doc-summary">{doc.summary}</p>
             <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] mt-4 truncate">{doc.filename}</p>
+            {privacy && doc.textByPage && (
+              <details className="mt-5 border-t border-slate-200 pt-4" data-testid="local-source-text">
+                <summary className="cursor-pointer text-sm font-bold text-primary">View recognised text (personal data masked)</summary>
+                <div className="mt-3 max-h-80 overflow-y-auto space-y-4">
+                  {doc.textByPage.map((text, i) => (
+                    <div key={i}>
+                      <p className="text-xs font-bold text-on-surface-variant mb-2">Page {i + 1}</p>
+                      <p className="text-sm whitespace-pre-wrap break-words">{text || 'No readable text found on this page.'}</p>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            )}
           </div>
 
           {translation && <TranslationPanel translation={translation} onClose={() => setTranslation(null)} />}
