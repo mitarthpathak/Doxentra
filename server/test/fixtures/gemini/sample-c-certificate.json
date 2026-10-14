@@ -1,0 +1,178 @@
+{
+ "_match": "EIT/FSWD/2024/0381",
+ "docType": "certificate",
+ "docTypeConfidence": 0.97,
+ "title": "Certificate of Completion – Rohan Mehta",
+ "language": "en",
+ "summary": "Certificate of Completion EIT/FSWD/2024/0381 from Example Institute of Technology, Pune, certifying that Rohan Mehta completed the 120-hour Full Stack Web Development course with Grade A. It is dated 20/08/2024 but marked valid until 19/08/2023, before its issue date, and the verification line spells the name Rohan Mehtaa.",
+ "fields": [
+  {
+   "key": "certificate_title",
+   "label": "Certificate title",
+   "value": "Certificate of Completion",
+   "normalizedValue": null,
+   "confidence": 0.97,
+   "page": 1,
+   "sourceQuote": "Certificate of Completion"
+  },
+  {
+   "key": "certificate_number",
+   "label": "Certificate number",
+   "value": "EIT/FSWD/2024/0381",
+   "normalizedValue": null,
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "Certificate No: EIT/FSWD/2024/0381"
+  },
+  {
+   "key": "recipient_name",
+   "label": "Recipient",
+   "value": "Rohan Mehta",
+   "normalizedValue": null,
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "Rohan Mehta"
+  },
+  {
+   "key": "issuing_organization",
+   "label": "Issued by",
+   "value": "Example Institute of Technology, Pune",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "EXAMPLE INSTITUTE OF TECHNOLOGY, PUNE"
+  },
+  {
+   "key": "course_or_achievement",
+   "label": "Course / achievement",
+   "value": "Full Stack Web Development",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "has successfully completed the 120-hour course Full Stack Web Development"
+  },
+  {
+   "key": "grade_or_score",
+   "label": "Grade / score",
+   "value": "A",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "with Grade A."
+  },
+  {
+   "key": "issue_date",
+   "label": "Issue date",
+   "value": "20/08/2024",
+   "normalizedValue": "2024-08-20",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Date of Issue: 20/08/2024"
+  },
+  {
+   "key": "valid_until",
+   "label": "Valid until",
+   "value": "19/08/2023",
+   "normalizedValue": "2023-08-19",
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Valid Until: 19/08/2023"
+  },
+  {
+   "key": "signatory_name",
+   "label": "Signatory",
+   "value": "Dr. Kavita Rao",
+   "normalizedValue": null,
+   "confidence": 0.92,
+   "page": 1,
+   "sourceQuote": "Dr. Kavita Rao"
+  },
+  {
+   "key": "signatory_designation",
+   "label": "Signatory designation",
+   "value": "Director, Academic Programmes",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Director, Academic Programmes"
+  },
+  {
+   "key": "place",
+   "label": "Place",
+   "value": "Pune",
+   "normalizedValue": null,
+   "confidence": 0.85,
+   "page": 1,
+   "sourceQuote": "EXAMPLE INSTITUTE OF TECHNOLOGY, PUNE"
+  },
+  {
+   "key": "seal_or_signature_present",
+   "label": "Seal / signature",
+   "value": "yes",
+   "normalizedValue": "yes",
+   "confidence": 0.85,
+   "page": 1,
+   "sourceQuote": "EIT SEAL"
+  },
+  {
+   "key": "course_duration",
+   "label": "Course duration",
+   "value": "120 hours",
+   "normalizedValue": null,
+   "confidence": 0.88,
+   "page": 1,
+   "sourceQuote": "has successfully completed the 120-hour course"
+  }
+ ],
+ "entities": [
+  {
+   "type": "PERSON",
+   "value": "Rohan Mehta",
+   "page": 1,
+   "sourceQuote": "Rohan Mehta"
+  },
+  {
+   "type": "PERSON",
+   "value": "Rohan Mehtaa",
+   "page": 1,
+   "sourceQuote": "Verification: issued to Mr. Rohan Mehtaa."
+  },
+  {
+   "type": "PERSON",
+   "value": "Dr. Kavita Rao",
+   "page": 1,
+   "sourceQuote": "Dr. Kavita Rao"
+  },
+  {
+   "type": "ORG",
+   "value": "Example Institute of Technology",
+   "page": 1,
+   "sourceQuote": "EXAMPLE INSTITUTE OF TECHNOLOGY, PUNE"
+  },
+  {
+   "type": "ID",
+   "value": "EIT/FSWD/2024/0381",
+   "page": 1,
+   "sourceQuote": "Certificate No: EIT/FSWD/2024/0381"
+  },
+  {
+   "type": "DATE",
+   "value": "20/08/2024",
+   "page": 1,
+   "sourceQuote": "Date of Issue: 20/08/2024"
+  },
+  {
+   "type": "DATE",
+   "value": "19/08/2023",
+   "page": 1,
+   "sourceQuote": "Valid Until: 19/08/2023"
+  },
+  {
+   "type": "LOCATION",
+   "value": "Pune",
+   "page": 1,
+   "sourceQuote": "EXAMPLE INSTITUTE OF TECHNOLOGY, PUNE"
+  }
+ ],
+ "tables": []
+}

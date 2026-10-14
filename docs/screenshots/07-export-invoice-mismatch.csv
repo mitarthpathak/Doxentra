@@ -1,0 +1,41 @@
+﻿section,key,label,value,normalized_value,confidence,confidence_band,page,source_quote
+document,filename,File,b-invoice-total-mismatch.pdf,,,,,
+document,doc_type,Document type,Invoice,invoice,0.95,,,
+document,summary,Summary,"Tax invoice SOS-2024-0912 from Sample Office Supplies (Bengaluru) to Demo Learning Centre, dated 03/09/2024 and due 18/09/2024. Items worth ₹9,500.00 with CGST and SGST of ₹855.00 each, but the printed grand total is ₹11,710.00. No GSTIN is shown for the seller.",,,,,
+document,ocr_used,OCR used,no,,,,,
+document,page_count,Pages,1,,,,,
+document,overall_confidence,Overall confidence,0.68,,,,,
+field,invoice_number,Invoice number,SOS-2024-0912,SOS-2024-0912,0.98,high,1,Invoice No: SOS-2024-0912
+field,invoice_date,Invoice date,03/09/2024,2024-09-03,0.98,high,1,Invoice Date: 03/09/2024
+field,due_date,Due date,18/09/2024,2024-09-18,0.97,high,1,Due Date: 18/09/2024
+field,seller_name,Seller,Sample Office Supplies,Sample Office Supplies,0.97,high,1,Sample Office Supplies
+field,seller_gstin,Seller GSTIN,,,0,low,,
+field,seller_pan,Seller PAN,,,0,low,,
+field,seller_address,Seller address,"5 Demo Lane, Bengaluru, Karnataka 560001","5 Demo Lane, Bengaluru, Karnataka 560001",0.95,high,1,"5 Demo Lane, Bengaluru, Karnataka 560001"
+field,buyer_name,Buyer,Demo Learning Centre,Demo Learning Centre,0.97,high,1,Bill To: Demo Learning Centre
+field,buyer_gstin,Buyer GSTIN,,,0,low,,
+field,buyer_address,Buyer address,"9 Example Street, Mysuru 570001","9 Example Street, Mysuru 570001",0.94,high,1,"9 Example Street, Mysuru 570001"
+field,place_of_supply,Place of supply,,,0,low,,
+field,subtotal,Subtotal,"₹ 9,500.00",9500,0.77,medium,1,"Subtotal ₹ 9,500.00"
+field,discount,Discount,,,0,low,,
+field,cgst,CGST,₹ 855.00,855,0.97,high,1,CGST @ 9% ₹ 855.00
+field,sgst,SGST,₹ 855.00,855,0.97,high,1,SGST @ 9% ₹ 855.00
+field,igst,IGST,,,0,low,,
+field,tax_total,Total tax,,,0,low,,
+field,total_amount,Total amount,"₹ 11,710.00",11710,0.77,medium,1,"Grand Total ₹ 11,710.00"
+field,amount_in_words,Amount in words,,,0,low,,
+field,currency,Currency,₹,INR,0.84,high,1,"Grand Total ₹ 11,710.00"
+field,payment_terms,Payment terms,,,0,low,,
+field,seller_phone,Seller phone,98765 43210,'+919876543210,0.95,high,1,Phone: 98765 43210
+entity,ORG,ORG,Sample Office Supplies,,0.9,high,1,Sample Office Supplies
+entity,ORG,ORG,Demo Learning Centre,,0.9,high,1,Bill To: Demo Learning Centre
+entity,PHONE,PHONE,98765 43210,,0.9,high,1,Phone: 98765 43210
+entity,AMOUNT,AMOUNT,"₹ 11,710.00",,0.9,high,1,"Grand Total ₹ 11,710.00"
+entity,DATE,DATE,03/09/2024,,0.9,high,1,Invoice Date: 03/09/2024
+entity,LOCATION,LOCATION,"Bengaluru, Karnataka 560001",,0.9,high,1,"5 Demo Lane, Bengaluru, Karnataka 560001"
+issue,missing,error,Seller GSTIN is missing.,seller_gstin,,,,
+issue,inconsistent,error,"Total ₹11,710 does not match ₹9,500 + tax ₹1,710 = ₹11,210.",total_amount; subtotal; tax_total,,,,
+table,table_1_columns,Line items,Item | Qty | Rate (₹) | Amount (₹),,,,1,
+table,table_1_row_1,Line items,"Printer Toner Cartridge | 4 | 1,500.00 | 6,000.00",,,,1,
+table,table_1_row_2,Line items,"Stapler (heavy duty) | 5 | 300.00 | 1,500.00",,,,1,
+table,table_1_row_3,Line items,"Box Files | 40 | 50.00 | 2,000.00",,,,1,

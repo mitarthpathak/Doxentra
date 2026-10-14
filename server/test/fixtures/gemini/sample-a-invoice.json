@@ -1,0 +1,331 @@
+{
+ "_match": "Original for Recipient",
+ "docType": "invoice",
+ "docTypeConfidence": 0.98,
+ "title": "Tax Invoice ET/2024-25/0147",
+ "language": "en",
+ "summary": "GST tax invoice ET/2024-25/0147 from Example Traders Pvt Ltd (Pune) to Sample Retail Co (Mumbai), dated 15/07/2024 and due 14/08/2024. Three office-supply items total ₹16,000.00 before tax; CGST and SGST at 9% each bring the total to ₹18,880.00. Signed and stamped by the authorised signatory.",
+ "fields": [
+  {
+   "key": "invoice_number",
+   "label": "Invoice number",
+   "value": "ET/2024-25/0147",
+   "normalizedValue": null,
+   "confidence": 0.98,
+   "page": 1,
+   "sourceQuote": "Invoice No: ET/2024-25/0147"
+  },
+  {
+   "key": "invoice_date",
+   "label": "Invoice date",
+   "value": "15/07/2024",
+   "normalizedValue": "2024-07-15",
+   "confidence": 0.97,
+   "page": 1,
+   "sourceQuote": "Invoice Date: 15/07/2024"
+  },
+  {
+   "key": "due_date",
+   "label": "Due date",
+   "value": "14/08/2024",
+   "normalizedValue": "2024-08-14",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Due Date: 14/08/2024"
+  },
+  {
+   "key": "seller_name",
+   "label": "Seller",
+   "value": "Example Traders Pvt Ltd",
+   "normalizedValue": null,
+   "confidence": 0.97,
+   "page": 1,
+   "sourceQuote": "Example Traders Pvt Ltd"
+  },
+  {
+   "key": "seller_gstin",
+   "label": "Seller GSTIN",
+   "value": "27AAACE1234F1Z6",
+   "normalizedValue": null,
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "GSTIN: 27AAACE1234F1Z6"
+  },
+  {
+   "key": "seller_pan",
+   "label": "Seller PAN",
+   "value": "AAACE1234F",
+   "normalizedValue": null,
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "PAN: AAACE1234F"
+  },
+  {
+   "key": "seller_address",
+   "label": "Seller address",
+   "value": "14 Sample Industrial Estate, Pune, Maharashtra 411019",
+   "normalizedValue": null,
+   "confidence": 0.92,
+   "page": 1,
+   "sourceQuote": "14 Sample Industrial Estate, Pune, Maharashtra 411019"
+  },
+  {
+   "key": "buyer_name",
+   "label": "Buyer",
+   "value": "Sample Retail Co",
+   "normalizedValue": null,
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "Bill To: Sample Retail Co"
+  },
+  {
+   "key": "buyer_gstin",
+   "label": "Buyer GSTIN",
+   "value": "27AAFCS5678B1Z7",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "Buyer GSTIN: 27AAFCS5678B1Z7"
+  },
+  {
+   "key": "buyer_address",
+   "label": "Buyer address",
+   "value": "22 Demo Market, Mumbai 400001",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "22 Demo Market, Mumbai 400001"
+  },
+  {
+   "key": "place_of_supply",
+   "label": "Place of supply",
+   "value": "Maharashtra (27)",
+   "normalizedValue": null,
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Place of Supply: Maharashtra (27)"
+  },
+  {
+   "key": "subtotal",
+   "label": "Subtotal",
+   "value": "₹ 16,000.00",
+   "normalizedValue": "16000.00",
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "Subtotal ₹ 16,000.00"
+  },
+  {
+   "key": "discount",
+   "label": "Discount",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "cgst",
+   "label": "CGST",
+   "value": "₹ 1,440.00",
+   "normalizedValue": "1440",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "CGST @ 9% ₹ 1,440.00"
+  },
+  {
+   "key": "sgst",
+   "label": "SGST",
+   "value": "₹ 1,440.00",
+   "normalizedValue": "1440",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "SGST @ 9% ₹ 1,440.00"
+  },
+  {
+   "key": "igst",
+   "label": "IGST",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "tax_total",
+   "label": "Total tax",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "total_amount",
+   "label": "Total amount",
+   "value": "₹ 18,880.00",
+   "normalizedValue": "18880",
+   "confidence": 0.97,
+   "page": 1,
+   "sourceQuote": "Total ₹ 18,880.00"
+  },
+  {
+   "key": "amount_in_words",
+   "label": "Amount in words",
+   "value": "Rupees Eighteen Thousand Eight Hundred Eighty Only",
+   "normalizedValue": null,
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Amount in words: Rupees Eighteen Thousand Eight Hundred Eighty Only"
+  },
+  {
+   "key": "currency",
+   "label": "Currency",
+   "value": "₹",
+   "normalizedValue": "INR",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Total ₹ 18,880.00"
+  },
+  {
+   "key": "payment_terms",
+   "label": "Payment terms",
+   "value": "Net 30",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Payment Terms: Net 30"
+  },
+  {
+   "key": "ifsc",
+   "label": "IFSC",
+   "value": "DEMO0001234",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Bank: Demo Bank, A/c 000123456789, IFSC DEMO0001234"
+  },
+  {
+   "key": "seller_email",
+   "label": "Seller email",
+   "value": "accounts@example.com",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "accounts@example.com"
+  }
+ ],
+ "entities": [
+  {
+   "type": "ORG",
+   "value": "Example Traders Pvt Ltd",
+   "page": 1,
+   "sourceQuote": "Example Traders Pvt Ltd"
+  },
+  {
+   "type": "ORG",
+   "value": "Sample Retail Co",
+   "page": 1,
+   "sourceQuote": "Bill To: Sample Retail Co"
+  },
+  {
+   "type": "ORG",
+   "value": "Demo Bank",
+   "page": 1,
+   "sourceQuote": "Bank: Demo Bank, A/c 000123456789, IFSC DEMO0001234"
+  },
+  {
+   "type": "ID",
+   "value": "27AAACE1234F1Z6",
+   "page": 1,
+   "sourceQuote": "GSTIN: 27AAACE1234F1Z6"
+  },
+  {
+   "type": "ID",
+   "value": "27AAFCS5678B1Z7",
+   "page": 1,
+   "sourceQuote": "Buyer GSTIN: 27AAFCS5678B1Z7"
+  },
+  {
+   "type": "ID",
+   "value": "AAACE1234F",
+   "page": 1,
+   "sourceQuote": "PAN: AAACE1234F"
+  },
+  {
+   "type": "DATE",
+   "value": "15/07/2024",
+   "page": 1,
+   "sourceQuote": "Invoice Date: 15/07/2024"
+  },
+  {
+   "type": "DATE",
+   "value": "14/08/2024",
+   "page": 1,
+   "sourceQuote": "Due Date: 14/08/2024"
+  },
+  {
+   "type": "AMOUNT",
+   "value": "₹ 18,880.00",
+   "page": 1,
+   "sourceQuote": "Total ₹ 18,880.00"
+  },
+  {
+   "type": "LOCATION",
+   "value": "Pune, Maharashtra 411019",
+   "page": 1,
+   "sourceQuote": "14 Sample Industrial Estate, Pune, Maharashtra 411019"
+  },
+  {
+   "type": "LOCATION",
+   "value": "Mumbai 400001",
+   "page": 1,
+   "sourceQuote": "22 Demo Market, Mumbai 400001"
+  },
+  {
+   "type": "EMAIL",
+   "value": "accounts@example.com",
+   "page": 1,
+   "sourceQuote": "accounts@example.com"
+  }
+ ],
+ "tables": [
+  {
+   "title": "Line items",
+   "page": 1,
+   "columns": [
+    "#",
+    "Description",
+    "HSN",
+    "Qty",
+    "Rate (₹)",
+    "Amount (₹)"
+   ],
+   "rows": [
+    [
+     "1",
+     "A4 Copier Paper (500 sheets)",
+     "4802",
+     "20",
+     "250.00",
+     "5,000.00"
+    ],
+    [
+     "2",
+     "Whiteboard Markers (pack of 10)",
+     "9608",
+     "15",
+     "180.00",
+     "2,700.00"
+    ],
+    [
+     "3",
+     "Ergonomic Office Chair",
+     "9401",
+     "2",
+     "4,150.00",
+     "8,300.00"
+    ]
+   ]
+  }
+ ]
+}

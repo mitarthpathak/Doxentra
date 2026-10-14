@@ -1,0 +1,300 @@
+{
+  "results": [
+    {
+      "name": "sign up through the UI",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "log in through the UI",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "fake image rejected with a clear message",
+      "ok": true,
+      "detail": "\"fake.png\" could not be read as an image."
+    },
+    {
+      "name": "large image compressed below 4 MB before upload",
+      "ok": true,
+      "detail": "18.4 MB -> 0.83 MB received by the server"
+    },
+    {
+      "name": "multi-upload result: a-invoice-digital.pdf",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "multi-upload result: b-invoice-total-mismatch.pdf",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "multi-upload result: c-certificate-issued-after-expiry.pdf",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "multi-upload result: d-marksheet-wrong-total.pdf",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "multi-upload result: e-application-form-scan.jpg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "multi-upload result: f-student-id-scanned.pdf",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "multi-upload result: g-notice-bilingual-hindi-english.pdf",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "multi-upload result: h-report-unusual-layout.pdf",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "a: document type",
+      "ok": true,
+      "detail": "INVOICE · 100%"
+    },
+    {
+      "name": "a: OCR badge hidden",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "a: summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "a: no error issues",
+      "ok": true,
+      "detail": "VALIDATION Issues check_circle No missing or inconsistent information found."
+    },
+    {
+      "name": "b: document type",
+      "ok": true,
+      "detail": "INVOICE · 100%"
+    },
+    {
+      "name": "b: OCR badge hidden",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "b: summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "b: issue Seller GSTIN is missing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "b: issue Total ₹11,710 does not match",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "c: document type",
+      "ok": true,
+      "detail": "CERTIFICATE · 98%"
+    },
+    {
+      "name": "c: OCR badge hidden",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "c: summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "c: issue Valid until \\(2023-08-19\\) is before issue date",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "c: issue written differently",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "d: document type",
+      "ok": true,
+      "detail": "MARKSHEET / REPORT CARD · 99%"
+    },
+    {
+      "name": "d: OCR badge hidden",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "d: summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "d: issue Subject marks add up to 408, but the total shown is 418",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "e: document type",
+      "ok": true,
+      "detail": "APPLICATION / FORM · 100%"
+    },
+    {
+      "name": "e: OCR badge shown",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "e: summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "e: no error issues",
+      "ok": true,
+      "detail": "VALIDATION Issues check_circle No missing or inconsistent information found."
+    },
+    {
+      "name": "f: document type",
+      "ok": true,
+      "detail": "IDENTITY DOCUMENT · 99%"
+    },
+    {
+      "name": "f: OCR badge shown",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "f: summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "f: no error issues",
+      "ok": true,
+      "detail": "VALIDATION Issues check_circle No missing or inconsistent information found."
+    },
+    {
+      "name": "g: document type",
+      "ok": true,
+      "detail": "LETTER / NOTICE / RECORD · 98%"
+    },
+    {
+      "name": "g: OCR badge shown",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "g: summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "g: no error issues",
+      "ok": true,
+      "detail": "VALIDATION Issues check_circle No missing or inconsistent information found."
+    },
+    {
+      "name": "h: document type",
+      "ok": true,
+      "detail": "REPORT · 98%"
+    },
+    {
+      "name": "h: OCR badge hidden",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "h: summary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "h: no error issues",
+      "ok": true,
+      "detail": "VALIDATION Issues check_circle No missing or inconsistent information found."
+    },
+    {
+      "name": "clicking an issue opens the field source panel",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Hindi value shown with its source quote",
+      "ok": true,
+      "detail": "SOURCE /  / Subject / title"
+    },
+    {
+      "name": "export JSON",
+      "ok": true,
+      "detail": "b-invoice-total-mismatch-extraction.json"
+    },
+    {
+      "name": "export CSV",
+      "ok": true,
+      "detail": "b-invoice-total-mismatch-extraction.csv"
+    },
+    {
+      "name": "Hindi search finds the notice",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "search with type + confidence filters",
+      "ok": true,
+      "detail": "3 hits"
+    },
+    {
+      "name": "search result opens the source panel",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "history lists all documents",
+      "ok": true,
+      "detail": "9 cards"
+    },
+    {
+      "name": "delete from history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "reopen from history",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "roadmap and quiz render",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: no horizontal scroll",
+      "ok": true,
+      "detail": "0px"
+    },
+    {
+      "name": "no console errors or failed requests",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "problems": []
+}

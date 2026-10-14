@@ -1,0 +1,5 @@
+{
+  "name": "Doxentra",
+  "description": "Upload PDFs, scans or photos of forms, certificates, invoices, marksheets and reports: Doxentra classifies them, extracts fields with confidence scores and source references, flags missing or inconsistent information, and also builds a knowledge graph, roadmap and quiz.",
+  "requestFramePermissions": []
+}

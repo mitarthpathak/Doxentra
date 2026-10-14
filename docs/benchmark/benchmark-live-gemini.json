@@ -1,0 +1,1351 @@
+{
+  "summary": {
+    "label": "live-gemini",
+    "api": "http://localhost:3002/api",
+    "ai": "configured",
+    "date": "2026-10-12T20:03:59.145Z",
+    "documents": 11,
+    "fallbacks": [
+      "a-invoice-digital.pdf"
+    ],
+    "failed": 0,
+    "cachedHits": 0,
+    "type": {
+      "accuracy": 1,
+      "subtypeAccuracy": 1
+    },
+    "fields": {
+      "expected": 122,
+      "correct": 113,
+      "wrong": 2,
+      "missing": 7,
+      "precision": 0.9826086956521739,
+      "recall": 0.9262295081967213,
+      "f1": 0.9535864978902953
+    },
+    "aiFields": {
+      "documents": 10,
+      "expected": 107,
+      "correct": 105,
+      "wrong": 2,
+      "missing": 0,
+      "precision": 0.9813084112149533,
+      "recall": 0.9813084112149533,
+      "f1": 0.9813084112149533
+    },
+    "confidence": {
+      "bands": {
+        "high": {
+          "n": 94,
+          "accuracy": 0.9787234042553191
+        },
+        "medium": {
+          "n": 21,
+          "accuracy": 1
+        },
+        "low": {
+          "n": 0,
+          "accuracy": null
+        }
+      },
+      "meanCorrect": 0.9096460176991142,
+      "meanWrong": 0.985
+    },
+    "issues": {
+      "expected": 9,
+      "found": 8,
+      "recall": 0.8888888888888888,
+      "missed": [
+        "cross:cross.invoice_conflict"
+      ],
+      "falseAlarms": [
+        "a:required.missing",
+        "a:required.missing",
+        "a:required.missing"
+      ]
+    },
+    "latencyMs": {
+      "all": {
+        "n": 11,
+        "mean": 10056,
+        "p50": 6594,
+        "p95": 50133,
+        "max": 50133
+      },
+      "text": {
+        "n": 7,
+        "mean": 11895,
+        "p50": 5233,
+        "p95": 50133,
+        "max": 50133
+      },
+      "ocr": {
+        "n": 4,
+        "mean": 6838,
+        "p50": 7046,
+        "p95": 7471,
+        "max": 7471
+      }
+    }
+  },
+  "runs": [
+    {
+      "file": "a-invoice-digital.pdf",
+      "ms": 50133,
+      "serverMs": 50119,
+      "cached": false,
+      "ocrUsed": false,
+      "fallbackUsed": true,
+      "model": "rule-based",
+      "docType": "invoice",
+      "typeOk": true,
+      "docSubtype": "tax_invoice",
+      "subtypeOk": true,
+      "typeConfidence": 0.56,
+      "overallConfidence": 0.25,
+      "fields": [
+        {
+          "key": "invoice_number",
+          "expected": "ET/2024-25/0147",
+          "got": "ET/2024-25/0147",
+          "status": "correct",
+          "confidence": 0.7,
+          "band": "medium"
+        },
+        {
+          "key": "invoice_date",
+          "expected": "15/07/2024",
+          "got": "15/07/2024",
+          "status": "correct",
+          "confidence": 0.7,
+          "band": "medium"
+        },
+        {
+          "key": "due_date",
+          "expected": "14/08/2024",
+          "got": "14/08/2024",
+          "status": "correct",
+          "confidence": 0.7,
+          "band": "medium"
+        },
+        {
+          "key": "seller_name",
+          "expected": "Example Traders Pvt Ltd",
+          "got": null,
+          "status": "missing",
+          "confidence": 0,
+          "band": "low"
+        },
+        {
+          "key": "seller_gstin",
+          "expected": "27AAACE1234F1Z6",
+          "got": "27AAACE1234F1Z6",
+          "status": "correct",
+          "confidence": 0.7,
+          "band": "medium"
+        },
+        {
+          "key": "seller_pan",
+          "expected": "AAACE1234F",
+          "got": "AAACE1234F",
+          "status": "correct",
+          "confidence": 0.7,
+          "band": "medium"
+        },
+        {
+          "key": "seller_address",
+          "expected": "14 Sample Industrial Estate, Pune, Maharashtra 411019",
+          "got": null,
+          "status": "missing",
+          "confidence": 0,
+          "band": "low"
+        },
+        {
+          "key": "buyer_name",
+          "expected": "Sample Retail Co",
+          "got": "Sample Retail Co",
+          "status": "correct",
+          "confidence": 0.7,
+          "band": "medium"
+        },
+        {
+          "key": "buyer_gstin",
+          "expected": "27AAFCS5678B1Z7",
+          "got": "27AAFCS5678B1Z7",
+          "status": "correct",
+          "confidence": 0.7,
+          "band": "medium"
+        },
+        {
+          "key": "buyer_address",
+          "expected": "22 Demo Market, Mumbai 400001",
+          "got": null,
+          "status": "missing",
+          "confidence": 0,
+          "band": "low"
+        },
+        {
+          "key": "place_of_supply",
+          "expected": "Maharashtra (27)",
+          "got": "Maharashtra (27)",
+          "status": "correct",
+          "confidence": 0.7,
+          "band": "medium"
+        },
+        {
+          "key": "subtotal",
+          "expected": "₹ 16,000.00",
+          "got": null,
+          "status": "missing",
+          "confidence": 0,
+          "band": "low"
+        },
+        {
+          "key": "cgst",
+          "expected": "₹ 1,440.00",
+          "got": null,
+          "status": "missing",
+          "confidence": 0,
+          "band": "low"
+        },
+        {
+          "key": "sgst",
+          "expected": "₹ 1,440.00",
+          "got": null,
+          "status": "missing",
+          "confidence": 0,
+          "band": "low"
+        },
+        {
+          "key": "total_amount",
+          "expected": "₹ 18,880.00",
+          "got": null,
+          "status": "missing",
+          "confidence": 0,
+          "band": "low"
+        }
+      ],
+      "issues": {
+        "expected": [],
+        "found": [],
+        "missed": [],
+        "falseAlarms": [
+          "required.missing",
+          "required.missing",
+          "required.missing"
+        ]
+      }
+    },
+    {
+      "file": "b-invoice-total-mismatch.pdf",
+      "ms": 7174,
+      "serverMs": 7160,
+      "cached": false,
+      "ocrUsed": false,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "invoice",
+      "typeOk": true,
+      "docSubtype": "tax_invoice",
+      "subtypeOk": true,
+      "typeConfidence": 0.94,
+      "overallConfidence": 0.7,
+      "fields": [
+        {
+          "key": "invoice_number",
+          "expected": "SOS-2024-0912",
+          "got": "SOS-2024-0912",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "invoice_date",
+          "expected": "03/09/2024",
+          "got": "03/09/2024",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "due_date",
+          "expected": "18/09/2024",
+          "got": "18/09/2024",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "seller_name",
+          "expected": "Sample Office Supplies",
+          "got": "Sample Office Supplies",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "seller_address",
+          "expected": "5 Demo Lane, Bengaluru, Karnataka 560001",
+          "got": "5 Demo Lane, Bengaluru, Karnataka 560001",
+          "status": "correct",
+          "confidence": 0.97,
+          "band": "high"
+        },
+        {
+          "key": "buyer_name",
+          "expected": "Demo Learning Centre",
+          "got": "Demo Learning Centre",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "buyer_address",
+          "expected": "9 Example Street, Mysuru 570001",
+          "got": "9 Example Street, Mysuru 570001",
+          "status": "correct",
+          "confidence": 0.97,
+          "band": "high"
+        },
+        {
+          "key": "subtotal",
+          "expected": "₹ 9,500.00",
+          "got": "9,500.00",
+          "status": "correct",
+          "confidence": 0.8,
+          "band": "high"
+        },
+        {
+          "key": "cgst",
+          "expected": "₹ 855.00",
+          "got": "855.00",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "sgst",
+          "expected": "₹ 855.00",
+          "got": "855.00",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "total_amount",
+          "expected": "₹ 11,710.00",
+          "got": "11,710.00",
+          "status": "correct",
+          "confidence": 0.8,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [
+          "invoice.total_mismatch"
+        ],
+        "found": [
+          "invoice.total_mismatch"
+        ],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "c-certificate-issued-after-expiry.pdf",
+      "ms": 4767,
+      "serverMs": 4759,
+      "cached": false,
+      "ocrUsed": false,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "certificate",
+      "typeOk": true,
+      "docSubtype": "completion",
+      "subtypeOk": true,
+      "typeConfidence": 0.98,
+      "overallConfidence": 0.85,
+      "fields": [
+        {
+          "key": "certificate_title",
+          "expected": "Certificate of Completion",
+          "got": "Certificate of Completion",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "certificate_number",
+          "expected": "EIT/FSWD/2024/0381",
+          "got": "EIT/FSWD/2024/0381",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "recipient_name",
+          "expected": "Rohan Mehta",
+          "got": "Rohan Mehta",
+          "status": "correct",
+          "confidence": 0.89,
+          "band": "high"
+        },
+        {
+          "key": "issuing_organization",
+          "expected": "Example Institute of Technology, Pune",
+          "got": "EXAMPLE INSTITUTE OF TECHNOLOGY, PUNE",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "course_or_achievement",
+          "expected": "Full Stack Web Development",
+          "got": "Full Stack Web Development",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "grade_or_score",
+          "expected": "A",
+          "got": "A",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "issue_date",
+          "expected": "20/08/2024",
+          "got": "20/08/2024",
+          "status": "correct",
+          "confidence": 0.8,
+          "band": "high"
+        },
+        {
+          "key": "valid_until",
+          "expected": "19/08/2023",
+          "got": "19/08/2023",
+          "status": "correct",
+          "confidence": 0.8,
+          "band": "high"
+        },
+        {
+          "key": "signatory_name",
+          "expected": "Dr. Kavita Rao",
+          "got": "Dr. Kavita Rao",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "signatory_designation",
+          "expected": "Director, Academic Programmes",
+          "got": "Director, Academic Programmes",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "place",
+          "expected": "Pune",
+          "got": "PUNE",
+          "status": "correct",
+          "confidence": 0.97,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [
+          "date.order",
+          "name.variant"
+        ],
+        "found": [
+          "date.order",
+          "name.variant"
+        ],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "d-marksheet-wrong-total.pdf",
+      "ms": 5233,
+      "serverMs": 5225,
+      "cached": false,
+      "ocrUsed": false,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "marksheet",
+      "typeOk": true,
+      "docSubtype": "board",
+      "subtypeOk": true,
+      "typeConfidence": 0.88,
+      "overallConfidence": 0.9,
+      "fields": [
+        {
+          "key": "student_name",
+          "expected": "Asha Verma",
+          "got": "Asha Verma",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "roll_number",
+          "expected": "2401587",
+          "got": "2401587",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "father_or_guardian_name",
+          "expected": "Suresh Verma",
+          "got": "Suresh Verma",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "date_of_birth",
+          "expected": "14/02/2006",
+          "got": "14/02/2006",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "institution_name",
+          "expected": "Model Senior Secondary School",
+          "got": "Model Senior Secondary School",
+          "status": "correct",
+          "confidence": 0.97,
+          "band": "high"
+        },
+        {
+          "key": "board_or_university",
+          "expected": "Sample Board of School Education",
+          "got": "SAMPLE BOARD OF SCHOOL EDUCATION",
+          "status": "correct",
+          "confidence": 0.97,
+          "band": "high"
+        },
+        {
+          "key": "examination",
+          "expected": "Annual Examination 2024",
+          "got": "Annual Examination 2024",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "class_or_semester",
+          "expected": "XII",
+          "got": "Class XII",
+          "status": "wrong",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "session",
+          "expected": "2023-24",
+          "got": "2023-24",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "total_marks_obtained",
+          "expected": "418",
+          "got": "418",
+          "status": "correct",
+          "confidence": 0.8,
+          "band": "high"
+        },
+        {
+          "key": "total_max_marks",
+          "expected": "500",
+          "got": "500",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "percentage",
+          "expected": "83.60%",
+          "got": "83.60%",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "result",
+          "expected": "PASS",
+          "got": "PASS",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "issue_date",
+          "expected": "15/05/2024",
+          "got": "15/05/2024",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [
+          "marksheet.total_mismatch"
+        ],
+        "found": [
+          "marksheet.total_mismatch"
+        ],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "e-application-form-scan.jpg",
+      "ms": 7471,
+      "serverMs": 7460,
+      "cached": false,
+      "ocrUsed": true,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "application_form",
+      "typeOk": true,
+      "docSubtype": "admission",
+      "subtypeOk": true,
+      "typeConfidence": 0.93,
+      "overallConfidence": 0.9,
+      "fields": [
+        {
+          "key": "form_title",
+          "expected": "Admission Application Form",
+          "got": "Admission Application Form",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "application_number",
+          "expected": "ADM/2024/1093",
+          "got": "ADM/2024/1093",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "applicant_name",
+          "expected": "Neha Rao",
+          "got": "Neha Rao",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "date_of_birth",
+          "expected": "05/09/2006",
+          "got": "05/09/2006",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "gender",
+          "expected": "Female",
+          "got": "Female",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "father_or_guardian_name",
+          "expected": "Prakash Rao",
+          "got": "Prakash Rao",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "email",
+          "expected": "neha.rao@example.com",
+          "got": "neha.rao@example.com",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "phone",
+          "expected": "98765 43210",
+          "got": "98765 43210",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "address",
+          "expected": "7 Demo Colony, Nagpur, Maharashtra",
+          "got": "7 Demo Colony, Nagpur, Maharashtra",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "pincode",
+          "expected": "440010",
+          "got": "440010",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "id_number",
+          "expected": "XXXX XXXX 4321",
+          "got": "XXXX XXXX 4321",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "position_or_course",
+          "expected": "B.Sc. Computer Science",
+          "got": "B.Sc. Computer Science",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "application_date",
+          "expected": "28/06/2024",
+          "got": "28/06/2024",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [],
+        "found": [],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "f-student-id-scanned.pdf",
+      "ms": 5533,
+      "serverMs": 5524,
+      "cached": false,
+      "ocrUsed": true,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "identity_document",
+      "typeOk": true,
+      "docSubtype": "student_id",
+      "subtypeOk": true,
+      "typeConfidence": 0.98,
+      "overallConfidence": 0.9,
+      "fields": [
+        {
+          "key": "document_name",
+          "expected": "Student Identity Card",
+          "got": "Student Identity Card",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "id_number",
+          "expected": "EU2023CS0412",
+          "got": "EU2023CS0412",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "holder_name",
+          "expected": "Arjun Nair",
+          "got": "Arjun Nair",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "date_of_birth",
+          "expected": "11/11/2004",
+          "got": "11/11/2004",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "address",
+          "expected": "3 Sample Hostel Road, Kochi, Kerala 682001",
+          "got": "3 Sample Hostel Road, Kochi, Kerala 682001",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "issuing_authority",
+          "expected": "Example University",
+          "got": "Example University",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "issue_date",
+          "expected": "01/08/2023",
+          "got": "01/08/2023",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "expiry_date",
+          "expected": "31/07/2027",
+          "got": "31/07/2027",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [],
+        "found": [],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "g-notice-bilingual-hindi-english.pdf",
+      "ms": 7302,
+      "serverMs": 7296,
+      "cached": false,
+      "ocrUsed": true,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "institutional_record",
+      "typeOk": true,
+      "docSubtype": "notice",
+      "subtypeOk": true,
+      "typeConfidence": 0.96,
+      "overallConfidence": 0.9,
+      "fields": [
+        {
+          "key": "title_or_subject",
+          "expected": "वार्षिक परीक्षा कार्यक्रम / Annual Examination Schedule",
+          "got": "वार्षिक परीक्षा कार्यक्रम / Subject: Annual Examination Schedule",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "reference_number",
+          "expected": "MPS/ADM/2024/112",
+          "got": "MPS/ADM/2024/112",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "issuing_institution",
+          "expected": "Model Public School (आदर्श पब्लिक स्कूल)",
+          "got": "आदर्श पब्लिक स्कूल / Model Public School",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "date",
+          "expected": "02/01/2024",
+          "got": "02/01/2024",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "addressed_to",
+          "expected": "All students of Classes IX to XII and their parents",
+          "got": "All students of Classes IX to XII and their parents",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "issued_by_name",
+          "expected": "Dr. S. Iyer",
+          "got": "Dr. S. Iyer",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "issued_by_designation",
+          "expected": "Principal (प्रधानाचार्य)",
+          "got": "Principal",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "effective_date",
+          "expected": "15/03/2024",
+          "got": "15/03/2024",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        },
+        {
+          "key": "deadline_date",
+          "expected": "20/02/2024",
+          "got": "20/02/2024",
+          "status": "correct",
+          "confidence": 0.9,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [],
+        "found": [],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "h-report-unusual-layout.pdf",
+      "ms": 5200,
+      "serverMs": 5193,
+      "cached": false,
+      "ocrUsed": false,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "report",
+      "typeOk": true,
+      "docSubtype": "inspection",
+      "subtypeOk": true,
+      "typeConfidence": 0.96,
+      "overallConfidence": 0.99,
+      "fields": [
+        {
+          "key": "title",
+          "expected": "Campus Facilities Inspection Report",
+          "got": "Campus Facilities Inspection Report",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "report_number",
+          "expected": "CFI/Q2/2024/07",
+          "got": "CFI/Q2/2024/07",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "organization",
+          "expected": "Example University",
+          "got": "Estates Department · Example University",
+          "status": "wrong",
+          "confidence": 0.97,
+          "band": "high"
+        },
+        {
+          "key": "author",
+          "expected": "Estates Department",
+          "got": "Estates Department",
+          "status": "correct",
+          "confidence": 0.97,
+          "band": "high"
+        },
+        {
+          "key": "report_date",
+          "expected": "05/07/2024",
+          "got": "05/07/2024",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "period_covered",
+          "expected": "April to June 2024",
+          "got": "April to June 2024",
+          "status": "correct",
+          "confidence": 0.97,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [],
+        "found": [],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "i-student-id-asha-verma.pdf",
+      "ms": 4164,
+      "serverMs": 4158,
+      "cached": false,
+      "ocrUsed": false,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "identity_document",
+      "typeOk": true,
+      "docSubtype": "student_id",
+      "subtypeOk": true,
+      "typeConfidence": 0.92,
+      "overallConfidence": 0.99,
+      "fields": [
+        {
+          "key": "document_name",
+          "expected": "Student Identity Card",
+          "got": "Student Identity Card",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "id_number",
+          "expected": "2401587",
+          "got": "2401587",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "holder_name",
+          "expected": "Asha Verma",
+          "got": "Asha Verma",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "father_or_guardian_name",
+          "expected": "Suresh Varma",
+          "got": "Suresh Varma",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "date_of_birth",
+          "expected": "14/03/2006",
+          "got": "14/03/2006",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "address",
+          "expected": "18 Demo Nagar, Jaipur, Rajasthan 302004",
+          "got": "18 Demo Nagar, Jaipur, Rajasthan 302004",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "issuing_authority",
+          "expected": "Model Senior Secondary School",
+          "got": "MODEL SENIOR SECONDARY SCHOOL",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "issue_date",
+          "expected": "01/04/2024",
+          "got": "01/04/2024",
+          "status": "correct",
+          "confidence": 0.99,
+          "band": "high"
+        },
+        {
+          "key": "expiry_date",
+          "expected": "31/03/2025",
+          "got": "31/03/2025",
+          "status": "correct",
+          "confidence": 0.96,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [],
+        "found": [],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "j-invoice-duplicate-number.pdf",
+      "ms": 6594,
+      "serverMs": 6591,
+      "cached": false,
+      "ocrUsed": false,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "invoice",
+      "typeOk": true,
+      "docSubtype": "tax_invoice",
+      "subtypeOk": true,
+      "typeConfidence": 0.99,
+      "overallConfidence": 1,
+      "fields": [
+        {
+          "key": "invoice_number",
+          "expected": "ET/2024-25/0147",
+          "got": "ET/2024-25/0147",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "invoice_date",
+          "expected": "15/07/2024",
+          "got": "15/07/2024",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "due_date",
+          "expected": "14/08/2024",
+          "got": "14/08/2024",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "seller_name",
+          "expected": "Example Traders Pvt Ltd",
+          "got": "Example Traders Pvt Ltd",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "seller_gstin",
+          "expected": "27AAACE1234F1Z6",
+          "got": "27AAACE1234F1Z6",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "seller_address",
+          "expected": "14 Sample Industrial Estate, Pune, Maharashtra 411019",
+          "got": "14 Sample Industrial Estate, Pune, Maharashtra 411019",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "buyer_name",
+          "expected": "Sample Retail Co",
+          "got": "Sample Retail Co",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "buyer_gstin",
+          "expected": "27AAFCS5678B1Z7",
+          "got": "27AAFCS5678B1Z7",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "buyer_address",
+          "expected": "22 Demo Market, Mumbai 400001",
+          "got": "22 Demo Market, Mumbai 400001",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "subtotal",
+          "expected": "₹ 15,900.00",
+          "got": "15,900.00",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "cgst",
+          "expected": "₹ 1,431.00",
+          "got": "1,431.00",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "sgst",
+          "expected": "₹ 1,431.00",
+          "got": "1,431.00",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        },
+        {
+          "key": "total_amount",
+          "expected": "₹ 18,762.00",
+          "got": "18,762.00",
+          "status": "correct",
+          "confidence": 1,
+          "band": "high"
+        }
+      ],
+      "issues": {
+        "expected": [],
+        "found": [],
+        "missed": [],
+        "falseAlarms": []
+      }
+    },
+    {
+      "file": "k-application-form-blurry-photo.jpg",
+      "ms": 7046,
+      "serverMs": 7039,
+      "cached": false,
+      "ocrUsed": true,
+      "fallbackUsed": false,
+      "model": "gemini-3.5-flash-lite",
+      "docType": "application_form",
+      "typeOk": true,
+      "docSubtype": "admission",
+      "subtypeOk": true,
+      "typeConfidence": 0.93,
+      "overallConfidence": 0.71,
+      "fields": [
+        {
+          "key": "form_title",
+          "expected": "Admission Application Form",
+          "got": "Admission Application Form",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "application_number",
+          "expected": "ADM/2024/1093",
+          "got": "ADM/2024/1093",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "applicant_name",
+          "expected": "Neha Rao",
+          "got": "Neha Rao",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "date_of_birth",
+          "expected": "05/09/2006",
+          "got": "05/09/2006",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "gender",
+          "expected": "Female",
+          "got": "Female",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "father_or_guardian_name",
+          "expected": "Prakash Rao",
+          "got": "Prakash Rao",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "email",
+          "expected": "neha.rao@example.com",
+          "got": "neha.rao@example.com",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "phone",
+          "expected": "98765 43210",
+          "got": "9876543210",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "address",
+          "expected": "7 Demo Colony, Nagpur, Maharashtra",
+          "got": "7 Demo Colony, Nagpur, Maharashtra",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "pincode",
+          "expected": "440010",
+          "got": "440010",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "id_number",
+          "expected": "XXXX XXXX 4321",
+          "got": "XXXX XXXX 4321",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "position_or_course",
+          "expected": "B.Sc. Computer Science",
+          "got": "B.Sc. Computer Science",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        },
+        {
+          "key": "application_date",
+          "expected": "28/06/2024",
+          "got": "28/06/2024",
+          "status": "correct",
+          "confidence": 0.75,
+          "band": "medium"
+        }
+      ],
+      "issues": {
+        "expected": [
+          "image.blurry",
+          "image.dark"
+        ],
+        "found": [
+          "image.blurry",
+          "image.dark"
+        ],
+        "missed": [],
+        "falseAlarms": []
+      }
+    }
+  ],
+  "cross": [
+    "cross.dob_mismatch",
+    "cross.father_mismatch",
+    "cross.invoice_duplicate"
+  ]
+}

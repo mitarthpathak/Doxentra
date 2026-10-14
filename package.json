@@ -1,0 +1,63 @@
+{
+  "name": "doxentra",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "concurrently -n \"WEB,API\" -c \"cyan,magenta\" \"npm run client\" \"npm run server\"",
+    "client": "vite --port=5173 --host=0.0.0.0",
+    "server": "npm start --prefix server",
+    "benchmark": "node scripts/benchmark.mjs",
+    "benchmark:gemini": "node scripts/benchmark-gemini.mjs",
+    "benchmark:hybrid": "node scripts/benchmark-gemini.mjs",
+    "dev": "npm start",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist",
+    "lint": "tsc --noEmit",
+    "test": "npm test --prefix server",
+    "test:ui": "node scripts/test-privacy-ui.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "^2.27.0",
+    "@supabase/server": "^1.9.2",
+    "clsx": "^2.1.1",
+    "cors": "^2.8.6",
+    "d3-force": "^3.0.0",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "lucide-react": "^0.546.0",
+    "mongoose": "^9.4.1",
+    "motion": "^12.23.24",
+    "multer": "^2.1.1",
+    "pdf-lib": "^1.17.1",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.10.38",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-dropzone": "^15.0.0",
+    "tailwind-merge": "^3.5.0",
+    "undici": "^6.29.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/d3-force": "^3.0.10",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "concurrently": "^9.2.1",
+    "playwright": "^1.64.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  },
+  "description": "Upload PDFs, scans or photos of forms, certificates, invoices, marksheets and reports: Doxentra classifies them, extracts fields with confidence scores and source references, flags missing or inconsistent information, and also builds a knowledge graph, roadmap and quiz.",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,157 @@
+{
+ "_match": "Student Identity Card · Session 2024-25",
+ "docType": "identity_document",
+ "docTypeConfidence": 0.96,
+ "title": "Student ID Card – Asha Verma",
+ "language": "en",
+ "summary": "Student identity card of Model Senior Secondary School for Asha Verma (Class XII, roll no. 2401587), session 2024-25. It gives her father's name as Suresh Varma and her date of birth as 14/03/2006; issued 01/04/2024 and valid till 31/03/2025.",
+ "fields": [
+  {
+   "key": "document_name",
+   "label": "Document",
+   "value": "Student Identity Card",
+   "normalizedValue": null,
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Student Identity Card · Session 2024-25"
+  },
+  {
+   "key": "id_number",
+   "label": "ID number",
+   "value": "2401587",
+   "normalizedValue": null,
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Class: XII · Roll No: 2401587"
+  },
+  {
+   "key": "holder_name",
+   "label": "Holder name",
+   "value": "Asha Verma",
+   "normalizedValue": null,
+   "confidence": 0.97,
+   "page": 1,
+   "sourceQuote": "Name: Asha Verma"
+  },
+  {
+   "key": "father_or_guardian_name",
+   "label": "Father's / guardian's name",
+   "value": "Suresh Varma",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "Father's Name: Suresh Varma"
+  },
+  {
+   "key": "date_of_birth",
+   "label": "Date of birth",
+   "value": "14/03/2006",
+   "normalizedValue": "2006-03-14",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Date of Birth: 14/03/2006"
+  },
+  {
+   "key": "gender",
+   "label": "Gender",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "address",
+   "label": "Address",
+   "value": "18 Demo Nagar, Jaipur, Rajasthan 302004",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Address: 18 Demo Nagar, Jaipur, Rajasthan 302004"
+  },
+  {
+   "key": "issuing_authority",
+   "label": "Issuing authority",
+   "value": "Model Senior Secondary School",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "MODEL SENIOR SECONDARY SCHOOL"
+  },
+  {
+   "key": "issue_date",
+   "label": "Issue date",
+   "value": "01/04/2024",
+   "normalizedValue": "2024-04-01",
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Date of Issue: 01/04/2024"
+  },
+  {
+   "key": "expiry_date",
+   "label": "Valid until",
+   "value": "31/03/2025",
+   "normalizedValue": "2025-03-31",
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Valid Till: 31/03/2025"
+  },
+  {
+   "key": "roll_number",
+   "label": "Roll number",
+   "value": "2401587",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "Class: XII · Roll No: 2401587"
+  },
+  {
+   "key": "class",
+   "label": "Class",
+   "value": "XII",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Class: XII · Roll No: 2401587"
+  }
+ ],
+ "entities": [
+  {
+   "type": "PERSON",
+   "value": "Asha Verma",
+   "page": 1,
+   "sourceQuote": "Name: Asha Verma"
+  },
+  {
+   "type": "PERSON",
+   "value": "Suresh Varma",
+   "page": 1,
+   "sourceQuote": "Father's Name: Suresh Varma"
+  },
+  {
+   "type": "ORG",
+   "value": "Model Senior Secondary School",
+   "page": 1,
+   "sourceQuote": "MODEL SENIOR SECONDARY SCHOOL"
+  },
+  {
+   "type": "ID",
+   "value": "2401587",
+   "page": 1,
+   "sourceQuote": "Class: XII · Roll No: 2401587"
+  },
+  {
+   "type": "DATE",
+   "value": "14/03/2006",
+   "page": 1,
+   "sourceQuote": "Date of Birth: 14/03/2006"
+  },
+  {
+   "type": "LOCATION",
+   "value": "Jaipur, Rajasthan 302004",
+   "page": 1,
+   "sourceQuote": "Address: 18 Demo Nagar, Jaipur, Rajasthan 302004"
+  }
+ ],
+ "tables": []
+}

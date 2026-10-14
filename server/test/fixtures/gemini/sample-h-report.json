@@ -1,0 +1,165 @@
+{
+ "_match": "CFI/Q2/2024/07",
+ "docType": "report",
+ "docTypeConfidence": 0.93,
+ "title": "Campus Facilities Inspection Report Q2 2024",
+ "language": "en",
+ "summary": "Quarterly campus facilities inspection report CFI/Q2/2024/07 by the Estates Department of Example University, dated 05/07/2024 and covering April to June 2024. It found faulty projectors in Block A, fire extinguishers due for refill in Block C and overdue water-purifier maintenance, with an estimated cost of ₹1,25,000; safety items need urgent attention.",
+ "fields": [
+  {
+   "key": "title",
+   "label": "Title",
+   "value": "Campus Facilities Inspection Report",
+   "normalizedValue": null,
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Campus Facilities Inspection Report"
+  },
+  {
+   "key": "report_number",
+   "label": "Report number",
+   "value": "CFI/Q2/2024/07",
+   "normalizedValue": null,
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Report No: CFI/Q2/2024/07"
+  },
+  {
+   "key": "organization",
+   "label": "Organisation",
+   "value": "Example University",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Estates Department · Example University"
+  },
+  {
+   "key": "author",
+   "label": "Author / department",
+   "value": "Estates Department",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Estates Department · Example University"
+  },
+  {
+   "key": "report_date",
+   "label": "Report date",
+   "value": "05/07/2024",
+   "normalizedValue": "2024-07-05",
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "Date: 05/07/2024"
+  },
+  {
+   "key": "period_covered",
+   "label": "Period covered",
+   "value": "April to June 2024",
+   "normalizedValue": null,
+   "confidence": 0.88,
+   "page": 1,
+   "sourceQuote": "Period covered: April to June 2024."
+  },
+  {
+   "key": "key_findings",
+   "label": "Key findings",
+   "value": "Faulty projectors in three Block A classrooms; fire extinguishers in Block C due for refill; water purifier maintenance overdue by six weeks",
+   "normalizedValue": null,
+   "confidence": 0.86,
+   "page": 1,
+   "sourceQuote": "1. Three classrooms in Block A have faulty projectors."
+  },
+  {
+   "key": "recommendations",
+   "label": "Recommendations",
+   "value": "Replace projectors before the new semester; refill extinguishers within 15 days; sign an annual maintenance contract for water purifiers",
+   "normalizedValue": null,
+   "confidence": 0.85,
+   "page": 1,
+   "sourceQuote": "Replace the projectors before the new semester, refill all extinguishers within 15 days"
+  },
+  {
+   "key": "conclusion",
+   "label": "Conclusion",
+   "value": "Facilities are largely in good condition; the safety items need urgent attention.",
+   "normalizedValue": null,
+   "confidence": 0.88,
+   "page": 1,
+   "sourceQuote": "Facilities are largely in good condition; the safety items need urgent attention."
+  },
+  {
+   "key": "estimated_cost",
+   "label": "Estimated cost",
+   "value": "₹ 1,25,000",
+   "normalizedValue": null,
+   "confidence": 0.8,
+   "page": 1,
+   "sourceQuote": "Estimated cost ₹ 1,25,000"
+  },
+  {
+   "key": "inspector",
+   "label": "Inspector",
+   "value": "Ms. Farah Khan",
+   "normalizedValue": null,
+   "confidence": 0.88,
+   "page": 1,
+   "sourceQuote": "Inspector: Ms. Farah Khan"
+  }
+ ],
+ "entities": [
+  {
+   "type": "ORG",
+   "value": "Example University",
+   "page": 1,
+   "sourceQuote": "Estates Department · Example University"
+  },
+  {
+   "type": "ORG",
+   "value": "Estates Department",
+   "page": 1,
+   "sourceQuote": "Estates Department · Example University"
+  },
+  {
+   "type": "PERSON",
+   "value": "Ms. Farah Khan",
+   "page": 1,
+   "sourceQuote": "Inspector: Ms. Farah Khan"
+  },
+  {
+   "type": "DATE",
+   "value": "05/07/2024",
+   "page": 1,
+   "sourceQuote": "Date: 05/07/2024"
+  },
+  {
+   "type": "AMOUNT",
+   "value": "₹ 1,25,000",
+   "page": 1,
+   "sourceQuote": "Estimated cost ₹ 1,25,000"
+  }
+ ],
+ "tables": [
+  {
+   "title": "Key figures",
+   "page": 1,
+   "columns": [
+    "Metric",
+    "Value"
+   ],
+   "rows": [
+    [
+     "Buildings inspected",
+     "6"
+    ],
+    [
+     "Issues found",
+     "3"
+    ],
+    [
+     "Estimated cost",
+     "₹ 1,25,000"
+    ]
+   ]
+  }
+ ]
+}

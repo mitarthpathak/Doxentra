@@ -1,0 +1,151 @@
+{
+ "_match": "MPS/ADM/2024/112",
+ "docType": "institutional_record",
+ "docTypeConfidence": 0.96,
+ "title": "Notice: Annual Examination Schedule",
+ "language": "hi+en",
+ "summary": "Bilingual (Hindi and English) notice MPS/ADM/2024/112 from Model Public School, Jaipur, dated 02/01/2024, announcing that annual examinations begin on 15/03/2024. The examination fee must be deposited by 20/02/2024 and admit cards are available from 05/03/2024. Signed by the Principal, Dr. S. Iyer.",
+ "fields": [
+  {
+   "key": "title_or_subject",
+   "label": "Subject / title",
+   "value": "वार्षिक परीक्षा कार्यक्रम / Annual Examination Schedule",
+   "normalizedValue": null,
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "विषय: वार्षिक परीक्षा कार्यक्रम / Subject: Annual Examination Schedule"
+  },
+  {
+   "key": "reference_number",
+   "label": "Reference number",
+   "value": "MPS/ADM/2024/112",
+   "normalizedValue": null,
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "Ref No: MPS/ADM/2024/112"
+  },
+  {
+   "key": "issuing_institution",
+   "label": "Issuing institution",
+   "value": "Model Public School (आदर्श पब्लिक स्कूल)",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "आदर्श पब्लिक स्कूल / Model Public School"
+  },
+  {
+   "key": "date",
+   "label": "Date",
+   "value": "02/01/2024",
+   "normalizedValue": "2024-01-02",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "दिनांक / Date: 02/01/2024"
+  },
+  {
+   "key": "addressed_to",
+   "label": "Addressed to",
+   "value": "All students of Classes IX to XII and their parents",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "To: All students of Classes IX to XII and their parents"
+  },
+  {
+   "key": "issued_by_name",
+   "label": "Issued by",
+   "value": "Dr. S. Iyer",
+   "normalizedValue": null,
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Dr. S. Iyer"
+  },
+  {
+   "key": "issued_by_designation",
+   "label": "Designation",
+   "value": "Principal (प्रधानाचार्य)",
+   "normalizedValue": null,
+   "confidence": 0.92,
+   "page": 1,
+   "sourceQuote": "प्रधानाचार्य / Principal"
+  },
+  {
+   "key": "effective_date",
+   "label": "Effective date",
+   "value": "15/03/2024",
+   "normalizedValue": "2024-03-15",
+   "confidence": 0.88,
+   "page": 1,
+   "sourceQuote": "the annual examinations will begin on 15/03/2024"
+  },
+  {
+   "key": "deadline_date",
+   "label": "Deadline",
+   "value": "20/02/2024",
+   "normalizedValue": "2024-02-20",
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "The last date for depositing the examination fee is 20/02/2024"
+  },
+  {
+   "key": "key_points",
+   "label": "Key points",
+   "value": "Examinations begin 15/03/2024; fee deadline 20/02/2024; admit cards from 05/03/2024",
+   "normalizedValue": null,
+   "confidence": 0.86,
+   "page": 1,
+   "sourceQuote": "Admit cards can be collected from the office from 05/03/2024."
+  }
+ ],
+ "entities": [
+  {
+   "type": "ORG",
+   "value": "Model Public School",
+   "page": 1,
+   "sourceQuote": "Model Public School"
+  },
+  {
+   "type": "ORG",
+   "value": "आदर्श पब्लिक स्कूल",
+   "page": 1,
+   "sourceQuote": "आदर्श पब्लिक स्कूल / Model Public School"
+  },
+  {
+   "type": "PERSON",
+   "value": "Dr. S. Iyer",
+   "page": 1,
+   "sourceQuote": "Dr. S. Iyer"
+  },
+  {
+   "type": "DATE",
+   "value": "15/03/2024",
+   "page": 1,
+   "sourceQuote": "वार्षिक परीक्षा 15/03/2024 से प्रारंभ होगी"
+  },
+  {
+   "type": "DATE",
+   "value": "20/02/2024",
+   "page": 1,
+   "sourceQuote": "The last date for depositing the examination fee is 20/02/2024"
+  },
+  {
+   "type": "LOCATION",
+   "value": "Jaipur, Rajasthan 302001",
+   "page": 1,
+   "sourceQuote": "12 Demo Road, Jaipur, Rajasthan 302001"
+  },
+  {
+   "type": "ID",
+   "value": "MPS/ADM/2024/112",
+   "page": 1,
+   "sourceQuote": "Ref No: MPS/ADM/2024/112"
+  }
+ ],
+ "tables": [],
+ "ocrText": [
+  {
+   "page": 1,
+   "text": "आदर्श पब्लिक स्कूल / Model Public School\n12 Demo Road, Jaipur, Rajasthan 302001\nसूचना / NOTICE\nRef No: MPS/ADM/2024/112 दिनांक / Date: 02/01/2024\nविषय: वार्षिक परीक्षा कार्यक्रम / Subject: Annual Examination Schedule\nसभी छात्रों एवं अभिभावकों को सूचित किया जाता है कि वार्षिक परीक्षा 15/03/2024 से प्रारंभ होगी। परीक्षा शुल्क जमा करने की अंतिम तिथि 20/02/2024 है। प्रवेश पत्र 05/03/2024 से कार्यालय से प्राप्त किए जा सकते हैं।\nAll students and parents are informed that the annual examinations will begin on 15/03/2024. The last date for depositing the examination fee is 20/02/2024. Admit cards can be collected from the office from 05/03/2024.\nप्रधानाचार्य / Principal\nDr. S. Iyer\nModel Public School\nTo: All students of Classes IX to XII and their parents"
+  }
+ ]
+}

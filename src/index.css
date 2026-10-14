@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Space Grotesk", sans-serif;
+  
+  --color-primary: #0891b2;
+  --color-primary-container: #0e7490;
+  --color-on-primary: #ffffff;
+  --color-secondary: #7c3aed;
+  --color-secondary-container: #8b5cf6;
+  --color-tertiary: #059669;
+  --color-tertiary-container: #10b981;
+  --color-on-tertiary: #ffffff;
+  
+  --color-background: #f8fafc;
+  --color-surface: #f8fafc;
+  --color-surface-container-low: #f1f5f9;
+  --color-surface-container: #e8edf4;
+  --color-surface-container-high: #e2e8f0;
+  --color-surface-container-highest: #dbe2ed;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-bright: #d4dbe6;
+  
+  --color-on-surface: #1e293b;
+  --color-on-surface-variant: #64748b;
+  --color-outline-variant: #cbd5e1;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface font-sans antialiased selection:bg-primary/20 selection:text-primary;
+  }
+}
+
+.glass-panel {
+  background: rgba(241, 245, 249, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  /* Reserve exactly one character of space so layouts stay intact even before
+     (or without) the icon font loading. */
+  display: inline-block;
+  width: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  animation: gradient 3s ease infinite;
+}
+
+/* One letter of a gradient word: its slice of a gradient as wide as the word
+   (--w, --o: see GradientLetters in HeroScreen), shifting like .animate-gradient
+   on a 300% wide background. */
+.gradient-letter {
+  background-size: calc(var(--w, 100%) * 3) 100%;
+  animation: gradient-letter 3s ease infinite;
+}
+
+@keyframes gradient-letter {
+  0% { background-position: calc(0px - var(--o, 0px)) 50%; }
+  50% { background-position: calc(var(--w, 0px) * -2 - var(--o, 0px)) 50%; }
+  100% { background-position: calc(0px - var(--o, 0px)) 50%; }
+}

@@ -1,0 +1,216 @@
+{
+  "docType": "identity_document",
+  "docTypeConfidence": 0.94,
+  "title": "Student ID Card – Arjun Nair",
+  "language": "en",
+  "summary": "Scanned student identity card from Example University for Arjun Nair (enrollment no. EU2023CS0412), B.Tech Computer Science. Issued on 01/08/2023 and valid till 31/07/2027; date of birth 11/11/2004, blood group O+.",
+  "fields": [
+    {
+      "key": "document_name",
+      "label": "Document",
+      "value": "Student Identity Card",
+      "normalizedValue": null,
+      "confidence": 0.94,
+      "page": 1,
+      "sourceQuote": "Student Identity Card",
+      "box": [
+        193,
+        178,
+        209,
+        326
+      ]
+    },
+    {
+      "key": "id_number",
+      "label": "ID number",
+      "value": "EU2023CS0412",
+      "normalizedValue": null,
+      "confidence": 0.9,
+      "page": 1,
+      "sourceQuote": "Enrollment No: EU2023CS0412",
+      "box": [
+        248,
+        432,
+        260,
+        562
+      ]
+    },
+    {
+      "key": "holder_name",
+      "label": "Holder name",
+      "value": "Arjun Nair",
+      "normalizedValue": null,
+      "confidence": 0.93,
+      "page": 1,
+      "sourceQuote": "Name: Arjun Nair",
+      "box": [
+        232,
+        388,
+        245,
+        467
+      ]
+    },
+    {
+      "key": "father_or_guardian_name",
+      "label": "Father's / guardian's name",
+      "value": null,
+      "normalizedValue": null,
+      "confidence": 0,
+      "page": null,
+      "sourceQuote": null
+    },
+    {
+      "key": "date_of_birth",
+      "label": "Date of birth",
+      "value": "11/11/2004",
+      "normalizedValue": "2004-11-11",
+      "confidence": 0.88,
+      "page": 1,
+      "sourceQuote": "Date of Birth: 11/11/2004",
+      "box": [
+        292,
+        439,
+        301,
+        515
+      ]
+    },
+    {
+      "key": "gender",
+      "label": "Gender",
+      "value": null,
+      "normalizedValue": null,
+      "confidence": 0,
+      "page": null,
+      "sourceQuote": null
+    },
+    {
+      "key": "address",
+      "label": "Address",
+      "value": "3 Sample Hostel Road, Kochi, Kerala 682001",
+      "normalizedValue": null,
+      "confidence": 0.82,
+      "page": 1,
+      "sourceQuote": "Address: 3 Sample Hostel Road, Kochi, Kerala 682001",
+      "box": [
+        381,
+        201,
+        399,
+        571
+      ]
+    },
+    {
+      "key": "issuing_authority",
+      "label": "Issuing authority",
+      "value": "Example University",
+      "normalizedValue": null,
+      "confidence": 0.92,
+      "page": 1,
+      "sourceQuote": "EXAMPLE UNIVERSITY",
+      "box": [
+        172,
+        178,
+        189,
+        432
+      ]
+    },
+    {
+      "key": "issue_date",
+      "label": "Issue date",
+      "value": "01/08/2023",
+      "normalizedValue": "2023-08-01",
+      "confidence": 0.87,
+      "page": 1,
+      "sourceQuote": "Date of Issue: 01/08/2023",
+      "box": [
+        331,
+        444,
+        342,
+        526
+      ]
+    },
+    {
+      "key": "expiry_date",
+      "label": "Valid until",
+      "value": "31/07/2027",
+      "normalizedValue": "2027-07-31",
+      "confidence": 0.87,
+      "page": 1,
+      "sourceQuote": "Valid Till: 31/07/2027",
+      "box": [
+        351,
+        412,
+        362,
+        491
+      ]
+    },
+    {
+      "key": "programme",
+      "label": "Programme",
+      "value": "B.Tech Computer Science",
+      "normalizedValue": null,
+      "confidence": 0.88,
+      "page": 1,
+      "sourceQuote": "Programme: B.Tech Computer Science",
+      "box": [
+        267,
+        396,
+        281,
+        614
+      ]
+    },
+    {
+      "key": "blood_group",
+      "label": "Blood group",
+      "value": "O+",
+      "normalizedValue": null,
+      "confidence": 0.85,
+      "page": 1,
+      "sourceQuote": "Blood Group: O+",
+      "box": [
+        311,
+        396,
+        321,
+        461
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "type": "PERSON",
+      "value": "Arjun Nair",
+      "page": 1,
+      "sourceQuote": "Name: Arjun Nair"
+    },
+    {
+      "type": "ORG",
+      "value": "Example University",
+      "page": 1,
+      "sourceQuote": "EXAMPLE UNIVERSITY"
+    },
+    {
+      "type": "ID",
+      "value": "EU2023CS0412",
+      "page": 1,
+      "sourceQuote": "Enrollment No: EU2023CS0412"
+    },
+    {
+      "type": "DATE",
+      "value": "31/07/2027",
+      "page": 1,
+      "sourceQuote": "Valid Till: 31/07/2027"
+    },
+    {
+      "type": "LOCATION",
+      "value": "Kochi, Kerala 682001",
+      "page": 1,
+      "sourceQuote": "Address: 3 Sample Hostel Road, Kochi, Kerala 682001"
+    }
+  ],
+  "tables": [],
+  "ocrText": [
+    {
+      "page": 1,
+      "text": "EXAMPLE UNIVERSITY\nStudent Identity Card\nPHOTO\nName: Arjun Nair\nEnrollment No: EU2023CS0412\nProgramme: B.Tech Computer Science\nDate of Birth: 11/11/2004\nBlood Group: O+\nDate of Issue: 01/08/2023\nValid Till: 31/07/2027\nAddress: 3 Sample Hostel Road, Kochi, Kerala 682001\nIf found, please return to the Registrar, Example University."
+    }
+  ]
+}

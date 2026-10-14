@@ -1,0 +1,399 @@
+{
+  "date": "2026-10-13T14:50:42.889Z",
+  "mode": "fixture-replay (not live latency or accuracy evidence)",
+  "scope": "Original bytes → extraction; excludes storage, HTTP, caching, workspace derivations and UI. The tiered Gemini pipeline also requests concept-map/quiz source nodes.",
+  "baselineKeys": 0,
+  "geminiKeys": 0,
+  "visionModel": "gemini-2.5-flash-lite",
+  "reasoningModels": "gemini-2.5-flash-lite,gemini-3.1-flash-lite",
+  "repeats": 1,
+  "summary": {
+    "legacy": {
+      "runs": 3,
+      "failures": 0,
+      "basicResults": 0,
+      "fieldAccuracy": 0.90625,
+      "classificationAccuracy": 1,
+      "medianLatencyMs": 39,
+      "p95LatencyMs": 188
+    },
+    "gemini": {
+      "runs": 3,
+      "failures": 0,
+      "basicResults": 0,
+      "fieldAccuracy": 0.90625,
+      "classificationAccuracy": 1,
+      "medianLatencyMs": 178,
+      "p95LatencyMs": 429
+    }
+  },
+  "rows": [
+    {
+      "file": "a-invoice-digital.pdf",
+      "pipeline": "legacy",
+      "run": 1,
+      "latencyMs": 188,
+      "timings": {},
+      "basicResult": false,
+      "model": "gemini-3.1-flash-lite",
+      "correct": 15,
+      "total": 15,
+      "fieldAccuracy": 1,
+      "classificationCorrect": true,
+      "fields": [
+        {
+          "key": "invoice_number",
+          "correct": true
+        },
+        {
+          "key": "invoice_date",
+          "correct": true
+        },
+        {
+          "key": "due_date",
+          "correct": true
+        },
+        {
+          "key": "seller_name",
+          "correct": true
+        },
+        {
+          "key": "seller_gstin",
+          "correct": true
+        },
+        {
+          "key": "seller_pan",
+          "correct": true
+        },
+        {
+          "key": "seller_address",
+          "correct": true
+        },
+        {
+          "key": "buyer_name",
+          "correct": true
+        },
+        {
+          "key": "buyer_gstin",
+          "correct": true
+        },
+        {
+          "key": "buyer_address",
+          "correct": true
+        },
+        {
+          "key": "place_of_supply",
+          "correct": true
+        },
+        {
+          "key": "subtotal",
+          "correct": true
+        },
+        {
+          "key": "cgst",
+          "correct": true
+        },
+        {
+          "key": "sgst",
+          "correct": true
+        },
+        {
+          "key": "total_amount",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "file": "a-invoice-digital.pdf",
+      "pipeline": "gemini",
+      "run": 1,
+      "latencyMs": 35,
+      "timings": {
+        "visionPages": 0,
+        "textPages": 1,
+        "stage1": 1,
+        "stage2": 2,
+        "verificationPages": 0,
+        "stage3": 1
+      },
+      "basicResult": false,
+      "model": "gemini-2.5-flash-lite",
+      "correct": 15,
+      "total": 15,
+      "fieldAccuracy": 1,
+      "classificationCorrect": true,
+      "fields": [
+        {
+          "key": "invoice_number",
+          "correct": true
+        },
+        {
+          "key": "invoice_date",
+          "correct": true
+        },
+        {
+          "key": "due_date",
+          "correct": true
+        },
+        {
+          "key": "seller_name",
+          "correct": true
+        },
+        {
+          "key": "seller_gstin",
+          "correct": true
+        },
+        {
+          "key": "seller_pan",
+          "correct": true
+        },
+        {
+          "key": "seller_address",
+          "correct": true
+        },
+        {
+          "key": "buyer_name",
+          "correct": true
+        },
+        {
+          "key": "buyer_gstin",
+          "correct": true
+        },
+        {
+          "key": "buyer_address",
+          "correct": true
+        },
+        {
+          "key": "place_of_supply",
+          "correct": true
+        },
+        {
+          "key": "subtotal",
+          "correct": true
+        },
+        {
+          "key": "cgst",
+          "correct": true
+        },
+        {
+          "key": "sgst",
+          "correct": true
+        },
+        {
+          "key": "total_amount",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "file": "f-student-id-scanned.pdf",
+      "pipeline": "legacy",
+      "run": 1,
+      "latencyMs": 10,
+      "timings": {},
+      "basicResult": false,
+      "model": "gemini-3.1-flash-lite",
+      "correct": 8,
+      "total": 8,
+      "fieldAccuracy": 1,
+      "classificationCorrect": true,
+      "fields": [
+        {
+          "key": "document_name",
+          "correct": true
+        },
+        {
+          "key": "id_number",
+          "correct": true
+        },
+        {
+          "key": "holder_name",
+          "correct": true
+        },
+        {
+          "key": "date_of_birth",
+          "correct": true
+        },
+        {
+          "key": "address",
+          "correct": true
+        },
+        {
+          "key": "issuing_authority",
+          "correct": true
+        },
+        {
+          "key": "issue_date",
+          "correct": true
+        },
+        {
+          "key": "expiry_date",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "file": "f-student-id-scanned.pdf",
+      "pipeline": "gemini",
+      "run": 1,
+      "latencyMs": 429,
+      "timings": {
+        "visionPages": 1,
+        "textPages": 0,
+        "stage1": 420,
+        "stage2": 1,
+        "verificationPages": 0,
+        "stage3": 0
+      },
+      "basicResult": false,
+      "model": "gemini-2.5-flash-lite",
+      "correct": 8,
+      "total": 8,
+      "fieldAccuracy": 1,
+      "classificationCorrect": true,
+      "fields": [
+        {
+          "key": "document_name",
+          "correct": true
+        },
+        {
+          "key": "id_number",
+          "correct": true
+        },
+        {
+          "key": "holder_name",
+          "correct": true
+        },
+        {
+          "key": "date_of_birth",
+          "correct": true
+        },
+        {
+          "key": "address",
+          "correct": true
+        },
+        {
+          "key": "issuing_authority",
+          "correct": true
+        },
+        {
+          "key": "issue_date",
+          "correct": true
+        },
+        {
+          "key": "expiry_date",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "file": "g-notice-bilingual-hindi-english.pdf",
+      "pipeline": "legacy",
+      "run": 1,
+      "latencyMs": 39,
+      "timings": {},
+      "basicResult": false,
+      "model": "gemini-3.1-flash-lite",
+      "correct": 6,
+      "total": 9,
+      "fieldAccuracy": 0.6666666666666666,
+      "classificationCorrect": true,
+      "fields": [
+        {
+          "key": "title_or_subject",
+          "correct": false
+        },
+        {
+          "key": "reference_number",
+          "correct": true
+        },
+        {
+          "key": "issuing_institution",
+          "correct": false
+        },
+        {
+          "key": "date",
+          "correct": true
+        },
+        {
+          "key": "addressed_to",
+          "correct": true
+        },
+        {
+          "key": "issued_by_name",
+          "correct": true
+        },
+        {
+          "key": "issued_by_designation",
+          "correct": false
+        },
+        {
+          "key": "effective_date",
+          "correct": true
+        },
+        {
+          "key": "deadline_date",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "file": "g-notice-bilingual-hindi-english.pdf",
+      "pipeline": "gemini",
+      "run": 1,
+      "latencyMs": 178,
+      "timings": {
+        "visionPages": 1,
+        "textPages": 0,
+        "stage1": 142,
+        "stage2": 1,
+        "verificationPages": 0,
+        "stage3": 1
+      },
+      "basicResult": false,
+      "model": "gemini-2.5-flash-lite",
+      "correct": 6,
+      "total": 9,
+      "fieldAccuracy": 0.6666666666666666,
+      "classificationCorrect": true,
+      "fields": [
+        {
+          "key": "title_or_subject",
+          "correct": false
+        },
+        {
+          "key": "reference_number",
+          "correct": true
+        },
+        {
+          "key": "issuing_institution",
+          "correct": false
+        },
+        {
+          "key": "date",
+          "correct": true
+        },
+        {
+          "key": "addressed_to",
+          "correct": true
+        },
+        {
+          "key": "issued_by_name",
+          "correct": true
+        },
+        {
+          "key": "issued_by_designation",
+          "correct": false
+        },
+        {
+          "key": "effective_date",
+          "correct": true
+        },
+        {
+          "key": "deadline_date",
+          "correct": true
+        }
+      ]
+    }
+  ]
+}

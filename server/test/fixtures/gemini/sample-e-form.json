@@ -1,0 +1,270 @@
+{
+  "docType": "application_form",
+  "docTypeConfidence": 0.95,
+  "title": "Admission Application – Neha Rao",
+  "language": "en",
+  "summary": "Scanned admission application form ADM/2024/1093 for session 2024-25 at Example College of Arts and Science, Nagpur. Neha Rao (born 05/09/2006) applies for B.Sc. Computer Science; contact details, a masked Aadhaar number and the applicant's signature dated 28/06/2024 are present.",
+  "fields": [
+    {
+      "key": "form_title",
+      "label": "Form title",
+      "value": "Admission Application Form",
+      "normalizedValue": null,
+      "confidence": 0.95,
+      "page": 1,
+      "sourceQuote": "Admission Application Form",
+      "box": [
+        68,
+        303,
+        92,
+        728
+      ]
+    },
+    {
+      "key": "application_number",
+      "label": "Application number",
+      "value": "ADM/2024/1093",
+      "normalizedValue": null,
+      "confidence": 0.9,
+      "page": 1,
+      "sourceQuote": "Application No: ADM/2024/1093",
+      "box": [
+        117,
+        201,
+        128,
+        328
+      ]
+    },
+    {
+      "key": "applicant_name",
+      "label": "Applicant name",
+      "value": "Neha Rao",
+      "normalizedValue": null,
+      "confidence": 0.93,
+      "page": 1,
+      "sourceQuote": "Full name of applicant Neha Rao",
+      "box": [
+        152,
+        404,
+        163,
+        479
+      ]
+    },
+    {
+      "key": "date_of_birth",
+      "label": "Date of birth",
+      "value": "05/09/2006",
+      "normalizedValue": "2006-09-05",
+      "confidence": 0.88,
+      "page": 1,
+      "sourceQuote": "Date of birth (DD/MM/YYYY) 05/09/2006",
+      "box": [
+        182,
+        403,
+        192,
+        490
+      ]
+    },
+    {
+      "key": "gender",
+      "label": "Gender",
+      "value": "Female",
+      "normalizedValue": "FEMALE",
+      "confidence": 0.9,
+      "page": 1,
+      "sourceQuote": "Gender Female",
+      "box": [
+        210,
+        403,
+        221,
+        456
+      ]
+    },
+    {
+      "key": "father_or_guardian_name",
+      "label": "Father's / guardian's name",
+      "value": "Prakash Rao",
+      "normalizedValue": null,
+      "confidence": 0.89,
+      "page": 1,
+      "sourceQuote": "Father's name Prakash Rao",
+      "box": [
+        240,
+        403,
+        250,
+        497
+      ]
+    },
+    {
+      "key": "email",
+      "label": "Email",
+      "value": "neha.rao@example.com",
+      "normalizedValue": null,
+      "confidence": 0.86,
+      "page": 1,
+      "sourceQuote": "Email neha.rao@example.com",
+      "box": [
+        270,
+        401,
+        281,
+        575
+      ]
+    },
+    {
+      "key": "phone",
+      "label": "Phone",
+      "value": "98765 43210",
+      "normalizedValue": "+919876543210",
+      "confidence": 0.87,
+      "page": 1,
+      "sourceQuote": "Mobile 98765 43210",
+      "box": [
+        297,
+        401,
+        307,
+        499
+      ]
+    },
+    {
+      "key": "address",
+      "label": "Address",
+      "value": "7 Demo Colony, Nagpur, Maharashtra",
+      "normalizedValue": null,
+      "confidence": 0.85,
+      "page": 1,
+      "sourceQuote": "Address 7 Demo Colony, Nagpur, Maharashtra",
+      "box": [
+        326,
+        400,
+        339,
+        681
+      ]
+    },
+    {
+      "key": "pincode",
+      "label": "PIN code",
+      "value": "440010",
+      "normalizedValue": null,
+      "confidence": 0.88,
+      "page": 1,
+      "sourceQuote": "PIN code 440010",
+      "box": [
+        354,
+        400,
+        363,
+        453
+      ]
+    },
+    {
+      "key": "id_number",
+      "label": "ID number",
+      "value": "XXXX XXXX 4321",
+      "normalizedValue": null,
+      "confidence": 0.8,
+      "page": 1,
+      "sourceQuote": "Aadhaar No. XXXX XXXX 4321",
+      "box": [
+        409,
+        396,
+        420,
+        539
+      ]
+    },
+    {
+      "key": "position_or_course",
+      "label": "Applied for",
+      "value": "B.Sc. Computer Science",
+      "normalizedValue": null,
+      "confidence": 0.9,
+      "page": 1,
+      "sourceQuote": "Course applied for B.Sc. Computer Science",
+      "box": [
+        381,
+        396,
+        395,
+        567
+      ]
+    },
+    {
+      "key": "application_date",
+      "label": "Application date",
+      "value": "28/06/2024",
+      "normalizedValue": "2024-06-28",
+      "confidence": 0.86,
+      "page": 1,
+      "sourceQuote": "Date: 28/06/2024",
+      "box": [
+        470,
+        119,
+        482,
+        205
+      ]
+    },
+    {
+      "key": "signature_present",
+      "label": "Signature",
+      "value": "yes",
+      "normalizedValue": "yes",
+      "confidence": 0.8,
+      "page": 1,
+      "sourceQuote": "Signature of applicant: N. Rao",
+      "box": [
+        486,
+        850,
+        501,
+        925
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "type": "PERSON",
+      "value": "Neha Rao",
+      "page": 1,
+      "sourceQuote": "Full name of applicant Neha Rao"
+    },
+    {
+      "type": "PERSON",
+      "value": "Prakash Rao",
+      "page": 1,
+      "sourceQuote": "Father's name Prakash Rao"
+    },
+    {
+      "type": "ORG",
+      "value": "Example College of Arts and Science",
+      "page": 1,
+      "sourceQuote": "EXAMPLE COLLEGE OF ARTS AND SCIENCE, NAGPUR"
+    },
+    {
+      "type": "EMAIL",
+      "value": "neha.rao@example.com",
+      "page": 1,
+      "sourceQuote": "Email neha.rao@example.com"
+    },
+    {
+      "type": "PHONE",
+      "value": "98765 43210",
+      "page": 1,
+      "sourceQuote": "Mobile 98765 43210"
+    },
+    {
+      "type": "LOCATION",
+      "value": "Nagpur, Maharashtra 440010",
+      "page": 1,
+      "sourceQuote": "Address 7 Demo Colony, Nagpur, Maharashtra"
+    },
+    {
+      "type": "ID",
+      "value": "ADM/2024/1093",
+      "page": 1,
+      "sourceQuote": "Application No: ADM/2024/1093"
+    }
+  ],
+  "tables": [],
+  "ocrText": [
+    {
+      "page": 1,
+      "text": "EXAMPLE COLLEGE OF ARTS AND SCIENCE, NAGPUR\nAdmission Application Form\nSession 2024-25\nApplication No: ADM/2024/1093\nFull name of applicant Neha Rao\nDate of birth (DD/MM/YYYY) 05/09/2006\nGender Female\nFather's name Prakash Rao\nEmail neha.rao@example.com\nMobile 98765 43210\nAddress 7 Demo Colony, Nagpur, Maharashtra\nPIN code 440010\nCourse applied for B.Sc. Computer Science\nAadhaar No. XXXX XXXX 4321\nI declare that the information given above is true.\nDate: 28/06/2024 Signature of applicant: N. Rao"
+    }
+  ]
+}

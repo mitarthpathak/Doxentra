@@ -1,0 +1,254 @@
+{
+ "_match": "Statement of Marks",
+ "docType": "marksheet",
+ "docTypeConfidence": 0.97,
+ "title": "Statement of Marks – Asha Verma",
+ "language": "en",
+ "summary": "Class XII statement of marks (Annual Examination 2024, session 2023-24) for Asha Verma, roll no. 2401587, of Model Senior Secondary School under the Sample Board of School Education. Five subjects are listed; the printed grand total is 418/500 (83.60%) with result PASS, declared on 15/05/2024.",
+ "fields": [
+  {
+   "key": "student_name",
+   "label": "Student name",
+   "value": "Asha Verma",
+   "normalizedValue": null,
+   "confidence": 0.97,
+   "page": 1,
+   "sourceQuote": "Name of Student: Asha Verma"
+  },
+  {
+   "key": "roll_number",
+   "label": "Roll number",
+   "value": "2401587",
+   "normalizedValue": null,
+   "confidence": 0.97,
+   "page": 1,
+   "sourceQuote": "Roll No: 2401587"
+  },
+  {
+   "key": "enrollment_number",
+   "label": "Enrollment number",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "father_or_guardian_name",
+   "label": "Father's / guardian's name",
+   "value": "Suresh Verma",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "Father's Name: Suresh Verma"
+  },
+  {
+   "key": "mother_name",
+   "label": "Mother's name",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "date_of_birth",
+   "label": "Date of birth",
+   "value": "14/02/2006",
+   "normalizedValue": "2006-02-14",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Date of Birth: 14/02/2006"
+  },
+  {
+   "key": "institution_name",
+   "label": "Institution",
+   "value": "Model Senior Secondary School",
+   "normalizedValue": null,
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "Model Senior Secondary School"
+  },
+  {
+   "key": "board_or_university",
+   "label": "Board / university",
+   "value": "Sample Board of School Education",
+   "normalizedValue": null,
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "SAMPLE BOARD OF SCHOOL EDUCATION"
+  },
+  {
+   "key": "examination",
+   "label": "Examination",
+   "value": "Annual Examination 2024",
+   "normalizedValue": null,
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "Statement of Marks — Annual Examination 2024"
+  },
+  {
+   "key": "class_or_semester",
+   "label": "Class / semester",
+   "value": "XII",
+   "normalizedValue": null,
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Class XII · Session 2023-24"
+  },
+  {
+   "key": "session",
+   "label": "Session",
+   "value": "2023-24",
+   "normalizedValue": null,
+   "confidence": 0.92,
+   "page": 1,
+   "sourceQuote": "Class XII · Session 2023-24"
+  },
+  {
+   "key": "total_marks_obtained",
+   "label": "Total marks obtained",
+   "value": "418",
+   "normalizedValue": "418",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Grand Total 418 / 500"
+  },
+  {
+   "key": "total_max_marks",
+   "label": "Maximum marks",
+   "value": "500",
+   "normalizedValue": "500",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Grand Total 418 / 500"
+  },
+  {
+   "key": "percentage",
+   "label": "Percentage",
+   "value": "83.60%",
+   "normalizedValue": "83.6",
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "Percentage 83.60%"
+  },
+  {
+   "key": "cgpa",
+   "label": "CGPA / SGPA",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "result",
+   "label": "Result",
+   "value": "PASS",
+   "normalizedValue": "PASS",
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "Result PASS"
+  },
+  {
+   "key": "division",
+   "label": "Division / grade",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "issue_date",
+   "label": "Issue date",
+   "value": "15/05/2024",
+   "normalizedValue": "2024-05-15",
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Date of Declaration: 15/05/2024"
+  }
+ ],
+ "entities": [
+  {
+   "type": "PERSON",
+   "value": "Asha Verma",
+   "page": 1,
+   "sourceQuote": "Name of Student: Asha Verma"
+  },
+  {
+   "type": "PERSON",
+   "value": "Suresh Verma",
+   "page": 1,
+   "sourceQuote": "Father's Name: Suresh Verma"
+  },
+  {
+   "type": "ORG",
+   "value": "Model Senior Secondary School",
+   "page": 1,
+   "sourceQuote": "Model Senior Secondary School"
+  },
+  {
+   "type": "ORG",
+   "value": "Sample Board of School Education",
+   "page": 1,
+   "sourceQuote": "SAMPLE BOARD OF SCHOOL EDUCATION"
+  },
+  {
+   "type": "ID",
+   "value": "2401587",
+   "page": 1,
+   "sourceQuote": "Roll No: 2401587"
+  },
+  {
+   "type": "DATE",
+   "value": "14/02/2006",
+   "page": 1,
+   "sourceQuote": "Date of Birth: 14/02/2006"
+  }
+ ],
+ "tables": [
+  {
+   "title": "Subject-wise marks",
+   "page": 1,
+   "columns": [
+    "Subject",
+    "Max Marks",
+    "Marks Obtained",
+    "Grade"
+   ],
+   "rows": [
+    [
+     "English",
+     "100",
+     "85",
+     "A2"
+    ],
+    [
+     "Hindi",
+     "100",
+     "78",
+     "B1"
+    ],
+    [
+     "Mathematics",
+     "100",
+     "91",
+     "A1"
+    ],
+    [
+     "Physics",
+     "100",
+     "74",
+     "B1"
+    ],
+    [
+     "Chemistry",
+     "100",
+     "80",
+     "A2"
+    ]
+   ]
+  }
+ ]
+}

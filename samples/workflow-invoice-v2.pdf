@@ -1,0 +1,43 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 681 >>
+stream
+BT /F1 11 Tf 50 780 Td (Tax Invoice - Revised) Tj ET
+BT /F1 11 Tf 50 764 Td (Invoice No: DOXENTRA-DEMO-042) Tj ET
+BT /F1 11 Tf 50 748 Td (Invoice Date: 12/10/2026) Tj ET
+BT /F1 11 Tf 50 732 Td (Seller: Example Traders Pvt Ltd) Tj ET
+BT /F1 11 Tf 50 716 Td (Seller GSTIN: 27AAACE1234F1Z6) Tj ET
+BT /F1 11 Tf 50 700 Td (Buyer: Demo Learning Centre) Tj ET
+BT /F1 11 Tf 50 684 Td (Subtotal: Rs. 25,000.00) Tj ET
+BT /F1 11 Tf 50 668 Td (CGST: Rs. 1,750.00) Tj ET
+BT /F1 11 Tf 50 652 Td (SGST: Rs. 1,750.00) Tj ET
+BT /F1 11 Tf 50 636 Td (Total Amount: Rs. 28,500.00) Tj ET
+BT /F1 11 Tf 50 620 Td (Bank Account No: 987654321098) Tj ET
+BT /F1 11 Tf 50 604 Td (Bank IFSC: HDFC0001234) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000185 00000 n 
+0000000917 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1043
+%%EOF

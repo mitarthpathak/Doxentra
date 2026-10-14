@@ -1,0 +1,195 @@
+{
+  "sections": [
+    "cross",
+    "classify",
+    "entities",
+    "review",
+    "mask",
+    "hindi",
+    "quality",
+    "details"
+  ],
+  "results": [
+    {
+      "name": "ID card shows the date-of-birth conflict with the marksheet",
+      "ok": true,
+      "detail": "ACROSS DOCUMENTS · 2 /  / error"
+    },
+    {
+      "name": "and the father's name spelt differently",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the conflicting field is flagged in the field list",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the link opens the marksheet at the conflicting field",
+      "ok": true,
+      "detail": "MARKSHEET / REPORT CARD · 88% / "
+    },
+    {
+      "name": "the duplicate invoice number with another total is an error",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the invoice shows its subtype next to the type",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the type badge explains its confidence",
+      "ok": true,
+      "detail": "Financial · AI 98%, keywords 100%, required fields found 100%"
+    },
+    {
+      "name": "the ID card is a student ID with a runner-up type",
+      "ok": true,
+      "detail": "STUDENT ID CARD / Also possible: Marksheet / report card 7%"
+    },
+    {
+      "name": "the graph links Asha Verma, Example Traders and their documents",
+      "ok": true,
+      "detail": "30 nodes"
+    },
+    {
+      "name": "conflicting values are joined by red edges",
+      "ok": true,
+      "detail": "2 red edges, conflicts: 3 / 4 docs"
+    },
+    {
+      "name": "a conflicting field explains the conflict",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "and opens the document at that field",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the concept-map tab still shows the concept map view",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "a corrected field is marked and keeps the AI value for reference",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the correction settles the date-of-birth conflict with the marksheet",
+      "ok": true,
+      "detail": "ACROSS DOCUMENTS · 1"
+    },
+    {
+      "name": "the document is in review",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the review history lists every action, newest first",
+      "ok": true,
+      "detail": "[\"verified\\n\\nApproved the document\\n\\nfeatures1791836232908@example.com · 10/12/2026, 8:17:28 PM\",\"check_circle\\n\\nConfirmed Holder name\\n\\nfeatures1791836232908@example.com · 10/12/2026, 8:17:28 PM · confidence 97% → 98%\",\"edit\\n\\nCorrected Date of birth: 14/03/2006 → 14/02/2006\\n\\n“Checked against the birth certificate”\\n\\nfeatures1791836232908@example.com · 10/12/2026, 8:17:27 PM\"]"
+    },
+    {
+      "name": "back to the AI value: the conflict returns and the approval is withdrawn",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "masked: no name, date of birth, roll number or address anywhere on the page",
+      "ok": true,
+      "detail": "Student ID Card – A. V."
+    },
+    {
+      "name": "masked values are readable: initials and the year of birth",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no page image is shown while masking",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "review controls are off while masking",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the export is redacted, with a redacted file name",
+      "ok": true,
+      "detail": "i-student-id-AV-redacted.json"
+    },
+    {
+      "name": "the entity graph is masked too",
+      "ok": true,
+      "detail": "YOUR DOCUMENTS\nWORKSPACE | A. V.\nPERSON | EXAMPLE TRADERS PVT LTD\nORGANISATION | SAMPLE RETAIL CO\nORGANISATION | Stateme"
+    },
+    {
+      "name": "turning masking off shows the data again",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "a Hindi value is shown with its transliteration",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the notice is translated to English by the AI",
+      "ok": true,
+      "detail": "ENGLISH TRANSLATION /  / Notice: Annual Examination Schedule"
+    },
+    {
+      "name": "a Latin-letter search finds the Hindi words",
+      "ok": true,
+      "detail": "सूचना"
+    },
+    {
+      "name": "a batch shows its overall progress",
+      "ok": true,
+      "detail": "0 OF 3 DONE\n5%"
+    },
+    {
+      "name": "the blurry, dark photo is flagged before it is processed",
+      "ok": true,
+      "detail": "warning\nBlurry photo · Too dark: results may be less accurate"
+    },
+    {
+      "name": "the document lists the image-quality problems",
+      "ok": true,
+      "detail": "VALIDATION /  / Issues / "
+    },
+    {
+      "name": "and explains the lower confidence of its values",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "the Details page starts with the validation summary of its document",
+      "ok": true,
+      "detail": "DOCUMENT CHECK /  / Student ID Card – Asha Verma / "
+    },
+    {
+      "name": "the summary sits above the concept-map details",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "and shows the review status and the latest audit entries",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors or failed requests",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "problems": []
+}

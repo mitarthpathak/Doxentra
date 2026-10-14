@@ -1,0 +1,247 @@
+{
+  "about": "Ground truth of the synthetic samples (scripts/make-samples.mjs): type, subtype, key field values (a list = any of these is right), the planted problems each must raise (issues), other errors / warnings that are correct but not planted (allowedIssues), and the cross-document problems. Used by scripts/benchmark.mjs.",
+  "documents": {
+    "a-invoice-digital.pdf": {
+      "docType": "invoice",
+      "docSubtype": "tax_invoice",
+      "fields": {
+        "invoice_number": "ET/2024-25/0147",
+        "invoice_date": "15/07/2024",
+        "due_date": "14/08/2024",
+        "seller_name": "Example Traders Pvt Ltd",
+        "seller_gstin": "27AAACE1234F1Z6",
+        "seller_pan": "AAACE1234F",
+        "seller_address": "14 Sample Industrial Estate, Pune, Maharashtra 411019",
+        "buyer_name": "Sample Retail Co",
+        "buyer_gstin": "27AAFCS5678B1Z7",
+        "buyer_address": "22 Demo Market, Mumbai 400001",
+        "place_of_supply": "Maharashtra (27)",
+        "subtotal": "₹ 16,000.00",
+        "cgst": "₹ 1,440.00",
+        "sgst": "₹ 1,440.00",
+        "total_amount": "₹ 18,880.00"
+      }
+    },
+    "b-invoice-total-mismatch.pdf": {
+      "docType": "invoice",
+      "docSubtype": "tax_invoice",
+      "fields": {
+        "invoice_number": "SOS-2024-0912",
+        "invoice_date": "03/09/2024",
+        "due_date": "18/09/2024",
+        "seller_name": "Sample Office Supplies",
+        "seller_address": "5 Demo Lane, Bengaluru, Karnataka 560001",
+        "buyer_name": "Demo Learning Centre",
+        "buyer_address": "9 Example Street, Mysuru 570001",
+        "subtotal": "₹ 9,500.00",
+        "cgst": "₹ 855.00",
+        "sgst": "₹ 855.00",
+        "total_amount": "₹ 11,710.00"
+      },
+      "issues": [
+        "invoice.total_mismatch"
+      ],
+      "allowedIssues": [
+        "required.missing"
+      ]
+    },
+    "c-certificate-issued-after-expiry.pdf": {
+      "docType": "certificate",
+      "docSubtype": "completion",
+      "fields": {
+        "certificate_title": "Certificate of Completion",
+        "certificate_number": "EIT/FSWD/2024/0381",
+        "recipient_name": "Rohan Mehta",
+        "issuing_organization": "Example Institute of Technology, Pune",
+        "course_or_achievement": "Full Stack Web Development",
+        "grade_or_score": "A",
+        "issue_date": "20/08/2024",
+        "valid_until": "19/08/2023",
+        "signatory_name": "Dr. Kavita Rao",
+        "signatory_designation": "Director, Academic Programmes",
+        "place": "Pune"
+      },
+      "issues": [
+        "date.order",
+        "name.variant"
+      ]
+    },
+    "d-marksheet-wrong-total.pdf": {
+      "docType": "marksheet",
+      "docSubtype": "board",
+      "fields": {
+        "student_name": "Asha Verma",
+        "roll_number": "2401587",
+        "father_or_guardian_name": "Suresh Verma",
+        "date_of_birth": "14/02/2006",
+        "institution_name": "Model Senior Secondary School",
+        "board_or_university": "Sample Board of School Education",
+        "examination": "Annual Examination 2024",
+        "class_or_semester": "XII",
+        "session": "2023-24",
+        "total_marks_obtained": "418",
+        "total_max_marks": "500",
+        "percentage": "83.60%",
+        "result": "PASS",
+        "issue_date": "15/05/2024"
+      },
+      "issues": [
+        "marksheet.total_mismatch"
+      ]
+    },
+    "e-application-form-scan.jpg": {
+      "docType": "application_form",
+      "docSubtype": "admission",
+      "fields": {
+        "form_title": "Admission Application Form",
+        "application_number": "ADM/2024/1093",
+        "applicant_name": "Neha Rao",
+        "date_of_birth": "05/09/2006",
+        "gender": "Female",
+        "father_or_guardian_name": "Prakash Rao",
+        "email": "neha.rao@example.com",
+        "phone": "98765 43210",
+        "address": "7 Demo Colony, Nagpur, Maharashtra",
+        "pincode": "440010",
+        "id_number": "XXXX XXXX 4321",
+        "position_or_course": "B.Sc. Computer Science",
+        "application_date": "28/06/2024"
+      },
+      "upload": {
+        "quality": {
+          "width": 1588,
+          "height": 2246,
+          "sharpness": 72,
+          "brightness": 252,
+          "contrast": 111
+        }
+      }
+    },
+    "f-student-id-scanned.pdf": {
+      "docType": "identity_document",
+      "docSubtype": "student_id",
+      "fields": {
+        "document_name": "Student Identity Card",
+        "id_number": "EU2023CS0412",
+        "holder_name": "Arjun Nair",
+        "date_of_birth": "11/11/2004",
+        "address": "3 Sample Hostel Road, Kochi, Kerala 682001",
+        "issuing_authority": "Example University",
+        "issue_date": "01/08/2023",
+        "expiry_date": "31/07/2027"
+      }
+    },
+    "g-notice-bilingual-hindi-english.pdf": {
+      "docType": "institutional_record",
+      "docSubtype": "notice",
+      "fields": {
+        "title_or_subject": [
+          "वार्षिक परीक्षा कार्यक्रम / Annual Examination Schedule",
+          "Annual Examination Schedule",
+          "वार्षिक परीक्षा कार्यक्रम"
+        ],
+        "reference_number": "MPS/ADM/2024/112",
+        "issuing_institution": [
+          "Model Public School (आदर्श पब्लिक स्कूल)",
+          "Model Public School",
+          "आदर्श पब्लिक स्कूल / Model Public School",
+          "आदर्श पब्लिक स्कूल"
+        ],
+        "date": "02/01/2024",
+        "addressed_to": "All students of Classes IX to XII and their parents",
+        "issued_by_name": "Dr. S. Iyer",
+        "issued_by_designation": [
+          "Principal (प्रधानाचार्य)",
+          "Principal",
+          "प्रधानाचार्य / Principal",
+          "प्रधानाचार्य"
+        ],
+        "effective_date": "15/03/2024",
+        "deadline_date": "20/02/2024"
+      }
+    },
+    "h-report-unusual-layout.pdf": {
+      "docType": "report",
+      "docSubtype": "inspection",
+      "fields": {
+        "title": "Campus Facilities Inspection Report",
+        "report_number": "CFI/Q2/2024/07",
+        "organization": "Example University",
+        "author": "Estates Department",
+        "report_date": "05/07/2024",
+        "period_covered": "April to June 2024"
+      }
+    },
+    "i-student-id-asha-verma.pdf": {
+      "docType": "identity_document",
+      "docSubtype": "student_id",
+      "fields": {
+        "document_name": "Student Identity Card",
+        "id_number": "2401587",
+        "holder_name": "Asha Verma",
+        "father_or_guardian_name": "Suresh Varma",
+        "date_of_birth": "14/03/2006",
+        "address": "18 Demo Nagar, Jaipur, Rajasthan 302004",
+        "issuing_authority": "Model Senior Secondary School",
+        "issue_date": "01/04/2024",
+        "expiry_date": "31/03/2025"
+      }
+    },
+    "j-invoice-duplicate-number.pdf": {
+      "docType": "invoice",
+      "docSubtype": "tax_invoice",
+      "fields": {
+        "invoice_number": "ET/2024-25/0147",
+        "invoice_date": "15/07/2024",
+        "due_date": "14/08/2024",
+        "seller_name": "Example Traders Pvt Ltd",
+        "seller_gstin": "27AAACE1234F1Z6",
+        "seller_address": "14 Sample Industrial Estate, Pune, Maharashtra 411019",
+        "buyer_name": "Sample Retail Co",
+        "buyer_gstin": "27AAFCS5678B1Z7",
+        "buyer_address": "22 Demo Market, Mumbai 400001",
+        "subtotal": "₹ 15,900.00",
+        "cgst": "₹ 1,431.00",
+        "sgst": "₹ 1,431.00",
+        "total_amount": "₹ 18,762.00"
+      }
+    },
+    "k-application-form-blurry-photo.jpg": {
+      "docType": "application_form",
+      "docSubtype": "admission",
+      "fields": {
+        "form_title": "Admission Application Form",
+        "application_number": "ADM/2024/1093",
+        "applicant_name": "Neha Rao",
+        "date_of_birth": "05/09/2006",
+        "gender": "Female",
+        "father_or_guardian_name": "Prakash Rao",
+        "email": "neha.rao@example.com",
+        "phone": "98765 43210",
+        "address": "7 Demo Colony, Nagpur, Maharashtra",
+        "pincode": "440010",
+        "id_number": "XXXX XXXX 4321",
+        "position_or_course": "B.Sc. Computer Science",
+        "application_date": "28/06/2024"
+      },
+      "upload": {
+        "quality": {
+          "width": 1588,
+          "height": 2246,
+          "sharpness": 11,
+          "brightness": 110,
+          "contrast": 158
+        }
+      },
+      "issues": [
+        "image.blurry",
+        "image.dark"
+      ]
+    }
+  },
+  "crossIssues": [
+    "cross.dob_mismatch",
+    "cross.father_mismatch",
+    "cross.invoice_conflict"
+  ]
+}

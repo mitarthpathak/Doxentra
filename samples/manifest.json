@@ -1,0 +1,68 @@
+[
+  {
+    "file": "a-invoice-digital.pdf",
+    "bytes": 51681,
+    "sha256": "99b56885d30b276faddaa28c806709ad83f4f4b7dd904e42c65119d1c659a1e3",
+    "fixture": "sample-a-invoice.json"
+  },
+  {
+    "file": "b-invoice-total-mismatch.pdf",
+    "bytes": 30025,
+    "sha256": "e1de7e0a6a5805fce9589a8ed0d9d925e998493b9372934556b984314eadba2a",
+    "fixture": "sample-b-invoice-mismatch.json"
+  },
+  {
+    "file": "c-certificate-issued-after-expiry.pdf",
+    "bytes": 40304,
+    "sha256": "d17ed94e54e9750dbdd0c829983dfc216c955150eb9be554763acb3548a628a9",
+    "fixture": "sample-c-certificate.json"
+  },
+  {
+    "file": "d-marksheet-wrong-total.pdf",
+    "bytes": 30494,
+    "sha256": "2f1076f982c81d7aa9aaee0ddec6bc3e3f2b93fe72dae204a5d48de9062a7649",
+    "fixture": "sample-d-marksheet.json"
+  },
+  {
+    "file": "e-application-form-scan.jpg",
+    "bytes": 389051,
+    "sha256": "81cfb0d6ad440149fc6b587c02ad011ca6d7e5a8840f9b94ae1b4af9dda5068d",
+    "fixture": "sample-e-form.json"
+  },
+  {
+    "file": "f-student-id-scanned.pdf",
+    "bytes": 354626,
+    "sha256": "af5cab71a443a32e6450930c3112f9226933f2a91af6a1ed3bd2607421429132",
+    "fixture": "sample-f-id-card.json"
+  },
+  {
+    "file": "g-notice-bilingual-hindi-english.pdf",
+    "bytes": 48182,
+    "sha256": "10424e1060fca5d1552533e2f77a2effb30638260dcadaa6c164e997e58c0a93",
+    "fixture": "sample-g-notice.json"
+  },
+  {
+    "file": "h-report-unusual-layout.pdf",
+    "bytes": 39851,
+    "sha256": "b8505604d8e982498fc24f5fc87ea1c73a742cef28d13ddf1affe5c0276e3198",
+    "fixture": "sample-h-report.json"
+  },
+  {
+    "file": "i-student-id-asha-verma.pdf",
+    "bytes": 41633,
+    "sha256": "ad514e1216ef7889e35f333ec5aaff41b0f11a041f7e355b6210ffeca6ecc44e",
+    "fixture": "sample-i-id-card-asha.json"
+  },
+  {
+    "file": "j-invoice-duplicate-number.pdf",
+    "bytes": 38471,
+    "sha256": "dda1e4ccc84c57629698179ee85f90e789590a41c75d76e73d3e1eb0faec24a5",
+    "fixture": "sample-j-invoice-duplicate.json"
+  },
+  {
+    "file": "k-application-form-blurry-photo.jpg",
+    "bytes": 828884,
+    "sha256": "9f79c2a16ee8ee1fbf36f0793ca8282e30c82503e1f5aa193ca97f5e73d8a7f1",
+    "fixture": "sample-e-form.json"
+  }
+]

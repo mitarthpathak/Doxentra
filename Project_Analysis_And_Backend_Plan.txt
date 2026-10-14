@@ -1,0 +1,26 @@
+=== DOXENTRA PROJECT STATUS ===
+
+1. KYA-KYA HO CHUKA HAI? (Current Status)
+------------------------------------------------------
+- AI: Google Gemini pipeline (gemini-flash-latest + flash-lite backup).
+  Poori PDF ek hi call me analyse hoti hai (~10-30 sec), Vercel ki 60s limit ke andar.
+- Scanned PDF (bina text wali) bhi chalti hai: Gemini PDF file ko seedha padhta hai.
+- AI ka graph ab sahi se save aur return hota hai (pehle har baar fallback aa jata tha).
+- MongoDB optional: connect na ho to data memory me rehta hai, app band nahi hota.
+- Login/Signup ab server par hai: password hash hota hai, token se history milti hai.
+  Koi bhi dusre user ka data nahi dekh sakta.
+- Upload limits: sirf PDF, max 4 MB, rate limit.
+- Frontend: Upload screen ka crash fix, graph readable aur fast, history me delete,
+  details page me AI ka roadmap, mobile layout, saaf error messages.
+- Tests: server ke 9 automated tests (`npm test`) + Playwright se poora flow check kiya.
+
+2. DEPLOY KE LIYE KYA KARNA HAI?
+------------------------------------------------------
+- Vercel → Settings → Environment Variables: GEMINI_API_KEY, MONGO_URI, AUTH_SECRET.
+- MongoDB Atlas → Network Access → 0.0.0.0/0 allow karo (Vercel ke IP badalte rehte hain).
+
+3. AAGE KYA KAR SAKTE HAIN? (Ideas)
+------------------------------------------------------
+1. GRAPH EDITING: nodes rename/delete karna taaki AI ki galti user theek kar sake.
+2. EXPORT: graph ko PNG ya JSON me download karna.
+3. Badi PDFs (4 MB se zyada) ke liye direct cloud upload.

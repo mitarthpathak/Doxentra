@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "name": "AI off: digital PDF gets a basic extraction",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "AI off: still shows type, fields and issues",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "AI off: scans get a clear message",
+      "ok": true,
+      "detail": "This image needs OCR and the AI service is not configured."
+    },
+    {
+      "name": "no console errors or failed requests",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "problems": []
+}

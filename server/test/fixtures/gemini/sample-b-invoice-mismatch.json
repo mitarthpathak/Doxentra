@@ -1,0 +1,278 @@
+{
+ "_match": "SOS-2024-0912",
+ "docType": "invoice",
+ "docTypeConfidence": 0.95,
+ "title": "Tax Invoice SOS-2024-0912",
+ "language": "en",
+ "summary": "Tax invoice SOS-2024-0912 from Sample Office Supplies (Bengaluru) to Demo Learning Centre, dated 03/09/2024 and due 18/09/2024. Items worth ₹9,500.00 with CGST and SGST of ₹855.00 each, but the printed grand total is ₹11,710.00. No GSTIN is shown for the seller.",
+ "fields": [
+  {
+   "key": "invoice_number",
+   "label": "Invoice number",
+   "value": "SOS-2024-0912",
+   "normalizedValue": null,
+   "confidence": 0.97,
+   "page": 1,
+   "sourceQuote": "Invoice No: SOS-2024-0912"
+  },
+  {
+   "key": "invoice_date",
+   "label": "Invoice date",
+   "value": "03/09/2024",
+   "normalizedValue": "2024-09-03",
+   "confidence": 0.96,
+   "page": 1,
+   "sourceQuote": "Invoice Date: 03/09/2024"
+  },
+  {
+   "key": "due_date",
+   "label": "Due date",
+   "value": "18/09/2024",
+   "normalizedValue": "2024-09-18",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Due Date: 18/09/2024"
+  },
+  {
+   "key": "seller_name",
+   "label": "Seller",
+   "value": "Sample Office Supplies",
+   "normalizedValue": null,
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Sample Office Supplies"
+  },
+  {
+   "key": "seller_gstin",
+   "label": "Seller GSTIN",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "seller_pan",
+   "label": "Seller PAN",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "seller_address",
+   "label": "Seller address",
+   "value": "5 Demo Lane, Bengaluru, Karnataka 560001",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "5 Demo Lane, Bengaluru, Karnataka 560001"
+  },
+  {
+   "key": "buyer_name",
+   "label": "Buyer",
+   "value": "Demo Learning Centre",
+   "normalizedValue": null,
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Bill To: Demo Learning Centre"
+  },
+  {
+   "key": "buyer_gstin",
+   "label": "Buyer GSTIN",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "buyer_address",
+   "label": "Buyer address",
+   "value": "9 Example Street, Mysuru 570001",
+   "normalizedValue": null,
+   "confidence": 0.88,
+   "page": 1,
+   "sourceQuote": "9 Example Street, Mysuru 570001"
+  },
+  {
+   "key": "place_of_supply",
+   "label": "Place of supply",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "subtotal",
+   "label": "Subtotal",
+   "value": "₹ 9,500.00",
+   "normalizedValue": "9500",
+   "confidence": 0.95,
+   "page": 1,
+   "sourceQuote": "Subtotal ₹ 9,500.00"
+  },
+  {
+   "key": "discount",
+   "label": "Discount",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "cgst",
+   "label": "CGST",
+   "value": "₹ 855.00",
+   "normalizedValue": "855",
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "CGST @ 9% ₹ 855.00"
+  },
+  {
+   "key": "sgst",
+   "label": "SGST",
+   "value": "₹ 855.00",
+   "normalizedValue": "855",
+   "confidence": 0.94,
+   "page": 1,
+   "sourceQuote": "SGST @ 9% ₹ 855.00"
+  },
+  {
+   "key": "igst",
+   "label": "IGST",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "tax_total",
+   "label": "Total tax",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "total_amount",
+   "label": "Total amount",
+   "value": "₹ 11,710.00",
+   "normalizedValue": "11710",
+   "confidence": 0.93,
+   "page": 1,
+   "sourceQuote": "Grand Total ₹ 11,710.00"
+  },
+  {
+   "key": "amount_in_words",
+   "label": "Amount in words",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "currency",
+   "label": "Currency",
+   "value": "₹",
+   "normalizedValue": "INR",
+   "confidence": 0.92,
+   "page": 1,
+   "sourceQuote": "Grand Total ₹ 11,710.00"
+  },
+  {
+   "key": "payment_terms",
+   "label": "Payment terms",
+   "value": null,
+   "normalizedValue": null,
+   "confidence": 0,
+   "page": null,
+   "sourceQuote": null
+  },
+  {
+   "key": "seller_phone",
+   "label": "Seller phone",
+   "value": "98765 43210",
+   "normalizedValue": null,
+   "confidence": 0.9,
+   "page": 1,
+   "sourceQuote": "Phone: 98765 43210"
+  }
+ ],
+ "entities": [
+  {
+   "type": "ORG",
+   "value": "Sample Office Supplies",
+   "page": 1,
+   "sourceQuote": "Sample Office Supplies"
+  },
+  {
+   "type": "ORG",
+   "value": "Demo Learning Centre",
+   "page": 1,
+   "sourceQuote": "Bill To: Demo Learning Centre"
+  },
+  {
+   "type": "PHONE",
+   "value": "98765 43210",
+   "page": 1,
+   "sourceQuote": "Phone: 98765 43210"
+  },
+  {
+   "type": "AMOUNT",
+   "value": "₹ 11,710.00",
+   "page": 1,
+   "sourceQuote": "Grand Total ₹ 11,710.00"
+  },
+  {
+   "type": "DATE",
+   "value": "03/09/2024",
+   "page": 1,
+   "sourceQuote": "Invoice Date: 03/09/2024"
+  },
+  {
+   "type": "LOCATION",
+   "value": "Bengaluru, Karnataka 560001",
+   "page": 1,
+   "sourceQuote": "5 Demo Lane, Bengaluru, Karnataka 560001"
+  }
+ ],
+ "tables": [
+  {
+   "title": "Line items",
+   "page": 1,
+   "columns": [
+    "Item",
+    "Qty",
+    "Rate (₹)",
+    "Amount (₹)"
+   ],
+   "rows": [
+    [
+     "Printer Toner Cartridge",
+     "4",
+     "1,500.00",
+     "6,000.00"
+    ],
+    [
+     "Stapler (heavy duty)",
+     "5",
+     "300.00",
+     "1,500.00"
+    ],
+    [
+     "Box Files",
+     "40",
+     "50.00",
+     "2,000.00"
+    ]
+   ]
+  }
+ ]
+}

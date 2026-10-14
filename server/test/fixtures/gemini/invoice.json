@@ -1,0 +1,30 @@
+{
+  "docType": "invoice",
+  "docTypeConfidence": 0.97,
+  "title": "Tax Invoice INV-2024-0042",
+  "language": "en",
+  "summary": "Tax invoice INV-2024-0042 from Example Traders Pvt Ltd to Sample Retail Co dated 12/03/2024. Taxable value Rs. 1,000.00 with 18% GST gives a total of Rs. 1,180.00.",
+  "fields": [
+    { "key": "invoice_number", "label": "Invoice number", "value": "INV-2024-0042", "normalizedValue": "INV-2024-0042", "confidence": 0.98, "page": 1, "sourceQuote": "Invoice No: INV-2024-0042" },
+    { "key": "invoice_date", "label": "Invoice date", "value": "12/03/2024", "normalizedValue": "2024-03-12", "confidence": 0.95, "page": 1, "sourceQuote": "Date: 12/03/2024" },
+    { "key": "due_date", "label": "Due date", "value": null, "normalizedValue": null, "confidence": 0, "page": null, "sourceQuote": null },
+    { "key": "seller_name", "label": "Seller", "value": "Example Traders Pvt Ltd", "normalizedValue": null, "confidence": 0.96, "page": 1, "sourceQuote": "Seller: Example Traders Pvt Ltd" },
+    { "key": "seller_gstin", "label": "Seller GSTIN", "value": "27AAACE1234F1Z6", "normalizedValue": "27AAACE1234F1Z6", "confidence": 0.93, "page": 1, "sourceQuote": "GSTIN: 27AAACE1234F1Z6" },
+    { "key": "buyer_name", "label": "Buyer", "value": "Sample Retail Co", "normalizedValue": null, "confidence": 0.94, "page": 1, "sourceQuote": "Bill To: Sample Retail Co" },
+    { "key": "subtotal", "label": "Subtotal", "value": "Rs. 1,000.00", "normalizedValue": "1000.00", "confidence": 0.9, "page": 1, "sourceQuote": "Subtotal: Rs. 1,000.00" },
+    { "key": "tax_total", "label": "Total tax", "value": "Rs. 180.00", "normalizedValue": "180", "confidence": 0.9, "page": 1, "sourceQuote": "GST 18%: Rs. 180.00" },
+    { "key": "total_amount", "label": "Total amount", "value": "Rs. 1,180.00", "normalizedValue": "1180", "confidence": 0.95, "page": 1, "sourceQuote": "Total: Rs. 1,180.00" },
+    { "key": "currency", "label": "Currency", "value": "Rs.", "normalizedValue": "INR", "confidence": 0.9, "page": 1, "sourceQuote": "Total: Rs. 1,180.00" },
+    { "key": "Vehicle No.", "label": "Vehicle number", "value": "MH 12 AB 0000", "normalizedValue": null, "confidence": 0.7, "page": 1, "sourceQuote": "Vehicle No: MH 12 AB 0000" }
+  ],
+  "entities": [
+    { "type": "ORG", "value": "Example Traders Pvt Ltd", "page": 1, "sourceQuote": "Seller: Example Traders Pvt Ltd" },
+    { "type": "org", "value": "Sample Retail Co", "page": 1, "sourceQuote": "Bill To: Sample Retail Co" },
+    { "type": "ORG", "value": "example traders pvt ltd", "page": 1, "sourceQuote": "duplicate" },
+    { "type": "AMOUNT", "value": "Rs. 1,180.00", "page": 1, "sourceQuote": "Total: Rs. 1,180.00" },
+    { "type": "SOMETHING", "value": "Net 15", "page": 9, "sourceQuote": "Terms: Net 15" }
+  ],
+  "tables": [
+    { "title": "Line items", "page": 1, "columns": ["Item", "Qty", "Rate", "Amount"], "rows": [["Notebook", "10", "50.00", "500.00"], ["Pen set", "5", "100.00"]] }
+  ]
+}
