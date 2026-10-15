@@ -42,6 +42,7 @@ function nativePlatformMatches(file) {
 await rm(staging, { recursive: true, force: true });
 let bytes = 0;
 let count = 0;
+const copied = [];
 for (const file of [...files].sort()) {
   if (file.startsWith('../') || path.isAbsolute(file) || /(^|\/)\.env(?:\.|$)/.test(file)) throw new Error('OCR trace escaped the service root');
   if (!nativePlatformMatches(file)) continue;
@@ -52,7 +53,13 @@ for (const file of [...files].sort()) {
   await copyFile(source, target);
   bytes += (await stat(source)).size;
   count++;
+  copied.push(file);
 }
+// Make every worker asset visible to the framework's static file trace. This
+// function is never called: importing the module does not read model bytes.
+const traceSource = 'const { readFileSync } = require("node:fs");\nconst { join } = require("node:path");\nexports.traceAssets = function () {\n' +
+  copied.map(file => `  readFileSync(join(__dirname, ${JSON.stringify(file)}));`).join('\n') + '\n};\n';
+await writeFile(path.join(staging, 'trace-assets.cjs'), traceSource);
 await writeFile(path.join(staging, 'manifest.json'), JSON.stringify({ platform: process.platform, arch: process.arch, files: count, bytes }));
 await rm(destination, { recursive: true, force: true });
 await rename(staging, destination);

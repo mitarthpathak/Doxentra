@@ -1,4 +1,5 @@
 import './lib/dns-fallback.js';
+import { existsSync } from 'node:fs';
 import express from 'express';
 import { processingMode } from './lib/privacy.js';
 import cors from 'cors';
@@ -21,6 +22,12 @@ import translateRouter from './routes/translate.js';
 import jobsRouter from './routes/jobs.js';
 import askRouter from './routes/ask.js';
 import packetsRouter from './routes/packets.js';
+
+// The generated module declares literal asset references for serverless
+// tracing. Development also works before the optional worker bundle is built.
+if (existsSync(new URL('./.ocr-runtime/trace-assets.cjs', import.meta.url))) {
+  await import('./.ocr-runtime/trace-assets.cjs');
+}
 
 const app = express();
 app.set('trust proxy', 1);
