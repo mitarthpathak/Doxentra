@@ -8,7 +8,12 @@
     "server": {
       "root": "server",
       "framework": "express",
-      "entrypoint": "index.js"
+      "entrypoint": "index.js",
+      "functions": {
+        "index.js": {
+          "includeFiles": "{data/tessdata/eng.traineddata,lib/ocr/paddleWorker.js,node_modules/@gutenye/ocr-models/assets/**,node_modules/tesseract.js/src/worker-script/node/**,node_modules/tesseract.js-core/**}"
+        }
+      }
     }
   },
   "rewrites": [
