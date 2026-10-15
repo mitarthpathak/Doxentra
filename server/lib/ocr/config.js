@@ -11,6 +11,9 @@ export function ocrConfig(env = process.env) {
   const confidenceThreshold = number(env.OCR_CONFIDENCE_THRESHOLD, 0.80, 0, 1);
   return {
     enabled: env.OCR_CROSSCHECK_ENABLED !== '0',
+    // Consensus review is optional. A failed secondary engine must not erase
+    // a successful primary OCR reading in the normal upload flow.
+    strictReview: env.OCR_STRICT_REVIEW_ENABLED === '1',
     engines: [...new Set((env.OCR_ENGINES || 'tesseract,paddle').split(',').map(s => s.trim().toLowerCase()).filter(Boolean))],
     confidenceThreshold,
     digitThreshold: Math.max(confidenceThreshold, number(env.OCR_DIGIT_CONFIDENCE_THRESHOLD, 0.95, 0, 1)),

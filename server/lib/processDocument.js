@@ -96,18 +96,21 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
   await onStage('reading');
   const input = await prepareDocumentInput({ buffer: file.buffer, kind: fileType.kind, mimeType: fileType.mimeType });
   const ocrInput = { ...input, file: { data: file.buffer, mimeType: fileType.mimeType } };
-  // Start local engines alongside cloud reasoning; reuse their reads for field
-  // alignment and for graceful fallback if the primary OCR service fails.
-  const recordsPromise = readOcrInput(ocrInput, { config, deadline,
+  // Normal uploads use cloud OCR directly. Local OCR runs only for privacy,
+  // provider failure, or an explicitly requested strict consensus review.
+  const readConfig = config.strictReview ? config : { ...config, engines: ['tesseract'] };
+  let recordsPromise;
+  const localReads = () => recordsPromise ||= readOcrInput(ocrInput, { config: readConfig, deadline,
     onPage: async (_page, completed, count) => {
       if (privacy || fileType.kind === 'image') await onPageProgress({ pageCount: input.pageCount,
         pagesCompleted: input.pageCount - count + completed, pageStart: 1, pageEnd: input.pageCount, chunkIndex: 1, chunkCount: 1 });
     },
   });
   let records;
+  if (config.enabled && config.strictReview) void localReads();
   if (privacy && config.enabled && (fileType.kind === 'image' || input.unreliablePages?.length)) {
     await onStage('local_ocr');
-    records = await recordsPromise;
+    records = await localReads();
     if (records.length && records.every(r => r.reads.every(read => read.status === 'failed')) && !input.pages.some(text => String(text).trim())) {
       return failResult(filename, 422, 'All configured local OCR engines failed. Please try a clearer image or check the OCR engine installation.');
     }
@@ -149,6 +152,10 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
   let result;
   let source = 'ai';
   let warning;
+  const needsOcr = fileType.kind === 'image' || input.unreliablePages?.length > 0;
+  // Leave time to read the file locally if both cloud OCR providers fail.
+  const cloudDeadline = config.enabled && !config.strictReview && needsOcr && Number.isFinite(deadline)
+    ? deadline - Math.min(12_000, Math.max(0, (deadline - Date.now()) / 3)) : deadline;
   if (pipeline === 'legacy' && !privacy) await onStage('extracting');
   try {
     if (privacy) {
@@ -159,10 +166,10 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
       else if (identity?.value && /^[A-Z]{5}\d{4}[A-Z]$/.test(identity.value.replace(/\s/g, ''))) identity.format = 'pan';
       source = 'fallback';
       warning = 'High-Privacy Mode: local OCR, parsing and validation with automated PII masking. This session is stored only in server memory and is lost on restart.';
-    } else result = pipeline === 'legacy' ? await extractDocument(input, { deadline }) : await analyzeGemini({ ...input,
+    } else result = pipeline === 'legacy' ? await extractDocument(input, { deadline: cloudDeadline }) : await analyzeGemini({ ...input,
       // Keep original bytes available for selective re-verification of digital pages too.
       file: input.file || { data: file.buffer, mimeType: fileType.mimeType },
-    }, { deadline, onStage, pageOffset });
+    }, { deadline: cloudDeadline, onStage, pageOffset });
     if (result.pipeline?.fallback) {
       source = 'fallback';
       warning = result.pipeline.groqOcrPages
@@ -177,7 +184,7 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
     }
   } catch (err) {
     console.error('[Extract] AI extraction failed:', err.code || err.status || err.name);
-    records ||= await recordsPromise;
+    records ||= await localReads();
     if (err.code === 'OCR_PROVIDERS_FAILED' && err.groqStatus === 429 &&
       !records.some(r => r.reads.some(read => read.status === 'ok' && read.text.trim()))) return failResult(filename, 429,
       'OCR services are rate-limited. Your uploaded file is retained and will retry when quota is available.',
@@ -186,8 +193,7 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
       'Gemini is rate-limited. Your uploaded file is retained and will retry when quota is available.',
       { retryable: true, deferUntil: Number(err.retryAt) || Date.now() + 60_000 });
     const what = fileType.kind === 'image' ? 'This image needs OCR' : 'This PDF has no selectable text';
-    if (input.mode !== 'text') {
-      records ||= await recordsPromise;
+    if (needsOcr) {
       const localPages = Array.from({ length: input.pageCount }, (_, i) =>
         records.find(r => r.page === i + 1)?.reads.find(r => r.status === 'ok' && r.text.trim())?.text || input.pages[i] || '');
       if (config.enabled && localPages.some(text => text.trim())) {
@@ -210,13 +216,17 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
     }
     result = fallbackExtract(input.pages);
     source = 'fallback';
-    warning = err.code === 'NO_API_KEY'
+    warning = records.some(r => r.reads.some(read => read.status === 'ok' && read.text.trim()))
+      ? 'Cloud OCR was unavailable. Local OCR read the document; a basic extraction is shown.'
+      : err.code === 'NO_API_KEY'
       ? 'AI is not configured on the server, so a basic rule-based extraction was done.'
       : 'The AI service is busy right now, so a basic rule-based extraction was done. Upload again later for a full AI extraction.';
   }
 
-  records ||= await recordsPromise;
-  result = await crosscheckExtraction(result, ocrInput, { config, deadline, onStage, records });
+  if (config.enabled && config.strictReview) {
+    records ||= await localReads();
+    result = await crosscheckExtraction(result, ocrInput, { config, deadline, onStage, records });
+  }
   // Cross-check candidates must follow the existing Aadhaar storage policy too.
   if (!privacy && config.enabled) result = maskPrivateIds(result, input.pages).result;
   await onStage('validating');

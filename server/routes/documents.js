@@ -9,6 +9,7 @@ import { RULES } from '../lib/validate.js';
 import { PII_KINDS, redactDocument, wantsRedaction as redactQuery } from '../lib/redact.js';
 import { locateFieldBoxes } from '../lib/fieldLocations.js';
 import { isPrivacyMode } from '../lib/privacy.js';
+import { createExtractionJob, toJobResponse } from '../lib/jobs.js';
 
 const router = express.Router();
 const AI_BUDGET_MS = 50_000;
@@ -66,6 +67,16 @@ router.get('/documents/:id', requireOwner, async (req, res) => {
   const doc = await getDocument(req.params.id, req.owner);
   if (!doc) return notFound(res);
   res.json(wantsRedaction(req) ? redactDocument(toDocumentResponse(doc)) : toDocumentResponse(doc));
+});
+
+// Reuse the stored original; keep the previous result and its review history.
+router.post('/documents/:id/reprocess', requireOwner, mapLimiter, async (req, res) => {
+  const doc = await getDocument(req.params.id, req.owner);
+  if (!doc) return notFound(res);
+  if (!doc.file?.path) return res.status(404).json({ success: false, error: 'The original file is unavailable. Please upload the document again.' });
+  const job = await createExtractionJob(req.owner, [{ ...doc.file, filename: doc.filename,
+    mimeType: doc.mimeType, size: doc.fileSize, quality: doc.quality || null }]);
+  res.status(202).json({ success: true, job: toJobResponse(job) });
 });
 
 router.post('/documents/:id/field-locations', requireOwner, locationLimiter, async (req, res) => {

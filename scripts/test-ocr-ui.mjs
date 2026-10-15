@@ -86,6 +86,15 @@ try {
   await preview.screenshot({ path: '.playwright-mcp/ocr-review-crop.png', fullPage: true });
   await preview.setViewportSize({ width: 375, height: 800 });
   assert.equal(await preview.getByTestId('document-screen').evaluate(el => el.scrollWidth > el.clientWidth), false);
+  const refreshed = toDocumentResponse({ ...stored, _id: 'ocr-reread-document', extraction: {
+    ...finalizeExtraction(raw, { textByPage: ['Total: INR 500'], ocrUsed: true }), pageCount: 1, ocrUsed: true,
+  } });
+  await preview.route('**/api/documents/ocr-ui-document/reprocess', r => r.fulfill({ status: 202, json: { job: { id: 'ocr-reread-job' } } }));
+  await preview.route('**/api/jobs/ocr-reread-job', r => r.fulfill({ json: { job: { id: 'ocr-reread-job', status: 'done', items: [{ documentId: refreshed.id }] } } }));
+  await preview.route('**/api/documents/ocr-reread-document', r => r.fulfill({ json: refreshed }));
+  await preview.getByTestId('rerun-ocr').click();
+  await preview.getByTestId('fields-table').getByText('INR 500', { exact: true }).waitFor();
+  assert.equal(await preview.getByTestId('ocr-review-queue').count(), 0);
   assert.deepEqual(errors, []);
-  console.log('PASS: OCR review queue, retained candidates, correction, audit/reset, original source crop, privacy isolation, mobile layout.');
+  console.log('PASS: OCR review queue, retained candidates, correction, audit/reset, original source crop, privacy isolation, mobile layout, re-run OCR recovery.');
 } finally { await browser.close(); }

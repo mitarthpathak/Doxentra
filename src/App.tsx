@@ -312,7 +312,10 @@ export default function App() {
           recentDocs={recentDocs}
           selectedFieldKey={selectedFieldKey}
           onSelectField={key => { setSelectedFieldKey(key); setSourceFocus(null); }}
-          onSelectDoc={d => { setCurrentDocId(d.id); setSelectedFieldKey(null); setSourceFocus(null); }}
+          onSelectDoc={d => {
+            setRecentDocs(prev => prev.some(item => item.id === d.id) ? prev : [d, ...prev].slice(0, 10));
+            setCurrentDocId(d.id); setSelectedFieldKey(null); setSourceFocus(null);
+          }}
           onUploadClick={() => setCurrentScreen('upload')}
           onExport={handleExport}
           onBuildConceptMap={buildConceptMap}

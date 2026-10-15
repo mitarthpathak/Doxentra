@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
-import { getProcessingMode } from '../lib/processingMode';
+import { getProcessingMode, setProcessingBusy } from '../lib/processingMode';
+import { pollJob, type Job } from '../lib/upload';
 import { OcrReviewQueue, OcrCandidates } from './OcrReviewPanel';
 import { apiFetch, confidenceBand, percent } from '../lib/api';
 import { PagePreview } from './PagePreview';
@@ -534,6 +535,27 @@ export function DocumentScreen({ doc, recentDocs, selectedFieldKey, onSelectFiel
           </div>
         )}
         <div className="flex flex-wrap gap-2 md:ml-auto">
+          {doc.hasFile && !privacy && !masked && (
+            <button
+              onClick={() => run('ocr', async () => {
+                setProcessingBusy(true);
+                try {
+                  const { job } = await apiFetch<{ job: Job }>(`/documents/${encodeURIComponent(doc.id)}/reprocess`, { method: 'POST' });
+                  const finished = await pollJob(job.id, () => {});
+                  const item = finished.items[0];
+                  if (!item?.documentId) throw new Error(item?.error || 'OCR could not finish. Please try again.');
+                  const updated = await apiFetch<DocumentResult>(`/documents/${encodeURIComponent(item.documentId)}`);
+                  onSelectDoc(updated);
+                } finally { setProcessingBusy(false); }
+              })}
+              disabled={!!busy}
+              className="flex items-center gap-2 px-3 py-2 lg:py-1.5 bg-primary/10 rounded-full text-[10px] text-primary font-bold uppercase hover:bg-primary/20 transition-colors disabled:opacity-50"
+              data-testid="rerun-ocr"
+            >
+              <span className="material-symbols-outlined text-sm">refresh</span>
+              {busy === 'ocr' ? 'Reading document…' : 'Re-run OCR'}
+            </button>
+          )}
           {onToggleMask && !privacy && (
             <button
               onClick={onToggleMask}

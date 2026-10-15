@@ -8,6 +8,7 @@ import { makePdf } from './helpers/files.js';
 
 process.env.MONGO_URI = ''; process.env.VERCEL = '1';
 process.env.OCR_CROSSCHECK_ENABLED = '1'; process.env.OCR_MAX_REPROCESS_FIELDS = '2';
+process.env.OCR_STRICT_REVIEW_ENABLED = '1';
 // Require review deterministically, even for a very clean synthetic image.
 process.env.OCR_DIGIT_CONFIDENCE_THRESHOLD = '1';
 const { default: app } = await import('../index.js');

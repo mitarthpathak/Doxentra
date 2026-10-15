@@ -3,7 +3,20 @@
 All AI calls use Google Gemini through `@google/genai`. Public document/job/map
 shapes and REST routes stay unchanged. `DOXENTRA_ANALYSIS_PIPELINE=gemini` is the
 default; `legacy` retains the earlier Google-only single-call extractor for
-rollback and benchmark comparison. Cache version 13 recomputes previous results.
+rollback and benchmark comparison. Cache version 17 recomputes previous results.
+
+Normal uploads preserve the primary OCR values and their source-based confidence.
+Tesseract runs for High-Privacy Mode or as a fallback when cloud OCR fails; a
+secondary OCR engine cannot blank a successful extraction. Strict Tesseract and
+Paddle consensus is available only with `OCR_STRICT_REVIEW_ENABLED=1` (off by
+default), alongside `OCR_CROSSCHECK_ENABLED=1`. The latter variable alone no
+longer enables mandatory consensus review on an existing Vercel deployment.
+Use **Re-run OCR** on a saved document to process its stored original again;
+the previous result and review history are retained.
+
+Verify a deployment with `node scripts/smoke-ocr.mjs https://doxentra.vercel.app`.
+This uploads fictional test images and a sample scanned PDF, checks extracted
+values in both processing modes, and exercises the saved-document retry flow.
 
 ## Stages
 
