@@ -15,17 +15,19 @@ const extracted = () => normalizeExtraction({ docType: 'other', docTypeConfidenc
   language: 'en', summary: 'Visible text.', fields: [], entities: [] });
 const deadline = () => Date.now() + 48_000;
 
-test('Groq receives a base64 image and JSON-only OCR request', async () => {
+test('Groq transcribes an image as plain text and the app safely serializes the OCR page', async () => {
   process.env.GROQ_API_KEY = 'test-key';
+  const transcription = 'Name: "Example"\nAddress: C:\\Example\\Scan\nHindi: आधार';
   try {
     const text = await readPageWithGroq(image, 'Read the document', { deadline: deadline(), fetchImpl: async (_url, options) => {
       const body = JSON.parse(options.body);
       assert.equal(options.headers.authorization, 'Bearer test-key');
       assert.match(body.messages[0].content[1].image_url.url, /^data:image\/png;base64,/);
-      assert.deepEqual(body.response_format, { type: 'json_object' });
-      return { ok: true, json: async () => ({ choices: [{ message: { content: '{"text":"Visible text","visibleFields":[]}' } }] }) };
+      assert.equal(body.response_format, undefined, 'JSON mode can reject otherwise readable scans with json_validate_failed');
+      assert.match(body.messages[0].content[0].text, /Return only plain text/);
+      return { ok: true, json: async () => ({ choices: [{ message: { content: transcription } }] }) };
     } });
-    assert.match(text, /Visible text/);
+    assert.deepEqual(JSON.parse(text), { text: transcription, visibleFields: [] });
   } finally { process.env.GROQ_API_KEY = ''; }
 });
 
@@ -39,6 +41,25 @@ test('successful Gemini OCR never calls Groq', async () => {
     } });
     assert.equal(result.pipeline.groqOcrPages, 0);
   } finally { process.env.GROQ_API_KEY = ''; }
+});
+
+test('Groq rate limits retain the uploaded image and defer processing until retry-after', async () => {
+  process.env.GROQ_API_KEY = 'test-key';
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({ ok: false, status: 429, headers: new Headers({ 'retry-after': '90' }) });
+  setGeminiPool(new GeminiKeyPool(['test'], { createClient: () => ({ models: { async generateContent() {
+    throw Object.assign(new Error('Unreadable model output'), { code: 'BAD_AI_OUTPUT' });
+  } } }) }));
+  try {
+    const started = Date.now();
+    const result = await processDocument({ buffer: image.data, originalname: 'rate-limited.png', mimetype: 'image/png' },
+      { deadline: deadline(), deferSave: true, pipeline: 'gemini' });
+    assert.equal(result.success, false);
+    assert.equal(result.status, 429);
+    assert.equal(result.retryable, true);
+    assert.ok(result.deferUntil >= started + 90_000);
+    assert.match(result.error, /OCR services are rate-limited/);
+  } finally { globalThis.fetch = originalFetch; setGeminiPool(null); process.env.GROQ_API_KEY = ''; }
 });
 
 test('Gemini OCR quota failure uses Groq and returns a basic result if Gemini reasoning is also limited', async () => {
@@ -111,7 +132,7 @@ test('the document result retains its Groq quota notice when reopened', async ()
   globalThis.fetch = async url => {
     assert.match(url, /^https:\/\/api\.groq\.com\//);
     return { ok: true, json: async () => ({ choices: [{ message: { content:
-      '{"text":"TAX INVOICE\\nTotal: Rs. 590.00","visibleFields":[]}' } }] }) };
+      'TAX INVOICE\nTotal: Rs. 590.00' } }] }) };
   };
   setGeminiPool(new GeminiKeyPool(['test'], { createClient: () => ({ models: { async generateContent() {
     throw Object.assign(new Error('quota'), { status: 429 });

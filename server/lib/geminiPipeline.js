@@ -208,6 +208,7 @@ export async function analyzeGemini(input, { deadline = Date.now() + 48_000, onS
             console.error(`[OCR] Groq failed on page=${pageOffset + index + 1} (${groqError.code || groqError.status || groqError.name})`);
             throw Object.assign(new Error('Both OCR providers could not read this page'), {
               code: 'OCR_PROVIDERS_FAILED', groqStatus: groqError.status,
+              ...(groqError.retryAt ? { retryAt: groqError.retryAt } : {}),
               retryable: true, cause: groqError, geminiQuotaReached: geminiOcrQuotaReached,
             });
           }

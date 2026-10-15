@@ -5,6 +5,7 @@ import models from '@gutenye/ocr-models/node';
 import { loadImage } from '@napi-rs/canvas';
 import http from 'node:http';
 import https from 'node:https';
+import { ocrErrorCode } from './workerClient.js';
 
 // This engine is local even when a future dependency tries to fetch an asset.
 const noNetwork = () => { throw Object.assign(new Error('Local OCR network access is disabled'), { code: 'OCR_NETWORK_DISABLED' }); };
@@ -38,6 +39,6 @@ parentPort.on('message', async ({ data }) => {
     parentPort.postMessage({ result: { text: lines.map(l => l.text).join('\n'), lines, words: [], confidenceGranularity: 'line' } });
   } catch (err) {
     // Do not pass library errors that may include image text or filesystem paths.
-    parentPort.postMessage({ error: { code: err.code || 'PADDLE_OCR_FAILED' } });
+    parentPort.postMessage({ error: { code: ocrErrorCode(err) } });
   }
 });

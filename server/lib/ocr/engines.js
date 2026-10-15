@@ -1,47 +1,10 @@
-import { Worker } from 'node:worker_threads';
 import { recognizeImageBuffer } from '../offlineOcr.js';
 import { loadImage } from '@napi-rs/canvas';
+import { createOcrWorkerClient } from './workerClient.js';
 
-let paddleWorker;
-let paddleQueue = Promise.resolve();
-let idle;
-export async function shutdownPaddleOcr() {
-  clearTimeout(idle);
-  const current = paddleWorker;
-  paddleWorker = null;
-  await current?.terminate();
-}
-
-function paddleExtract(image, { timeoutMs = 20_000, signal } = {}) {
-  const operation = paddleQueue.then(async () => {
-    if (signal?.aborted) throw Object.assign(new Error('OCR cancelled'), { code: 'OCR_TIMEOUT' });
-    clearTimeout(idle);
-    const worker = paddleWorker ||= new Worker(new URL('./paddleWorker.js', import.meta.url), {
-      execArgv: [],
-    });
-    if (!worker.listenerCount('error')) worker.on('error', () => {
-      if (paddleWorker === worker) { paddleWorker = null; clearTimeout(idle); }
-      console.warn('[OCR] engine=paddle worker failed');
-    });
-    worker.ref();
-    try {
-      return await new Promise((resolve, reject) => {
-        const cleanup = () => { clearTimeout(timer); worker.off('message', message); worker.off('error', error); worker.off('exit', exited); signal?.removeEventListener('abort', aborted); };
-        const message = payload => { cleanup(); payload.error ? reject(Object.assign(new Error('Paddle OCR failed'), payload.error)) : resolve(payload.result); };
-        const error = () => { cleanup(); reject(Object.assign(new Error('Paddle OCR worker failed'), { code: 'PADDLE_OCR_FAILED' })); };
-        const exited = () => error();
-        const aborted = () => { cleanup(); reject(Object.assign(new Error('Paddle OCR timed out'), { code: 'OCR_TIMEOUT' })); };
-        const timer = setTimeout(aborted, timeoutMs);
-        signal?.addEventListener('abort', aborted, { once: true });
-        worker.once('message', message); worker.once('error', error); worker.once('exit', exited);
-        worker.postMessage({ data: image.data });
-      });
-    } catch (err) { await shutdownPaddleOcr(); throw err; }
-    finally { idle = setTimeout(() => { void shutdownPaddleOcr(); }, 60_000); idle.unref?.(); worker.unref(); }
-  });
-  paddleQueue = operation.catch(() => {});
-  return operation;
-}
+const paddle = createOcrWorkerClient({ entrypoint: 'lib/ocr/paddleWorker.js' });
+export const shutdownPaddleOcr = () => paddle.shutdown();
+const paddleExtract = (image, options) => paddle.run({ data: image.data }, options);
 
 async function tesseractExtract(image, options) {
   const [read, decoded] = await Promise.all([recognizeImageBuffer(image.data, options), loadImage(image.data)]);

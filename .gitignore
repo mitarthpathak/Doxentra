@@ -9,3 +9,5 @@ coverage/
 docs/baseline/
 docs/current/
 .playwright-mcp/
+server/.ocr-runtime/
+server/.ocr-runtime.build/

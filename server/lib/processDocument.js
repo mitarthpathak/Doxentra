@@ -178,6 +178,10 @@ export async function processDocument(file, { owner = null, deadline, fileRef = 
   } catch (err) {
     console.error('[Extract] AI extraction failed:', err.code || err.status || err.name);
     records ||= await recordsPromise;
+    if (err.code === 'OCR_PROVIDERS_FAILED' && err.groqStatus === 429 &&
+      !records.some(r => r.reads.some(read => read.status === 'ok' && read.text.trim()))) return failResult(filename, 429,
+      'OCR services are rate-limited. Your uploaded file is retained and will retry when quota is available.',
+      { retryable: true, deferUntil: Number(err.retryAt) || Date.now() + 60_000 });
     if (isGeminiRateLimit(err) && !records.some(r => r.reads.some(read => read.status === 'ok' && read.text.trim()))) return failResult(filename, 429,
       'Gemini is rate-limited. Your uploaded file is retained and will retry when quota is available.',
       { retryable: true, deferUntil: Number(err.retryAt) || Date.now() + 60_000 });

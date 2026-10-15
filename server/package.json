@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Doxentra API: document extraction (OCR, classification, fields, validation, search), concept maps, auth and saved documents.",
   "scripts": {
+    "build": "node scripts/build-ocr-runtime.mjs",
     "start": "node index.js",
     "dev": "node --watch index.js",
     "test": "node --import ./test/env.js --test \"test/*.test.js\""
@@ -32,5 +33,8 @@
   },
   "engines": {
     "node": ">=20.9"
+  },
+  "devDependencies": {
+    "@vercel/nft": "1.3.0"
   }
 }

@@ -7,6 +7,7 @@ import { connectDB, dbStatus, dbLastError } from './lib/db.js';
 import { optionalAuth } from './lib/auth.js';
 import { attachOwner } from './lib/owner.js';
 import { maxUploadBytes, storageDriver } from './lib/storage.js';
+import { ocrRuntimeStatus } from './lib/ocr/workerClient.js';
 import { isAiConfigured } from './lib/ai.js';
 import uploadRouter, { MAX_UPLOAD_BYTES } from './routes/upload.js';
 import graphsRouter from './routes/graphs.js';
@@ -38,6 +39,8 @@ app.get(['/health', '/api/health'], async (_req, res) => {
   await connectDB();
   res.json({
     status: 'online',
+    ...(process.env.VERCEL_GIT_COMMIT_SHA ? { deploymentCommit: process.env.VERCEL_GIT_COMMIT_SHA.slice(0, 7) } : {}),
+    ...(_req.query.ocr === '1' ? { ocrRuntime: ocrRuntimeStatus() } : {}),
     ai: isAiConfigured() ? 'configured' : 'missing GEMINI_API_KEY',
     mongodb: dbStatus(),
     ...(dbStatus() === 'disconnected' && dbLastError() ? { mongodbError: dbLastError() } : {}),

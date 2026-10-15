@@ -1,5 +1,6 @@
 import { OCR_ENGINES } from './engines.js';
 import { isPrivacyMode } from '../privacy.js';
+import { ocrErrorCode } from './workerClient.js';
 
 export const confidence01 = value => value == null || !Number.isFinite(Number(value)) ? null : Math.min(1, Math.max(0, Number(value)));
 const box = value => Array.isArray(value) && value.length === 4 && value.every(Number.isFinite) ? value.map(n => Math.round(Math.max(0, Math.min(1000, n)))) : null;
@@ -30,7 +31,7 @@ export async function runOcrEngines(image, { config, engines = OCR_ENGINES, dead
       return { engine: engine.id || name, status: 'ok', elapsedMs: Date.now() - started, ...cleanRead(read) };
     } catch (err) {
       // OCR text, provider errors and credentials must not enter logs.
-      const code = ['UNKNOWN_OCR_ENGINE', 'PRIVACY_MODE', 'OCR_TIMEOUT', 'BAD_OCR_OUTPUT'].includes(err.code) ? err.code : 'OCR_ENGINE_FAILED';
+      const code = ['UNKNOWN_OCR_ENGINE', 'PRIVACY_MODE', 'BAD_OCR_OUTPUT'].includes(err.code) ? err.code : ocrErrorCode(err);
       console.warn(`[OCR] engine=${name} failed code=${code}`);
       return { engine: name, status: 'failed', error: code, elapsedMs: Date.now() - started, text: '', words: [], lines: [] };
     } finally { clearTimeout(timer); }

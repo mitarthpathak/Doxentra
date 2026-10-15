@@ -13,7 +13,7 @@ import { finalizeExtraction } from '../lib/pipeline.js';
 import { redactDocument } from '../lib/redact.js';
 import { maskPrivacyDocument } from '../lib/privacyDocument.js';
 import { mergeChunk } from '../lib/pdfChunks.js';
-import { findExtractionByHash, saveGraph } from '../lib/db.js';
+import { findExtractionByHash, findUserExtractionByHash, saveGraph } from '../lib/db.js';
 import { gstinCheckChar } from '../lib/idchecks.js';
 
 const config = (extra = {}) => ({ ...ocrConfig({}), reprocess: false, ...extra });
@@ -163,6 +163,22 @@ test('cache lookup requires the current OCR settings and aliases are not indepen
     { engine: 'tesseract', value: '500', confidence: 0.99 }, { engine: 'tesseract', value: '500', confidence: 0.99 },
   ], config());
   assert.equal(same.accepted, false); assert.ok(same.reasons.includes('insufficient_engines'));
+});
+
+test('new uploads retry failed OCR engines while valid manual-review results remain cacheable', async () => {
+  const owner = { guestId: 'ocr-cache-retry-owner' };
+  const base = { filename: 'retry.png', source: 'ai', fileHash: 'ocr-failed-engines-cache', extractionVersion: 123, guestId: owner.guestId };
+  const failed = await saveGraph({ ...base, extraction: { ...field(), ocr: { pages: [{ page: 1, engines: [
+    { engine: 'tesseract', status: 'failed', error: 'OCR_TIMEOUT' },
+    { engine: 'paddle', status: 'failed', error: 'OCR_ENGINE_FAILED' },
+  ] }] } } });
+  assert.equal(await findExtractionByHash(base.fileHash, 123), null);
+  assert.equal(await findUserExtractionByHash(base.fileHash, 123, owner), null);
+  const reviewed = await saveGraph({ ...base, extraction: { ...field(), fields: [{ key: 'total_amount', value: null, status: 'needs_review' }],
+    ocr: { pages: [{ page: 1, engines: [{ engine: 'tesseract', status: 'ok' }, { engine: 'paddle', status: 'ok' }] }] } } });
+  assert.equal((await findExtractionByHash(base.fileHash, 123))._id, reviewed._id);
+  assert.equal((await findUserExtractionByHash(base.fileHash, 123, owner))._id, reviewed._id);
+  assert.equal(failed.extraction.ocr.pages[0].engines[0].status, 'failed', 'historical results remain intact');
 });
 
 test('a whole-page retry cannot be accepted as an unlocated field value', async () => {

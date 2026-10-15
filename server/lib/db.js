@@ -101,11 +101,17 @@ export async function findUserGraphByHash(contentHash, userId) {
 }
 
 // ─── Document extractions (cached by file hash + extraction version) ─
+// Failed OCR engines are transient infrastructure failures, not reusable
+// verification results. A new upload must give those engines another attempt.
+const ocrEnginesAvailable = doc => !doc.extraction?.ocr?.pages?.some(page =>
+  page.engines?.some(engine => engine.status === 'failed'));
+const healthyOcrCache = { 'extraction.ocr.pages.engines.status': { $ne: 'failed' } };
+
 export async function findExtractionByHash(fileHash, version, ocrConfigHash) {
   const match = g => g.fileHash === fileHash && g.extractionVersion === version && g.source === 'ai' && g.extraction &&
-    (ocrConfigHash == null || g.ocrConfigHash === ocrConfigHash);
+    ocrEnginesAvailable(g) && (ocrConfigHash == null || g.ocrConfigHash === ocrConfigHash);
   if (useMongo()) {
-    return GraphModel.findOne({ fileHash, extractionVersion: version, source: 'ai', extraction: { $ne: null }, ...(ocrConfigHash ? { ocrConfigHash } : {}) }).sort({ createdAt: -1 }).lean();
+    return GraphModel.findOne({ fileHash, extractionVersion: version, source: 'ai', extraction: { $ne: null }, ...healthyOcrCache, ...(ocrConfigHash ? { ocrConfigHash } : {}) }).sort({ createdAt: -1 }).lean();
   }
   return [...memGraphsStore()].reverse().find(match) || null;
 }
@@ -114,10 +120,10 @@ export async function findExtractionByHash(fileHash, version, ocrConfigHash) {
 export async function findUserExtractionByHash(fileHash, version, owner, ocrConfigHash) {
   if (!owner) return null;
   if (useMongo()) {
-    return GraphModel.findOne({ $and: [{ fileHash, extractionVersion: version, source: 'ai', extraction: { $ne: null }, ...(ocrConfigHash ? { ocrConfigHash } : {}) }, ownerFilter(owner)] }).lean();
+    return GraphModel.findOne({ $and: [{ fileHash, extractionVersion: version, source: 'ai', extraction: { $ne: null }, ...healthyOcrCache, ...(ocrConfigHash ? { ocrConfigHash } : {}) }, ownerFilter(owner)] }).lean();
   }
   return memGraphsStore().find(g => g.fileHash === fileHash && g.extractionVersion === version && g.source === 'ai' &&
-    g.extraction && memOwned(g, owner) && (ocrConfigHash == null || g.ocrConfigHash === ocrConfigHash)) || null;
+    g.extraction && ocrEnginesAvailable(g) && memOwned(g, owner) && (ocrConfigHash == null || g.ocrConfigHash === ocrConfigHash)) || null;
 }
 
 export async function saveGraph(doc) {
