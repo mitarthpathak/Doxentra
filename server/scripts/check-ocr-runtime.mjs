@@ -3,7 +3,7 @@ import { cp, mkdtemp, rm } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 if (process.argv.includes('--isolated-child')) {
   const { createCanvas } = await import('@napi-rs/canvas');
@@ -23,6 +23,18 @@ if (process.argv.includes('--isolated-child')) {
       console.log(`[OCR runtime check] ${name}: PASS (${Date.now() - started}ms)`);
     }));
     for (const result of results) if (result.status === 'rejected') throw result.reason;
+    const { PDFDocument } = await import('pdf-lib');
+    const { openPdfRenderer } = await import(pathToFileURL(path.join(process.env.DOXENTRA_OCR_RUNTIME_DIR, 'lib/pdfRender.js')).href);
+    const pdf = await PDFDocument.create();
+    const picture = await pdf.embedPng(image.data);
+    pdf.addPage([900, 180]).drawImage(picture, { x: 0, y: 0, width: 900, height: 180 });
+    const renderer = await openPdfRenderer(Buffer.from(await pdf.save()));
+    try {
+      const page = await renderer.render(1);
+      const read = await OCR_ENGINES.tesseract.extract(page, { timeoutMs: 30_000 });
+      assert.match(read.text, /INVOICE\s*12345/);
+      console.log('[OCR runtime check] isolated scanned PDF: PASS');
+    } finally { await renderer.close(); }
   } finally { await Promise.all([shutdownOfflineOcr(), shutdownPaddleOcr()]); }
 } else {
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

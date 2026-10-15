@@ -23,6 +23,8 @@ export function ocrRuntimeStatus() {
     paddleWorker: present('lib/ocr/paddleWorker.js'),
     paddleModel: present('node_modules/@gutenye/ocr-models/assets/ch_PP-OCRv4_rec_infer.onnx'),
     onnxBinding: present(`node_modules/onnxruntime-node/bin/napi-v6/${process.platform}/${process.arch}/onnxruntime_binding.node`),
+    pdfWorker: present('node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs'),
+    pdfFonts: present('node_modules/pdfjs-dist/standard_fonts/LiberationSans-Regular.ttf'),
   };
 }
 

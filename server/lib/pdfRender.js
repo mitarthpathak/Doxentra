@@ -1,21 +1,37 @@
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import { createCanvas, DOMMatrix, ImageData, Path2D } from '@napi-rs/canvas';
+import { ocrRuntimePath } from './ocr/workerClient.js';
 
 // PDF.js' Node canvas factory resolves these same native canvas primitives.
 globalThis.DOMMatrix ||= DOMMatrix;
 globalThis.ImageData ||= ImageData;
 globalThis.Path2D ||= Path2D;
-const require = createRequire(import.meta.url);
-const assets = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const assets = ocrRuntimePath('node_modules/pdfjs-dist');
+
+// PDF.js creates intermediate canvases when decoding scanned page images.
+// Use the already imported native binding instead of its runtime-only require.
+class CanvasFactory {
+  create(width, height) {
+    const canvas = createCanvas(width, height);
+    return { canvas, context: canvas.getContext('2d') };
+  }
+  reset(target, width, height) { target.canvas.width = width; target.canvas.height = height; }
+  destroy(target) { target.canvas.width = 1; target.canvas.height = 1; target.canvas = null; target.context = null; }
+}
 
 /** Lazy bounded page rendering. A clean text page never calls render(). */
 export async function openPdfRenderer(buffer) {
-  const { getDocument } = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  const [{ getDocument }, worker] = await Promise.all([
+    import('pdfjs-dist/legacy/build/pdf.mjs'),
+    // The default worker path is a dynamic import inside PDF.js that Vercel
+    // cannot trace. Import it explicitly and register the Node message handler.
+    import('pdfjs-dist/legacy/build/pdf.worker.mjs'),
+  ]);
+  globalThis.pdfjsWorker ||= worker;
   const task = getDocument({
     data: new Uint8Array(buffer), useSystemFonts: false, isEvalSupported: false,
     standardFontDataUrl: path.join(assets, 'standard_fonts') + path.sep,
-    cMapUrl: path.join(assets, 'cmaps') + path.sep, cMapPacked: true,
+    cMapUrl: path.join(assets, 'cmaps') + path.sep, cMapPacked: true, CanvasFactory,
   });
   const pdf = await task.promise;
   return {

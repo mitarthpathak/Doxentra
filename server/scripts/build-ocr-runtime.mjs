@@ -12,7 +12,7 @@ for (const folder of [destination, staging]) {
   if (path.dirname(folder) !== root || !/^\.ocr-runtime(?:\.build)?$/.test(path.basename(folder))) throw new Error('Invalid OCR build directory');
 }
 const require = createRequire(path.join(root, 'package.json'));
-const workers = ['lib/ocr/paddleWorker.js', 'lib/ocr/tesseractWorker.js'];
+const workers = ['lib/ocr/paddleWorker.js', 'lib/ocr/tesseractWorker.js', 'lib/pdfRender.js'];
 const innerTesseract = path.relative(root, require.resolve('tesseract.js/src/worker-script/node/index.js'));
 const { fileList } = await nodeFileTrace([...workers, innerTesseract].map(file => path.join(root, file)), {
   base: root, processCwd: root, ignore: ['.ocr-runtime/**', '.ocr-runtime.build/**'],
@@ -30,6 +30,8 @@ async function includeDirectory(relative) {
 // These assets are selected by path at runtime, outside static import tracing.
 await includeDirectory('node_modules/@gutenye/ocr-models/assets');
 await includeDirectory('node_modules/tesseract.js-core');
+await includeDirectory('node_modules/pdfjs-dist/standard_fonts');
+await includeDirectory('node_modules/pdfjs-dist/cmaps');
 files.add('data/tessdata/eng.traineddata');
 
 function nativePlatformMatches(file) {

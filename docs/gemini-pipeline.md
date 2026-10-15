@@ -17,6 +17,9 @@ the previous result and review history are retained.
 Verify a deployment with `node scripts/smoke-ocr.mjs https://doxentra.vercel.app`.
 This uploads fictional test images and a sample scanned PDF, checks extracted
 values in both processing modes, and exercises the saved-document retry flow.
+The server build also traces PDF.js' worker, fonts and character maps explicitly;
+`node server/scripts/check-ocr-runtime.mjs` verifies OCR and scanned PDF rendering
+from a copied runtime outside the repository.
 
 ## Stages
 

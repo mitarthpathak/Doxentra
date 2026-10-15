@@ -8,7 +8,9 @@ import { readFile } from 'node:fs/promises';
 const base = (process.argv[2] || 'http://localhost:3001').replace(/\/$/, '');
 const { createCanvas } = createRequire(new URL('../server/package.json', import.meta.url))('@napi-rs/canvas');
 const guestId = `ocr_smoke_${crypto.randomBytes(16).toString('hex')}`;
-const invoiceNumber = `SMOKE-${Date.now()}`;
+// Keep fewer than 12 digits so privacy mode does not intentionally mask this
+// fictional reference as a potential Aadhaar number.
+const invoiceNumber = `SMOKE-${crypto.randomInt(1_000_000, 10_000_000)}`;
 const lines = ['TAX INVOICE', `Invoice number: ${invoiceNumber}`, 'Invoice date: 15/10/2026',
   'Seller name: Demo Traders', 'Buyer name: Sample Customer', 'Subtotal: INR 500', 'Total: INR 500'];
 const canvas = createCanvas(1200, 700); const ctx = canvas.getContext('2d');
