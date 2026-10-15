@@ -55,12 +55,12 @@ function send(url: string, method: string, headers: Headers | Record<string, str
   });
 }
 
-const readError = (text: string, status: number) => {
+const readError = (text: string, status: number, maxBytes: number) => {
   try {
     const data = JSON.parse(text);
     return data.error || data.message || `Upload failed (${status}).`;
   } catch {
-    return status === 413 ? 'File is too large. Maximum size is 4 MB.' : `Upload failed (${status}).`;
+    return status === 413 ? `File is too large. Maximum size is ${Math.round(maxBytes / 1024 / 1024)} MB.` : `Upload failed (${status}).`;
   }
 };
 
@@ -68,7 +68,7 @@ type UploadTarget =
   | { mode: 'supabase'; path: string; uploadUrl: string; method: string; headers: Record<string, string>; maxBytes: number; directMaxBytes?: number }
   | { mode: 'direct'; maxBytes: number };
 
-async function uploadThroughApi(file: File, onProgress: (fraction: number) => void, path?: string): Promise<string> {
+async function uploadThroughApi(file: File, onProgress: (fraction: number) => void, maxBytes: number, path?: string): Promise<string> {
   const form = new FormData();
   if (path) form.append('path', path);
   form.append('file', file);
@@ -79,7 +79,7 @@ async function uploadThroughApi(file: File, onProgress: (fraction: number) => vo
   } catch {
     /* not JSON */
   }
-  if (res.status >= 300 || !data?.success) throw new ApiError(data?.error || readError(res.text, res.status), res.status);
+  if (res.status >= 300 || !data?.success) throw new ApiError(data?.error || readError(res.text, res.status, maxBytes), res.status);
   return data.path;
 }
 
@@ -95,7 +95,7 @@ export async function uploadToStorage(file: File, onProgress: (fraction: number)
   if (target.mode === 'supabase') {
     try {
       const res = await send(target.uploadUrl, target.method || 'PUT', target.headers, file, onProgress);
-      if (res.status < 200 || res.status >= 300) throw new ApiError(readError(res.text, res.status), res.status);
+      if (res.status < 200 || res.status >= 300) throw new ApiError(readError(res.text, res.status, target.maxBytes), res.status);
       return target.path;
     } catch (err) {
       if (!(err instanceof ApiError) || err.status !== 0) throw err;
@@ -105,10 +105,10 @@ export async function uploadToStorage(file: File, onProgress: (fraction: number)
       }
       // The API may reach Storage even when the browser's DNS, CORS or
       // network settings block it. Keep the same owned object path.
-      return uploadThroughApi(file, onProgress, target.path);
+      return uploadThroughApi(file, onProgress, limit, target.path);
     }
   }
-  return uploadThroughApi(file, onProgress);
+  return uploadThroughApi(file, onProgress, target.maxBytes);
 }
 
 export async function createJob(items: UploadedFile[]): Promise<Job> {

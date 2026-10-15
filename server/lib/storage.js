@@ -7,10 +7,12 @@
  *  - mongo:    a MongoDB collection, when Supabase is not configured.
  *  - memory:   in-process Map (local development and tests; lost on restart).
  *
- * Without Supabase, files reach the API in a normal request, so the 4 MB
- * per-request limit still applies.
+ * Local API uploads accept 50 MB with every driver. On Vercel, files must
+ * go straight to Supabase to bypass the platform's request-body limit.
  */
 import crypto from 'crypto';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { isPrivacyMode, forbidCloud } from './privacy.js';
 import mongoose from 'mongoose';
 import StoredFileModel from '../models/StoredFile.js';
@@ -30,10 +32,15 @@ export function storageDriver() {
 }
 
 /** The biggest file the current driver accepts per upload. */
-export const maxUploadBytes = () => (supabaseConfigured() ? MAX_STORED_UPLOAD_BYTES : MAX_UPLOAD_BYTES);
+export const maxUploadBytes = () => (supabaseConfigured() ? MAX_STORED_UPLOAD_BYTES : maxDirectUploadBytes());
 
 /** Local API uploads can relay large files; Vercel's request body cap still applies there. */
-export const maxDirectUploadBytes = () => (!process.env.VERCEL && supabaseConfigured() ? MAX_STORED_UPLOAD_BYTES : MAX_UPLOAD_BYTES);
+export const maxDirectUploadBytes = () => (!process.env.VERCEL ? MAX_STORED_UPLOAD_BYTES : MAX_UPLOAD_BYTES);
+
+// Keep small MongoDB uploads compatible with existing records. Large files
+// use GridFS so they never exceed MongoDB's 16 MB document limit.
+const MAX_MONGO_DOCUMENT_BYTES = 15 * 1024 * 1024;
+const mongoBucket = () => new mongoose.mongo.GridFSBucket(mongoose.connection.db, { bucketName: 'uploadedFiles' });
 
 const safeName = name => String(name || 'file').replace(/[^\w.-]+/g, '_').replace(/^\.+/, '').slice(-80) || 'file';
 
@@ -112,7 +119,16 @@ export async function putObject(path, data, mimeType) {
     await ensureBucket();
     await sb('POST', `/object/${env().bucket}/${encodePath(path)}`, { body: data, headers: { 'content-type': mimeType || 'application/octet-stream', 'x-upsert': 'true' } });
   } else if (driver === 'mongo') {
-    await StoredFileModel.updateOne({ _id: path }, { $set: { data, mimeType, size: data.length, createdAt: new Date() } }, { upsert: true });
+    if (data.length > MAX_MONGO_DOCUMENT_BYTES) {
+      const bucket = mongoBucket();
+      if (await bucket.find({ _id: path }).hasNext()) await bucket.delete(path);
+      await pipeline(Readable.from([data]), bucket.openUploadStreamWithId(path, path, { metadata: { mimeType } }));
+      await StoredFileModel.deleteOne({ _id: path });
+    } else {
+      await StoredFileModel.updateOne({ _id: path }, { $set: { data, mimeType, size: data.length, createdAt: new Date() } }, { upsert: true });
+      const bucket = mongoBucket();
+      if (await bucket.find({ _id: path }).hasNext()) await bucket.delete(path);
+    }
   } else {
     memPut(path, data, mimeType);
   }
@@ -129,7 +145,12 @@ export async function getObject(ref, { deadline } = {}) {
     if (driver === 'mongo') {
       if (mongoose.connection.readyState !== 1) return null;
       const doc = await StoredFileModel.findById(path).lean();
-      return doc ? Buffer.from(doc.data.buffer ?? doc.data) : null;
+      if (doc) return Buffer.from(Buffer.isBuffer(doc.data) ? doc.data : doc.data.buffer ?? doc.data);
+      const bucket = mongoBucket();
+      if (!(await bucket.find({ _id: path }).hasNext())) return null;
+      const chunks = [];
+      for await (const chunk of bucket.openDownloadStream(path)) chunks.push(chunk);
+      return Buffer.concat(chunks);
     }
     return memoryFiles().get(path)?.data || null;
   } catch (err) {
@@ -152,7 +173,11 @@ export async function deleteObject(ref) {
   if (ref.driver !== 'memory') forbidCloud();
   try {
     if (ref.driver === 'supabase') await sb('DELETE', `/object/${env().bucket}`, { body: { prefixes: [ref.path] } });
-    else if (ref.driver === 'mongo') await StoredFileModel.deleteOne({ _id: ref.path });
+    else if (ref.driver === 'mongo') {
+      await StoredFileModel.deleteOne({ _id: ref.path });
+      const bucket = mongoBucket();
+      if (await bucket.find({ _id: ref.path }).hasNext()) await bucket.delete(ref.path);
+    }
     else {
       const files = memoryFiles();
       const mode = isPrivacyMode() ? 'privacy' : 'deep';

@@ -9,9 +9,8 @@ import { QUALITY_TEXT, measureImageQuality } from '../lib/quality';
 import { STAGE_TEXT, UPLOAD_STEPS, uploadStepIndex, createJob, fetchUploadLimitMb, pollJob, uploadToStorage, type UploadedFile } from '../lib/upload';
 import type { DocumentResult, UploadStatus } from '../types';
 
-// Per-file limit without Supabase Storage (Vercel's request-body limit); the
-// server reports a larger one when files go straight to Supabase.
-const DEFAULT_MAX_SIZE_MB = 4;
+// Match local and direct-to-storage uploads while server capabilities load.
+const DEFAULT_MAX_SIZE_MB = 50;
 const MAX_FILES = 10;
 // Larger originals are accepted because images are downscaled before upload.
 const MAX_ORIGINAL_IMAGE_MB = 40;

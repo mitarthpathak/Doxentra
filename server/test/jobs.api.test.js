@@ -435,3 +435,38 @@ test('the API upload relay reuses an owned signed target and respects the Vercel
     sb.close();
   }
 });
+
+test('local uploads accept 50 MB without Supabase, including privacy mode', async () => {
+  const previousVercel = process.env.VERCEL;
+  process.env.VERCEL = '';
+  resetStorageForTests();
+  try {
+    for (const mode of ['deep', 'privacy']) {
+      const headers = { ...guest(), 'x-processing-mode': mode };
+      const health = await call('/health', { headers });
+      assert.equal(health.body.uploadLimitMb, 50);
+      const maxBytes = 50 * 1024 * 1024;
+      const bytes = Buffer.concat([invoicePdf(), Buffer.alloc(maxBytes, 32)]).subarray(0, maxBytes);
+      const target = await call('/uploads/sign', json(headers, { filename: 'large.pdf', mimeType: 'application/pdf', size: bytes.length }));
+      assert.equal(target.status, 200);
+      assert.equal(target.body.mode, 'direct');
+      assert.equal(target.body.maxBytes, maxBytes);
+      const uploaded = await directUpload(headers, bytes, 'large.pdf');
+      assert.equal(uploaded.status, 200, JSON.stringify(uploaded.body));
+      assert.equal(uploaded.body.size, maxBytes);
+      const oversized = await call('/uploads/sign', json(headers, { filename: 'huge.pdf', mimeType: 'application/pdf', size: maxBytes + 1 }));
+      assert.equal(oversized.status, 413);
+      assert.match(oversized.body.error, /50 MB/);
+      const rejected = await directUpload(headers, Buffer.concat([bytes, Buffer.from(' ')]), 'huge.pdf');
+      assert.equal(rejected.status, 413);
+      assert.match(rejected.body.error, /50 MB/);
+    }
+    process.env.VERCEL = '1';
+    const deployed = await call('/uploads/sign', json(guest(), { filename: 'large.pdf', mimeType: 'application/pdf', size: 5 * 1024 * 1024 }));
+    assert.equal(deployed.status, 413, 'Vercel still needs direct-to-storage for large files');
+  } finally {
+    if (previousVercel === undefined) delete process.env.VERCEL;
+    else process.env.VERCEL = previousVercel;
+    resetStorageForTests();
+  }
+});

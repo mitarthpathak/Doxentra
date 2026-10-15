@@ -17,7 +17,7 @@
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "test": "npm test --prefix server",
-    "test:ui": "node scripts/test-privacy-ui.mjs && node scripts/test-ocr-ui.mjs"
+    "test:ui": "node scripts/test-privacy-ui.mjs && node scripts/test-ocr-ui.mjs && node scripts/test-graph-pan-ui.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.27.0",

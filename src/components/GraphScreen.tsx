@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { motion, AnimatePresence, useMotionValue, animate } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, useDragControls, animate } from 'motion/react';
 import * as d3 from 'd3-force';
 import { cn } from '../lib/utils';
 import type { CrossDocumentIssue, GraphData, GraphEdge, GraphMode, GraphNode } from '../types';
@@ -98,6 +98,8 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
   const containerRef = useRef<HTMLDivElement>(null);
   const panX = useMotionValue(0);
   const panY = useMotionValue(0);
+  const dragControls = useDragControls();
+  const wasDragged = useRef(false);
 
   const nodes = useMemo(() => (data?.nodes?.length ? computeLayout(data.nodes, data.edges || []) : []), [data]);
   const nodeById = useMemo(() => new Map(nodes.map(n => [n.id, n])), [nodes]);
@@ -245,13 +247,37 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
 
       <div
         className={cn(
-          'relative w-full bg-surface-container-low border border-slate-200 dark:border-slate-700 overflow-hidden cursor-grab active:cursor-grabbing shadow-inner',
+          'relative w-full bg-surface-container-low border border-slate-200 dark:border-slate-700 overflow-hidden cursor-grab active:cursor-grabbing touch-none select-none shadow-inner',
           isMaximized ? 'flex-1 md:rounded-[32px]' : 'h-[70vh] min-h-[480px] max-h-[850px] rounded-[40px]'
         )}
         ref={containerRef}
         data-testid="graph-canvas"
+        onPointerDownCapture={e => {
+          wasDragged.current = false;
+          // The viewport stays put even when the graph moves beyond its bounds.
+          if (e.button === 0 && !(e.target as Element).closest('[data-graph-controls]')) {
+            dragControls.start(e);
+          }
+        }}
+        onClickCapture={e => {
+          // A drag starting on a card/edge must not open its details on release.
+          if (wasDragged.current && e.detail > 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            wasDragged.current = false;
+          }
+        }}
       >
-        <motion.div drag style={{ x: panX, y: panY }} dragMomentum={false} className="absolute inset-0">
+        <motion.div
+          drag
+          dragListener={false}
+          dragControls={dragControls}
+          onDragStart={() => { wasDragged.current = true; }}
+          style={{ x: panX, y: panY }}
+          dragMomentum={false}
+          className="absolute inset-0"
+          data-testid="graph-pan-layer"
+        >
           <motion.div
             className="absolute left-1/2 top-1/2 w-0 h-0"
             animate={{ scale: zoom }}
@@ -279,7 +305,6 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
                     role={isMismatch ? 'button' : undefined}
                     tabIndex={isMismatch ? 0 : undefined}
                     aria-label={isMismatch ? `Compare conflict: ${edge.message}` : undefined}
-                    onPointerDown={e => { if (isMismatch) e.stopPropagation(); }}
                     onClick={() => { if (isMismatch) setSelectedConflict(issueForEdge(edge)); }}
                     onKeyDown={e => { if (isMismatch && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setSelectedConflict(issueForEdge(edge)); } }}
                     data-testid={isMismatch ? 'mismatch-edge' : undefined}
@@ -307,7 +332,7 @@ export function GraphScreen({ data, onNodeExplored, viewedNodeIds, onUploadClick
         </motion.div>
 
         {/* Controls */}
-        <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 space-y-2 z-40">
+        <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 space-y-2 z-40" data-graph-controls>
           <ControlButton icon="add" label="Zoom in" onClick={() => setZoom(z => Math.min(z * 1.25, 3))} />
           <ControlButton icon="remove" label="Zoom out" onClick={() => setZoom(z => Math.max(z / 1.25, 0.15))} />
           <div className="h-4"></div>
@@ -409,7 +434,6 @@ function GraphNodeView({ node, index, isViewed, isHovered, isFaded, onMouseEnter
         transition={{ duration: 0.35, delay: Math.min(index * 0.015, 0.6) }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        onPointerDownCapture={e => e.stopPropagation()}
         onClick={onClick}
       >
         <span className={style.label}>{node.label}</span>
